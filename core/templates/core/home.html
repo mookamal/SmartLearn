@@ -2,6 +2,7 @@
 {% load static %}
 {% block title %}Home page{% endblock title %}
 {% block content %}
+{% comment %} hero section {% endcomment %}
 <section class="bg-primary-200 dark:bg-gray-900">
     <div class="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
         <div class="mr-auto place-self-center lg:col-span-7">
@@ -17,4 +18,46 @@
         </div>                
     </div>
 </section>
+{% comment %} end hero section {% endcomment %}
+{% comment %} features section {% endcomment %}
+<section class="bg-white dark:bg-gray-800 border-y-2">
+    <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+        <div class="max-w-screen-md mb-8 lg:mb-16">
+            <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Overview</h2>
+            <p class="text-gray-500 sm:text-xl dark:text-gray-400">
+                Our platform is dedicated to enhancing the learning experience by fostering a community of inquisitive minds. Here, users can ask questions, share knowledge, and receive constructive feedback on their answers. This interactive approach not only helps in knowledge acquisition but also enhances critical thinking skills.
+            </p>
+        </div>
+        <div class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0">
+            <div>
+                <div class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12 dark:bg-primary-900">
+                    <i class="fas fa-users text-primary-600 dark:text-primary-300"></i>
+                </div>
+                <h3 class="mb-2 text-xl font-bold dark:text-white">Continuous Collaboration</h3>
+                <p class="text-gray-500 dark:text-gray-400">
+                    Our platform is fundamentally collaborative, encouraging users to actively participate in improving and developing content. By correcting test questions and refining their wording, we ensure that the material remains accurate and reliable. This collaboration allows everyone to contribute to creating a comprehensive learning experience.
+                </p>
+            </div>
+            <div>
+                <div class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12 dark:bg-primary-900">
+                    <i class="fas fa-chart-line text-primary-600 dark:text-primary-300"></i>
+                </div>
+                <h3 class="mb-2 text-xl font-bold dark:text-white">Ongoing Improvement</h3>
+                <p class="text-gray-500 dark:text-gray-400">
+                    We strive for continuous improvement in content quality by allowing users to report errors and add explanations. Every feedback or modification presented is considered an essential part of platform development. With each contribution, we can elevate the educational standards and ensure that the content remains updated and aligned with learners' needs.
+                </p>
+            </div>
+            <div>
+                <div class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12 dark:bg-primary-900">
+                    <i class="fas fa-trophy text-primary-600 dark:text-primary-300"></i>                 
+                </div>
+                <h3 class="mb-2 text-xl font-bold dark:text-white">Knowledge Enrichment</h3>
+                <p class="text-gray-500 dark:text-gray-400">
+                    By empowering the community, we work towards enriching the knowledge available on our platform. We believe that every user can add value through their contributions, whether by providing additional explanations or enhancing questions. This culture of collaboration and sharing fosters a fruitful educational environment that enhances the learning experience for all.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% comment %} end features section {% endcomment %}
 {% endblock content %}
