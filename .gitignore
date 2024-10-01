@@ -1,0 +1,54 @@
+db.sqlite3
+env/
+
+# Ignore virtual environment
+venv/
+
+# Ignore database file
+db.sqlite3
+
+# Ignore compiled Python files
+__pycache__/
+*.pyo
+*.pyd
+
+# Ignore settings file with sensitive information
+*.env
+
+# Ignore media files (uploads)
+media/
+
+# Ignore logs
+*.log
+secret.txt
+# Ignore local development settings
+local_settings.py
+
+# Ignore IDE-specific files and directories
+.vscode/
+.idea/
+
+# Ignore environment configuration
+.env
+
+# Ignore local database configuration
+*.db
+*.sqlite
+
+# Ignore any other generated files or directories
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyz
+*.pyw
+*.pyz
+__pycache__/
+MANIFEST
+*.orig
+*.rej
+*.bak
+*.swp
+*.db
+*.sqlite
+*.sqlite3
