@@ -9,6 +9,8 @@
     {% compress css %}
       <link rel="stylesheet" href="{% static 'src/css/styles.css' %}">
     {% endcompress %}
+    {% comment %} fontawesome {% endcomment %}
+    <link rel="stylesheet" href="{% static 'src/css/all.min.css' %}">
     {% block css %}{% endblock css %}
     <script>
       // On page load or when changing themes, best to add inline in `head` to avoid FOUC
