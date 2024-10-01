@@ -1,3 +1,4 @@
+{% load compress %}
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -5,6 +6,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}{% endblock title %}</title>
+    {% compress css %}
+      <link rel="stylesheet" href="{% static 'src/css/styles.css' %}">
+    {% endcompress %}
+    {% block css %}{% endblock css %}
   </head>
   <body>
     {% block content %}{% endblock content %}
