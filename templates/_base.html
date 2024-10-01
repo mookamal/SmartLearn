@@ -24,6 +24,7 @@
   <body>
     {% include 'core/parts/navbar.html' %}
     {% block content %}{% endblock content %}
+    {% include "parts/footer.html" %}
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
     <script src="{% static 'src/js/main.js' %}"></script>
     {% block js %}{% endblock js %}
