@@ -23,7 +23,7 @@
   </head>
   <body>
     {% include 'core/parts/navbar.html' %}
-    {% block content %}{% endblock content %}
+    <main class="mt-20">{% block content %}{% endblock content %}</main>
     {% include "parts/footer.html" %}
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
     <script src="{% static 'src/js/main.js' %}"></script>
