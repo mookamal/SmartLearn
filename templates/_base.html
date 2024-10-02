@@ -22,9 +22,13 @@
   </script>
   </head>
   <body>
-    {% include 'core/parts/navbar.html' %}
+    {% if not "/accounts" in request.path %}
+      {% include 'core/parts/navbar.html' %}
+    {% endif %}
     <main class="mt-20">{% block content %}{% endblock content %}</main>
-    {% include "parts/footer.html" %}
+    {% if not "/accounts" in request.path %}
+      {% include "parts/footer.html" %}
+    {% endif %}
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
     <script src="{% static 'src/js/main.js' %}"></script>
     {% block js %}{% endblock js %}
