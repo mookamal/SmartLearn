@@ -1,1 +1,8 @@
 {% extends "_base.html" %}
+{% load tailwind_filters %}
+{% block title %}Login page{% endblock title %}
+
+{% block content %}
+
+{{ form|crispy }}
+{% endblock content %}

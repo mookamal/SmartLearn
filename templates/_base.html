@@ -30,7 +30,9 @@
       {% include "parts/footer.html" %}
     {% endif %}
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
-    <script src="{% static 'src/js/main.js' %}"></script>
+    {% if not "/accounts" in request.path %}
+      <script src="{% static 'src/js/main.js' %}"></script>
+    {% endif %}
     {% block js %}{% endblock js %}
   </body>
 </html>
