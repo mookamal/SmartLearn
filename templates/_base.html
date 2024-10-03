@@ -25,7 +25,7 @@
     {% if not "/accounts" in request.path %}
       {% include 'core/parts/navbar.html' %}
     {% endif %}
-    <main class="mt-20">{% block content %}{% endblock content %}</main>
+    <main>{% block content %}{% endblock content %}</main>
     {% if not "/accounts" in request.path %}
       {% include "parts/footer.html" %}
     {% endif %}
