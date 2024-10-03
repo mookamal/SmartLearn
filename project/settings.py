@@ -41,12 +41,19 @@ INSTALLED_APPS = [
     'compressor',
     "crispy_forms",
     "crispy_tailwind",
+    'allauth',
+    'allauth.account',
     # my apps
-
     'core',
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
 LOGIN_REDIRECT_URL = "/dashboard/"
+ITE_ID = 1
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 
@@ -60,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'project.urls'
