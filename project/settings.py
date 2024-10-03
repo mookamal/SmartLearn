@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'core',
 ]
 
+LOGIN_REDIRECT_URL = "/dashboard/"
+
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 
 CRISPY_TEMPLATE_PACK = "tailwind"
