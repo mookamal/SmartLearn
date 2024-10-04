@@ -7,19 +7,29 @@
                 <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">{{info.name}}</span>
             </a>
             <ul class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
+                {% for page in pages %}
                 <li>
-                    <a href="#" class="hover:underline me-4 md:me-6">About</a>
+                    <a href="#" class="hover:underline me-4 md:me-6">{{page.title}}</a>
                 </li>
-                <li>
-                    <a href="#" class="hover:underline me-4 md:me-6">Privacy Policy</a>
-                </li>
-                <li>
-                    <a href="#" class="hover:underline me-4 md:me-6">Licensing</a>
-                </li>
-                <li>
-                    <a href="#" class="hover:underline">Contact</a>
-                </li>
+                {% endfor %}
             </ul>
+            <div class="flex mt-4 sm:justify-center sm:mt-0 gap-2">
+                {% if info.facebook %}
+                    <a href="{{info.facebook}}" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
+                        <i class="fa-brands fa-square-facebook text-2xl"></i>
+                    </a>
+                {% endif %}
+                {% if info.instagram %}
+                <a href="{{info.instagram}}" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
+                    <i class="fa-brands fa-instagram text-2xl"></i>
+                </a>
+                {% endif %}
+                {% if info.twitter %}
+                <a href="{{info.twitter}}" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
+                    <i class="fa-brands fa-twitter text-2xl"></i>
+                </a>
+                {% endif %}
+            </div>
         </div>
         <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
         <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400">
