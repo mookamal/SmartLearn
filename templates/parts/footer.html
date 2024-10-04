@@ -9,7 +9,7 @@
             <ul class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
                 {% for page in pages %}
                 <li>
-                    <a href="#" class="hover:underline me-4 md:me-6">{{page.title}}</a>
+                    <a href="{% url 'page' slug=page.slug %}" class="hover:underline me-4 md:me-6">{{page.title}}</a>
                 </li>
                 {% endfor %}
             </ul>
