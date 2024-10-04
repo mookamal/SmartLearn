@@ -25,6 +25,13 @@
     {% if not "/accounts" in request.path %}
       {% include 'core/parts/navbar.html' %}
     {% endif %}
+    {% comment %} toast {% endcomment %}
+    {% if messages %}
+      {% for message in messages %}
+        {% include 'parts/toast.html' with  message=message counter=forloop.counter %}
+      {% endfor %}
+    {% endif %}
+    
     <main>{% block content %}{% endblock content %}</main>
     {% if not "/accounts" in request.path %}
       {% include "parts/footer.html" %}
