@@ -1352,6 +1352,10 @@ input:checked + .toggle-bg {
   height: 4rem;
 }
 
+.h-2\.5 {
+  height: 0.625rem;
+}
+
 .w-1\/2 {
   width: 50%;
 }
@@ -1394,6 +1398,14 @@ input:checked + .toggle-bg {
 
 .w-6 {
   width: 1.5rem;
+}
+
+.w-2\.5 {
+  width: 0.625rem;
+}
+
+.w-44 {
+  width: 11rem;
 }
 
 .max-w-2xl {
@@ -1799,6 +1811,11 @@ input:checked + .toggle-bg {
 .bg-primary-700 {
   --tw-bg-opacity: 1;
   background-color: rgb(29 78 216 / var(--tw-bg-opacity));
+}
+
+.bg-primary-950 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(23 37 84 / var(--tw-bg-opacity));
 }
 
 .p-1 {

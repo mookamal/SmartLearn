@@ -37,6 +37,9 @@
           />
         </svg>
       </button>
+      {% if user.is_authenticated %}
+        {% include "parts/user_menu.html" %}
+      {% else %}
       <a
         type="button"
         href="{% url 'account_login' %}"
@@ -51,6 +54,7 @@
       >
         Register
       </a>
+      {% endif %}
       {% include "parts/theme_btn.html" %}
     </div>
     <div class="hidden w-full md:block md:w-auto" id="navbar-default">
