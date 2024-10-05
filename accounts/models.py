@@ -7,9 +7,9 @@ from django.contrib.auth.models import User
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=30)
-    middle_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
+    first_name = models.CharField(max_length=30, null=True, blank=True,)
+    middle_name = models.CharField(max_length=30, null=True, blank=True,)
+    last_name = models.CharField(max_length=30, null=True, blank=True,)
     nickname = models.CharField(max_length=30, default="", blank=True)
     primary_interest = models.ForeignKey('PrimaryInterest',
                                          on_delete=models.SET_NULL, null=True, blank=True,
