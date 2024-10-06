@@ -1,9 +1,86 @@
 {% extends "_base.html" %}
-
+{% load tailwind_filters %}
 {% block title %}
 Profile's {{profile.user.username}}
 {% endblock title %}
 
 {% block content %}
 
+
+<section class="bg-white dark:bg-gray-900">
+    <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16">
+        <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 md:p-12 mb-8">
+            <a href="#" class="bg-blue-100 gap-2 text-blue-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-blue-400 mb-2">
+                <i class="fa-solid fa-user"></i>
+                Profile
+            </a>
+            <h1 class="text-gray-900 dark:text-white text-3xl md:text-5xl font-extrabold mb-2">Profile's {{profile.user.username}}</h1>
+        </div>
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 md:p-12">
+                <form class="space-y-4 md:space-y-6" method="post">
+                    {{ form|crispy }}
+                    {% csrf_token %}
+                    <button type="submit" class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Save</button>
+                </form>
+            </div>
+            <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 md:p-12">
+                
+                <h2 class="text-primary-900 dark:text-purple-400 text-xl">
+                    Our platform offers tens of thousands of questions across various exams. Which exam would you like to focus on?
+                </h2>
+
+                <hr class="w-48 h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700">
+
+                <div class="max-w-sm mx-auto">
+                    <select id="primary_select" name="primary_interest" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                      <option selected>----</option>
+                      {% for interest in primary_interests %}
+                        {% if not interest.parent %}
+                            <option value="{{interest.id}}">{{interest.name}}</option>
+                        {% endif %}
+                      {% endfor %}
+                    </select>
+                    <!-- Select for child interests -->
+                    <form action="{% url 'set_interest' username=profile.user.username %}" method="post">
+                        {% csrf_token %}
+                        <select id="secondary_select" style="display:none;" name="secondary_interest" class="bg-gray-50 border  mt-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                            <option selected>----</option>
+                            {% for interest in primary_interests %}
+                            {% if not interest.parent %}
+                                <option value="{{interest.id}}">{{interest.name}}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+
+                        <button type="submit"  class="w-full text-white mt-4 bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Save</button>
+                    </form>
+                    <!-- Hidden data for child interests -->
+                    <div id="all-interests" style="display:none;">
+                        {% for interest in primary_interests %}
+                            {% if interest.parent %}
+                                <span data-parent="{{ interest.parent.id }}" data-child="{{ interest.id }}">{{ interest.name }}</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock content %}
+{% block js %}
+    <script>
+        document.getElementById('primary_select').addEventListener('change', function() {
+            var parent = this.value;
+            var childSelect = document.getElementById('secondary_select');
+            childSelect.innerHTML = '';
+            childSelect.style.display = 'none';
+            document.getElementById('all-interests').querySelectorAll(`[data-parent='${parent}']`).forEach(function(item) {
+                childSelect.style.display = 'block';
+                childSelect.innerHTML += `<option value="${item.dataset.child}">${item.textContent}</option>`;
+            });
+        });
+    </script>
+{% endblock js %}

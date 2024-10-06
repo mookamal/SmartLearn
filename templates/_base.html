@@ -25,6 +25,15 @@
     {% if not "/accounts" in request.path %}
       {% include 'core/parts/navbar.html' %}
     {% endif %}
+    
+    {% if user.is_authenticated %}
+      {% if not user.profile.primary_interest %}
+        {% url 'profile' username=user.username as url_profile %}
+        {% include "parts/banner.html" with message='Our platform offers tens of thousands of questions across various exams. Which exam would you like to focus on?' link=url_profile %}
+      {% endif %}
+    {% endif %}
+
+
     {% comment %} toast {% endcomment %}
     {% if messages %}
       {% for message in messages %}
@@ -40,6 +49,7 @@
     {% if not "/accounts" in request.path %}
       <script src="{% static 'src/js/main.js' %}"></script>
     {% endif %}
+    <script src="{% static 'src/js/jquery.js' %}"></script>
     {% block js %}{% endblock js %}
   </body>
 </html>
