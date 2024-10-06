@@ -18,6 +18,18 @@ Profile's {{profile.user.username}}
                 Profile
             </a>
             <h1 class="text-gray-900 dark:text-white text-3xl md:text-5xl font-extrabold mb-2">Profile's {{profile.user.username}}</h1>
+            <hr class="w-48 h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700">
+            
+
+            <div class="flex justify-center">
+                <div class="w-48 text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    <a href="{% url 'account_change_password' %}" class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b border-gray-200 rounded-t-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white gap-2">
+                        <i class="fa-solid fa-lock"></i>
+                        Change password
+                    </a>
+                </div>
+            </div>
+
         </div>
         <div class="grid md:grid-cols-2 gap-8">
             <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 md:p-12">
