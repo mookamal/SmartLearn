@@ -24,8 +24,17 @@ Profile's {{profile.user.username}}
                     <button type="submit" class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Save</button>
                 </form>
             </div>
+
             <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 md:p-12">
-                
+                {% if profile.primary_interest %}
+                    <h2 class="text-primary-900 dark:text-purple-400 text-xl">
+                        You are interested in
+                        <span class="bg-yellow-100 text-yellow-800 text-sm me-2 px-2.5 py-0.5 font-bold rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300">
+                            {{profile.primary_interest}}
+                        </span>
+                    </h2>
+                    <hr class="w-48 h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700">
+                {% endif %}
                 <h2 class="text-primary-900 dark:text-purple-400 text-xl">
                     Our platform offers tens of thousands of questions across various exams. Which exam would you like to focus on?
                 </h2>
@@ -64,7 +73,6 @@ Profile's {{profile.user.username}}
                         {% endfor %}
                     </div>
                 </div>
-                
             </div>
         </div>
     </div>
