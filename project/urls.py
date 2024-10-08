@@ -24,6 +24,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('accounts/', include('accounts.urls')),
     path("", include("core.urls")),
+    path("e/", include("exams.urls")),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
 ]
 

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django_ckeditor_5',
     # my apps
     'core',
+    'exams',
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -147,7 +148,7 @@ CKEDITOR_5_CONFIGS = {
     }
 }
 # /CKEditor Settings
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/e/"
 ITE_ID = 1
 
 ACCOUNT_EMAIL_REQUIRED = True
