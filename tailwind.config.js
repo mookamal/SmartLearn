@@ -5,6 +5,7 @@ module.exports = {
     "./templates/**/*.html",
     "./core/templates/**/*.html",
     "./accounts/templates/**/*.html",
+    "./exams/templates/**/*.html",
     "./node_modules/flowbite/**/*.js",
   ],
   theme: {
