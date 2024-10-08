@@ -5,8 +5,7 @@ from django.shortcuts import get_object_or_404
 
 
 def home(request):
-    pages = Page.objects.all()[:4]
-    return render(request, 'core/home.html', {'pages': pages})
+    return render(request, 'core/home.html')
 
 
 def page(request, slug):
