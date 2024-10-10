@@ -2,7 +2,6 @@ from django.db import models
 from django_ckeditor_5.fields import CKEditor5Field
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
-import textwrap
 from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 
@@ -44,7 +43,7 @@ class Exam(models.Model):
     name = models.CharField(max_length=100)
     category = models.ForeignKey(Category, related_name='exams',
                                  null=True,
-                                 on_delete=models.SET_NULL)
+                                 on_delete=models.SET_NULL, limit_choices_to={"parent_category__isnull": False})
     is_visible = models.BooleanField(default=True)
     description = CKEditor5Field(default='', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -64,29 +63,12 @@ class Subject(models.Model):
 
 
 class Question(models.Model):
+    sources = models.ManyToManyField(Source, blank=True)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     issues = models.ManyToManyField('Issue', blank=True)
-    global_sequence = models.PositiveIntegerField(
-        null=True, blank=True, validators=[MinValueValidator(1)])
-    marking_users = models.ManyToManyField(User, blank=True,
-                                           related_name="marked_questions")
-    best_revision = models.OneToOneField('Revision', null=True, blank=True,
-                                         on_delete=models.SET_NULL,
-                                         related_name="best_of")
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        if self.best_revision:
-            return textwrap.shorten(self.best_revision, 70, placeholder="...")
-        else:
-            return "No revision yet"
-
-
-class Revision(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
     text = models.TextField()
-    figure = models.ImageField(upload_to="revision_images",
+    figure = models.ImageField(upload_to="question_images",
                                blank=True)
     explanation = models.TextField(default="", blank=True)
     explanation_figure = models.ImageField(upload_to="explanation_images",
@@ -94,18 +76,17 @@ class Revision(models.Model):
     is_approved = models.BooleanField(default=False)
     approval_date = models.DateField(blank=True, null=True)
     reference = models.TextField(default="", blank=True)
-    choices = models.ManyToManyField(
-        'Choice', blank=True, related_name="revision_set")
+    marking_users = models.ManyToManyField(User, blank=True,
+                                           related_name="marked_questions")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Revision #{self.pk}"
+        return f"Question #{self.pk}"
 
 
 class Choice(models.Model):
     text = models.CharField(max_length=255)
     is_right = models.BooleanField("Right answer?", default=False)
-    revision = models.ForeignKey(Revision, on_delete=models.CASCADE, null=True)
     question = models.ForeignKey(
         Question,  null=True, on_delete=models.CASCADE)
 
