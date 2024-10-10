@@ -142,5 +142,15 @@ class Answer(models.Model):
     class Meta:
         unique_together = ("session", "question")
 
+    def save(self, *args, **kwargs):
+        if Answer.objects.filter(session=self.session, question=self.question).exists():
+            self.is_first = True
+        else:
+            self.is_first = False
+
+        if self.choice:
+            self.is_correct = self.choice.is_right
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"Answer for {self.question} in Session #{self.session.pk}"
