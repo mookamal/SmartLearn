@@ -1,8 +1,7 @@
 from django.db import models
 from django_ckeditor_5.fields import CKEditor5Field
-from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MaxValueValidator
 # Create your models here.
 
 
@@ -30,10 +29,6 @@ class Category(models.Model):
                                         default=None, limit_choices_to={"parent_category__isnull": True})
     is_listed = models.BooleanField("This category is listed upon showing categories and on the sidebar",
                                     default=True, blank=True)
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -81,7 +76,7 @@ class Question(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Question #{self.pk}"
+        return f"Question #{self.text[:50]}"
 
 
 class Choice(models.Model):
