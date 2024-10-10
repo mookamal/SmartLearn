@@ -1,3 +1,4 @@
+from datetime import timezone
 from django.db import models
 from django_ckeditor_5.fields import CKEditor5Field
 from django.contrib.auth.models import User
@@ -74,6 +75,11 @@ class Question(models.Model):
     marking_users = models.ManyToManyField(User, blank=True,
                                            related_name="marked_questions")
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if self.is_approved and not self.approval_date:
+            self.approval_date = timezone.now().date()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Question #{self.text[:50]}"

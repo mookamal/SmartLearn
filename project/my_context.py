@@ -21,7 +21,7 @@ def my_context(request):
 
         if not parent_categories:
             parent_categories = Category.objects.filter(
-                parent_category__isnull=True).order_by('id')
+                parent_category__isnull=True, is_listed=True).order_by('id')
             cache.set('parent_categories', parent_categories, timeout=60*15)
 
         return {
