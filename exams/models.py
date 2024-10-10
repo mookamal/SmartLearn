@@ -22,7 +22,7 @@ class Source(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
-    slug = models.SlugField(max_length=50, blank=True, null=True)
+    slug = models.SlugField(max_length=50, blank=True, null=True, unique=True)
     image = models.ImageField(upload_to="category_images", blank=True)
     parent_category = models.ForeignKey('self', null=True, blank=True,
                                         related_name="children",
