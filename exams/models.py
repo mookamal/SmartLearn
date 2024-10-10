@@ -1,26 +1,164 @@
 from django.db import models
-
+from django_ckeditor_5.fields import CKEditor5Field
+from django.template.defaultfilters import slugify
+from django.contrib.auth.models import User
+import textwrap
+from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 
 
-# class Category(models.Model):
-#     name = models.CharField(max_length=100)
-#     slug = models.SlugField(max_length=50)
-#     image = models.ImageField(upload_to="category_images", blank=True)
-#     parent_category = models.ForeignKey('self', null=True, blank=True,
-#                                         related_name="children",
-#                                         on_delete=models.SET_NULL,
-#                                         default=None)
-#     is_listed = models.BooleanField("This category is listed upon showing categories and on the sidebar",
-#                                     default=True, blank=True)
+class Source(models.Model):
+    name = models.CharField(max_length=100)
+    category = models.ForeignKey('Category',
+                                 on_delete=models.SET_NULL,
+                                 null=True)
+    parent_source = models.ForeignKey('self', null=True, blank=True,
+                                      related_name="children",
+                                      on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
 
-#     def __str__(self):
-#         return self.name
+    def __str__(self):
+        return self.name
 
 
-# class Exam(models.Model):
-#     name = models.CharField(max_length=100)
-#     category = models.ForeignKey(Category, related_name='exams',
-#                                  null=True,
-#                                  on_delete=models.SET_NULL)
-#     is_visible = models.BooleanField(default=True)
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=50, blank=True, null=True)
+    image = models.ImageField(upload_to="category_images", blank=True)
+    parent_category = models.ForeignKey('self', null=True, blank=True,
+                                        related_name="children",
+                                        on_delete=models.SET_NULL,
+                                        default=None, limit_choices_to={"parent_category__isnull": True})
+    is_listed = models.BooleanField("This category is listed upon showing categories and on the sidebar",
+                                    default=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
+class Exam(models.Model):
+    name = models.CharField(max_length=100)
+    category = models.ForeignKey(Category, related_name='exams',
+                                 null=True,
+                                 on_delete=models.SET_NULL)
+    is_visible = models.BooleanField(default=True)
+    description = CKEditor5Field(default='', blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Subject(models.Model):
+    name = models.CharField(max_length=100)
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Question(models.Model):
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
+    issues = models.ManyToManyField('Issue', blank=True)
+    global_sequence = models.PositiveIntegerField(
+        null=True, blank=True, validators=[MinValueValidator(1)])
+    marking_users = models.ManyToManyField(User, blank=True,
+                                           related_name="marked_questions")
+    best_revision = models.OneToOneField('Revision', null=True, blank=True,
+                                         on_delete=models.SET_NULL,
+                                         related_name="best_of")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        if self.best_revision:
+            return textwrap.shorten(self.best_revision, 70, placeholder="...")
+        else:
+            return "No revision yet"
+
+
+class Revision(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    text = models.TextField()
+    figure = models.ImageField(upload_to="revision_images",
+                               blank=True)
+    explanation = models.TextField(default="", blank=True)
+    explanation_figure = models.ImageField(upload_to="explanation_images",
+                                           blank=True)
+    is_approved = models.BooleanField(default=False)
+    approval_date = models.DateField(blank=True, null=True)
+    reference = models.TextField(default="", blank=True)
+    choices = models.ManyToManyField(
+        'Choice', blank=True, related_name="revision_set")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Revision #{self.pk}"
+
+
+class Choice(models.Model):
+    text = models.CharField(max_length=255)
+    is_right = models.BooleanField("Right answer?", default=False)
+    revision = models.ForeignKey(Revision, on_delete=models.CASCADE, null=True)
+    question = models.ForeignKey(
+        Question,  null=True, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.text
+
+
+session_mode_choices = (
+    ('EXPLAINED', 'Explained'),
+    ('UNEXPLAINED', 'Unexplained'),
+    ('SOLVED', 'Solved'),
+    ('INCOMPLETE', 'Incomplete'),
+)
+
+
+class Session(models.Model):
+    session_mode = models.CharField(
+        max_length=20, choices=session_mode_choices, default='EXPLAINED')
+    number_of_questions = models.PositiveIntegerField(
+        null=True, validators=[MaxValueValidator(25)])
+    subjects = models.ManyToManyField(Subject, blank=True)
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
+    questions = models.ManyToManyField(Question, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Session #{self.pk}"
+
+
+class Issue(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+
+class Answer(models.Model):
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    choice = models.ForeignKey(Choice, null=True,
+                               on_delete=models.CASCADE)
+    is_first = models.BooleanField("Is this the first time this question was answered by the user?",
+                                   blank=True, default=False)
+    is_correct = models.BooleanField(
+        "Is this the correct answer?", default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("session", "question")
+
+    def __str__(self):
+        return f"Answer for {self.question} in Session #{self.session.pk}"
