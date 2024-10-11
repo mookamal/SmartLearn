@@ -1,8 +1,9 @@
-from datetime import timezone
+from datetime import datetime, timezone
 from django.db import models
 from django_ckeditor_5.fields import CKEditor5Field
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator
+from django.apps import apps
 # Create your models here.
 
 
@@ -33,6 +34,11 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+    def total_questions(self):
+        # Dynamically load the Question model
+        Question = apps.get_model('exams', 'Question')
+        return Question.objects.filter(exam__category=self).count()
 
 
 class Exam(models.Model):
@@ -78,7 +84,7 @@ class Question(models.Model):
 
     def save(self, *args, **kwargs):
         if self.is_approved and not self.approval_date:
-            self.approval_date = timezone.now().date()
+            self.approval_date = datetime.now().date()
         super().save(*args, **kwargs)
 
     def __str__(self):
