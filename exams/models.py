@@ -63,6 +63,10 @@ class Exam(models.Model):
         Subject = apps.get_model('exams', 'Subject')
         return Subject.objects.filter(question__exam=self).distinct()
 
+    def get_questions(self):
+        Question = apps.get_model('exams', 'Question')
+        return Question.objects.filter(exam=self)
+
 
 class Subject(models.Model):
     name = models.CharField(max_length=100)
