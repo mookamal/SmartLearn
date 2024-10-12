@@ -65,7 +65,7 @@ class Exam(models.Model):
 
     def get_questions(self):
         Question = apps.get_model('exams', 'Question')
-        return Question.objects.filter(exam=self)
+        return Question.objects.filter(exam=self, is_approved=True)
 
 
 class Subject(models.Model):
