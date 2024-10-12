@@ -20,17 +20,25 @@
                         <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{{child.name}}</h5>
                         <div class="flex justify-between gap-2 items-center">
                             <span class="text-sm font-bold text-gray-500 dark:text-gray-400 my-2">
-                                <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
-                                    {{child.total_questions}}
-                                </span>
-                                Questions
+                                {% if child.total_questions > 0 %}
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                                        {{child.total_questions}}
+                                    </span>
+                                    Questions
+                                {% else %}
+                                    <span class="text-gray-500 dark:text-gray-400">No questions</span>
+                                {% endif %}
                             </span>
                             <span class="font-bold text-purple-200 shadow-md">|</span>
                             <span class="text-sm font-bold text-gray-500 dark:text-gray-400 my-2">
-                                <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
-                                    {{child.total_exams}}
-                                </span>
-                                Exams
+                                {% if child.total_exams > 0 %}
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                                        {{child.total_exams}}
+                                    </span>
+                                    Exams
+                                {% else %}
+                                    <span class="text-gray-500 dark:text-gray-400">No exams</span>
+                                {% endif %}
                             </span>
                         </div>
                         <div class="flex mt-4 md:mt-6">

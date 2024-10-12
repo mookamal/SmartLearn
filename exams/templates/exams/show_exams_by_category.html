@@ -16,12 +16,20 @@
             <hr class="w-48 h-1 mx-auto my-4 bg-gray-200 border-0 rounded md:my-10 dark:bg-gray-700">
             <div class="flex justify-evenly items-center font-bold text-slate-700">
                 <span class="p-3 shadow bg-yellow-100 rounded-md">
-                    {{category.total_questions}}
-                    Questions
+                    {% if category.total_questions > 0 %}
+                        {{category.total_questions}}
+                        Questions
+                    {% else %}
+                        No Questions Available
+                    {% endif %}
                 </span>
                 <span class="p-3 shadow bg-primary-100 rounded-md">
-                    {{category.total_exams}}
-                    Exams
+                    {% if category.total_exams > 0 %}
+                        {{category.total_exams}}
+                        Exams
+                    {% else %}
+                        No Exams Available
+                    {% endif %}
                 </span>
             </div>
         </div>
@@ -32,10 +40,15 @@
             <div class="max-w-sm rounded overflow-hidden shadow-lg dark:bg-black dark:text-white p-2 flex flex-col justify-between">
 
                 <div class="px-6 py-4">
-                    <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 mb-2">
-                        {{exam.get_questions|length}}
-                        Questions
+                    <span class="inline-flex gap-2 items-center bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 mb-2">
+                        <i class="fa-solid fa-clipboard-question"></i>
+                        {% if exam.get_questions|length > 0 %}
+                            {{exam.get_questions|length}} Questions
+                        {% else %}
+                            No Questions Available
+                        {% endif %}
                     </span>
+                    
                     <h2 class="font-bold text-xl mb-2">{{exam.name}}</h2>
                     <p class="text-gray-700 text-base">
                         {{exam.description|truncatewords:10|safe}}
