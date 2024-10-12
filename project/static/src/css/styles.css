@@ -1291,6 +1291,10 @@ input:checked + .toggle-bg {
   margin-right: 0.25rem;
 }
 
+.ml-1 {
+  margin-left: 0.25rem;
+}
+
 .block {
   display: block;
 }
@@ -2398,6 +2402,31 @@ input:checked + .toggle-bg {
 .hover\:bg-yellow-600:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(159 88 10 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-yellow-50:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(253 253 234 / var(--tw-bg-opacity));
+}
+
+.hover\:p-10:hover {
+  padding: 2.5rem;
+}
+
+.hover\:p-2:hover {
+  padding: 0.5rem;
+}
+
+.hover\:p-5:hover {
+  padding: 1.25rem;
+}
+
+.hover\:p-7:hover {
+  padding: 1.75rem;
+}
+
+.hover\:p-6:hover {
+  padding: 1.5rem;
 }
 
 .hover\:text-blue-600:hover {

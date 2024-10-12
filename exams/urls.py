@@ -6,4 +6,6 @@ urlpatterns = [
     path("<str:slug>/", views.show_category, name="show_category"),
     path("<str:slug>/<int:sub_category_id>/",
          views.show_exams_by_category, name="show_exams_by_category"),
+    path("<str:slug>/<int:sub_category_id>/<int:exam_id>/",
+         views.create_session, name="create_session"),
 ]

@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
-from .models import Category
+from .models import Category, Exam
 # Create your views here.
 
 
@@ -32,3 +32,18 @@ def show_exams_by_category(request, slug, sub_category_id):
     }
 
     return render(request, 'exams/show_exams_by_category.html', context)
+
+
+@login_required
+def create_session(request, slug, sub_category_id, exam_id):
+    category = get_object_or_404(
+        Category.objects.select_related('parent_category'),
+        pk=sub_category_id,
+        parent_category__slug=slug
+    )
+    exam = get_object_or_404(Exam, pk=exam_id, category=category)
+    context = {
+        'exam': exam,
+        'category': category
+    }
+    return render(request, 'exams/create_session.html', context)
