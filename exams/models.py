@@ -43,7 +43,7 @@ class Category(models.Model):
     def total_exams(self):
         # Dynamically load the Exam model
         Exam = apps.get_model('exams', 'Exam')
-        return Exam.objects.filter(category=self).count()
+        return Exam.objects.filter(category=self, is_visible=True).count()
 
 
 class Exam(models.Model):
@@ -59,10 +59,13 @@ class Exam(models.Model):
     def __str__(self):
         return self.name
 
+    def get_subjects(self):
+        Subject = apps.get_model('exams', 'Subject')
+        return Subject.objects.filter(question__exam=self).distinct()
+
 
 class Subject(models.Model):
     name = models.CharField(max_length=100)
-    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

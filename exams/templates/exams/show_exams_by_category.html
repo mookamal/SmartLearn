@@ -6,9 +6,9 @@
 
 {% include "exams/parts/navbar.html" %}
 {% include "exams/parts/sidebar.html" %} 
-<div class="p-4 sm:ml-64 mt-14 min-h-screen">
+<div class="sm:ml-64 mt-14 min-h-screen">
 
-    <section class="bg-white dark:bg-gray-900">
+    <section class="bg-gray-50 dark:bg-gray-900 border-b shadow-sm">
         <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 z-10 relative">
             <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
                 {{category.name}}
@@ -25,8 +25,39 @@
                 </span>
             </div>
         </div>
-        <div class="bg-gradient-to-b from-blue-50 to-transparent dark:from-blue-900 w-full h-full absolute top-0 left-0 z-0"></div>
     </section>
-    
+    {% if exams %}
+        <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-2 p-6">
+            {% for exam in exams %}
+            <div class="max-w-sm rounded overflow-hidden shadow-lg dark:bg-black dark:text-white p-2 flex flex-col justify-between">
+
+                <div class="px-6 py-4">
+                    <h2 class="font-bold text-xl mb-2">{{exam.name}}</h2>
+                    <p class="text-gray-700 text-base">
+                        {{exam.description|truncatewords:10|safe}}
+                    </p>
+                </div>
+
+                <div class="px-6 pt-4 pb-2">
+                    {% for subject in exam.get_subjects %}
+                        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#{{subject.name}}</span>
+                    {% endfor %}
+                </div>
+
+                
+                <div class="ml-3 mt-auto">
+                    <hr class="border-gray-200 dark:border-gray-700 w-full my-4" />
+                    <div class="flex justify-between">
+                        <p class="text-sm text-gray-500">Created: {{ exam.created_at|date:"M d, Y" }}</p>
+                        <p class="text-sm text-gray-500">Updated: {{ exam.updated_at|date:"M d, Y" }}</p>                    
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center font-medium text-gray-500 dark:text-gray-400 my-6">No exams found in this category.</p>
+    {% endif %}
 </div>
 {% endblock content %}

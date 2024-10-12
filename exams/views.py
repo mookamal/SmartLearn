@@ -24,7 +24,7 @@ def show_exams_by_category(request, slug, sub_category_id):
         parent_category__slug=slug
     )
 
-    exams = category.exams.all()
+    exams = category.exams.filter(is_visible=True)
 
     context = {
         'exams': exams,
