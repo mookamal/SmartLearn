@@ -40,6 +40,11 @@ class Category(models.Model):
         Question = apps.get_model('exams', 'Question')
         return Question.objects.filter(exam__category=self).count()
 
+    def total_exams(self):
+        # Dynamically load the Exam model
+        Exam = apps.get_model('exams', 'Exam')
+        return Exam.objects.filter(category=self).count()
+
 
 class Exam(models.Model):
     name = models.CharField(max_length=100)
