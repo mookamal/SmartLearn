@@ -14,3 +14,21 @@ def show_category(request, slug):
     category = get_object_or_404(Category, slug=slug)
     context = {'category': category}
     return render(request, 'exams/show_category.html', context)
+
+
+@login_required
+def show_exams_by_category(request, slug, sub_category_id):
+    category = get_object_or_404(
+        Category.objects.select_related('parent_category'),
+        pk=sub_category_id,
+        parent_category__slug=slug
+    )
+
+    exams = category.exams.all()
+
+    context = {
+        'exams': exams,
+        'category': category
+    }
+
+    return render(request, 'exams/show_exams_by_category.html', context)
