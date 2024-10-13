@@ -8,4 +8,8 @@ urlpatterns = [
          views.show_exams_by_category, name="show_exams_by_category"),
     path("<str:slug>/<int:sub_category_id>/<int:exam_id>/",
          views.create_session, name="create_session"),
+
+    # urls for ajax
+    path("ajax/get-question-count/",
+         views.get_question_count, name="get_question_count"),
 ]

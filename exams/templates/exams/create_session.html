@@ -94,7 +94,7 @@
                 <div class="flex justify-center">
                     <div class="mt-2 border shadow-sm p-2">
                         <div class="flex items-center mb-4">
-                            <input id="all-subjects" type="checkbox" value="all" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" checked>
+                            <input id="all-subjects" type="checkbox" name="subjects value="all" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" checked>
                             <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">All</label>
                         </div>
                         {% for subject in exam.get_subjects %}
@@ -116,7 +116,7 @@
                 <div class="flex justify-center">
                     <div class="mt-2 border shadow-sm p-2">
                         <div class="flex items-center mb-4">
-                            <input id="all-sources" type="checkbox" value="all" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" checked>
+                            <input id="all-sources" name="sources" type="checkbox" value="all" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" checked>
                             <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">All</label>
                         </div>
                         {% for source in exam.get_sources %}
@@ -264,5 +264,54 @@
                 }
             });
         });
+    </script>
+    <script>
+        $(document).ready(function() {
+
+            updateQuestionCount();
+
+            $('input[name="subjects"], input[name="sources"]').change(function() {
+                updateQuestionCount();
+            });
+        });
+
+        function updateQuestionCount() {
+            const isAllSubjectsSelected = $('#all-subjects').is(':checked');
+            const isAllSourcesSelected = $('#all-sources').is(':checked');
+
+            let formData = {};
+
+            formData['exam_id'] = '{{exam.id}}';
+
+            if (!isAllSubjectsSelected) {
+                const subjects = $('input[name="subjects"]:checked').map(function() {
+                    return this.value;
+                }).get();
+                formData['subjects'] = subjects;
+            }
+
+            if (!isAllSourcesSelected) {
+                const sources = $('input[name="sources"]:checked').map(function() {
+                    return this.value;
+                }).get();
+                formData['sources'] = sources;
+            }
+
+            $.ajax({
+                url: '{% url "get_question_count" %}',
+                type: 'POST',
+                contentType: 'application/json',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: JSON.stringify(formData),
+                success: function(data) {
+                    console.log('Number of questions:', data.question_count);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
     </script>
 {% endblock js %}

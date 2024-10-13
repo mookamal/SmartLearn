@@ -1,6 +1,9 @@
+import json
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from .models import Category, Exam
+from django.http import JsonResponse
 # Create your views here.
 
 
@@ -48,3 +51,31 @@ def create_session(request, slug, sub_category_id, exam_id):
         'category': category
     }
     return render(request, 'exams/create_session.html', context)
+
+# functions for ajax
+
+
+@login_required
+@require_POST
+def get_question_count(request):
+    data = json.loads(request.body)
+
+    subjects = data.get('subjects', None)
+    sources = data.get('sources', None)
+    exam_id = data.get('exam_id', None)
+    print("subjects", subjects)
+    print("sources", sources)
+    exam = get_object_or_404(Exam, id=exam_id)
+
+    questions = exam.get_questions().prefetch_related('subject', 'sources')
+
+    if subjects and subjects != ['all']:
+        questions = questions.filter(subject__id__in=subjects)
+
+    if sources and sources != ['all']:
+        questions = questions.filter(sources__id__in=sources)
+    for i in questions:
+        print(i)
+    question_count = questions.count()
+
+    return JsonResponse({'question_count': question_count})
