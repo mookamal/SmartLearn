@@ -41,7 +41,8 @@ def create_session(request, slug, sub_category_id, exam_id):
         pk=sub_category_id,
         parent_category__slug=slug
     )
-    exam = get_object_or_404(Exam, pk=exam_id, category=category)
+    exam = get_object_or_404(
+        Exam, pk=exam_id, category=category, is_visible=True)
     context = {
         'exam': exam,
         'category': category

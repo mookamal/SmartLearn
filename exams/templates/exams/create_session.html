@@ -1,12 +1,77 @@
 {% extends "_base.html" %}
 
-{% block title %}Exam name {{exam.name}}{% endblock title %}
+{% block title %}Create New Session{% endblock title %}
 
 {% block content %}
 
 {% include "exams/parts/navbar.html" %}
 {% include "exams/parts/sidebar.html" %} 
 <div class="p-4 sm:ml-64 mt-14">
+    <section class="bg-white dark:bg-black rounded-md shadow p-5 flex justify-between flex-col gap-2 md:flex-row">
+        <nav class="flex px-5 py-3 justify-center text-gray-700 border border-gray-200 rounded-lg bg-primary-100 dark:bg-gray-800 dark:border-gray-700" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+                <li class="inline-flex items-center">
+                    <a href="{% url 'show_category' slug=category.parent_category.slug %}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                        {{category.parent_category.name}}
+                        <span class="ml-2 text-gray-600 dark:text-gray-500">/</span>
+                    </a>
+                </li>
+                <li class="inline-flex items-center">
+                    <a href="{% url 'show_exams_by_category' slug=category.parent_category.slug sub_category_id=category.id %}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                        {{category.name}}
+                        <span class="ml-2 text-gray-600 dark:text-gray-500">/</span>
+                    </a>
+                </li>
+                <li class="inline-flex items-center">
+                    <span class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                        {{exam.name}}
+                    </span>
+                </li>
+            </ol>
+        </nav>
+        <div class="flex px-5 py-3 justify-center text-gray-700 border border-gray-200 rounded-lg bg-primary-100 dark:bg-gray-800 dark:border-gray-700">
+            <span class="bg-yellow-50 text-primary-950 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 flex items-center">
+                {{exam.get_questions|length}}
+                Questions
+            </span>
+        </div>
+        <div class="flex px-5 py-3 justify-center text-gray-700 border border-gray-200 rounded-lg bg-primary-100 dark:bg-gray-800 dark:border-gray-700">
+            <!-- Modal toggle -->
+            <button data-modal-target="exam-desc-modal" data-modal-toggle="exam-desc-modal" class="block text-primary-950 bg-yellow-50 hover:bg-yellow-200 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                Show exam description
+            </button>
+        </div>
+    </section>
+</div>
 
+<!-- Main modal -->
+<div id="exam-desc-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    Exam Description
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="exam-desc-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-4 md:p-5 space-y-4">
+                <p>{{ exam.description|safe }}</p>
+            </div>
+            <!-- Modal footer -->
+            <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-full md:w-auto px-5 py-2.5 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="exam-desc-modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock content %}
