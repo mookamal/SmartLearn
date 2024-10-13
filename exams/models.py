@@ -75,6 +75,11 @@ class Subject(models.Model):
     def __str__(self):
         return self.name
 
+    # get Questions
+    def get_questions(self):
+        Question = apps.get_model('exams', 'Question')
+        return Question.objects.filter(subject=self)
+
 
 class Question(models.Model):
     sources = models.ManyToManyField(Source, blank=True)

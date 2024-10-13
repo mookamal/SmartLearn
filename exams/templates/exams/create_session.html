@@ -46,12 +46,14 @@
     <h2 class="text-center font-bold text-slate-700 text-xl mt-3 dark:text-primary-200">Create New Session</h2>
     <hr class="w-48 h-1 mx-auto my-2 bg-primary-300  border-0 rounded md:my-5 dark:bg-primary-100">
 
-
-
     <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-styled-tab" data-tabs-toggle="#default-styled-tab-content" data-tabs-active-classes="text-purple-600 hover:text-purple-600 dark:text-purple-500 dark:hover:text-purple-500 border-purple-600 dark:border-purple-500" data-tabs-inactive-classes="dark:border-transparent text-gray-500 hover:text-gray-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300" role="tablist">
             <li class="me-2" role="presentation">
-                <button class="inline-block p-4 border-b-2 rounded-t-lg" id="profile-styled-tab" data-tabs-target="#styled-session-feel" type="button" role="tab" aria-controls="session-feel" aria-selected="false">Session feel</button>
+                <button class="inline-block p-4 border-b-2 rounded-t-lg" id="session-feel-tab" data-tabs-target="#styled-session-feel" type="button" role="tab" aria-controls="session-feel" aria-selected="false">Session feel</button>
+            </li>
+            <!-- subjects choose -->
+            <li class="me-2" role="presentation">
+                <button class="inline-block p-4 border-b-2 rounded-t-lg" id="subjects-styled-tab" data-tabs-target="#subjects-choose" type="button" role="tab" aria-controls="subjects-choose" aria-selected="false">Subjects</button>
             </li>
         </ul>
     </div>
@@ -73,13 +75,35 @@
                         name="session-feel"
                         class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer p-2"
                     >
-                        <option selected>Choose a Session feel</option>
+                        <option value="" selected>Choose a Session feel</option>
                         <option value="EXPLAINED">Explained</option>
                         <option value="UNEXPLAINED">Unexplained</option>
                         <option value="SOLVED">Solved</option>
                     </select>
                 </div>
     
+            </div>
+            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="subjects-choose" role="tabpanel" aria-labelledby="subjects-choose">
+                <h3 class="text-sm font-medium text-gray-700 dark:text-gray-400">
+                    Choose the subjects you'd like to study
+                </h3>
+                <div class="flex justify-center">
+                    <div class="mt-2 border shadow-sm p-2">
+                        <div class="flex items-center mb-4">
+                            <input id="all-subjects" type="checkbox" value="all" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" checked>
+                            <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">All</label>
+                        </div>
+                        {% for subject in exam.get_subjects %}
+                            <div class="flex items-center mb-4">
+                                <input id="{{ subject.name }}" name="subjects" type="checkbox" value="{{ subject.id }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg
+                                dark:border-gray-600" checked>
+                                <label for="{{ subject.name }}" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                    {{ subject.name }} ({{ subject.get_questions|length }})
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -133,6 +157,23 @@
             $('#sessionForm').on('submit', function(e) {
                 e.preventDefault();
                 let formData = $(this).serialize();
+                // check session feel choose
+                let sessionFeel = $('select[name="session-feel"]').val();
+                if (sessionFeel == '') {
+                    $('#session-feel-tab').click();
+                    setAlert('Please choose a session feel.','error')
+                    return false;
+                }
+                // check subjects choose
+                let subjects = [];
+                $('input[name="subjects"]:checked').each(function() {
+                    subjects.push($(this).val());
+                });
+                if (subjects.length == 0) {
+                    $('#subjects-styled-tab').click();
+                    setAlert('Please choose at least one subject.','error')
+                    return false;
+                }
                 console.log(formData);
                 // $.ajax({
                 //     url: '/api/create_session',
@@ -147,6 +188,28 @@
                 //         // handle error
                 //     }
                 // });
+            });
+        });
+    </script>
+    <script>
+        // handle checkbox 
+        $('#all-subjects').change(function() {
+            if ($(this).is(':checked')) {
+                $('input[name="subjects"]').prop('checked', true);
+            } else {
+                $('input[name="subjects"]').prop('checked', false);
+            }
+        });
+        $('input[name="subjects"]').change(function() {
+            if (!$(this).is(':checked')) {
+                $('#all-subjects').prop('checked', false);
+            }
+            $('input[name="subjects"]').change(function() {
+                if ($('input[name="subjects"]:checked').length == $('input[name="subjects"]').length) {
+                    $('#all-subjects').prop('checked', true);
+                } else {
+                    $('#all-subjects').prop('checked', false);
+                }
             });
         });
     </script>
