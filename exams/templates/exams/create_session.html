@@ -55,6 +55,10 @@
             <li class="me-2" role="presentation">
                 <button class="inline-block p-4 border-b-2 rounded-t-lg" id="subjects-styled-tab" data-tabs-target="#subjects-choose" type="button" role="tab" aria-controls="subjects-choose" aria-selected="false">Subjects</button>
             </li>
+            <!-- sources choose -->
+             <li class="me-2" role="presentation">
+                <button class="inline-block p-4 border-b-2 rounded-t-lg" id="sources-styled-tab" data-tabs-target="#sources-choose" type="button" role="tab" aria-controls="sources-choose" aria-selected="false">Sources</button>
+             </li>
         </ul>
     </div>
     <form id="sessionForm">
@@ -84,7 +88,7 @@
     
             </div>
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="subjects-choose" role="tabpanel" aria-labelledby="subjects-choose">
-                <h3 class="text-sm font-medium text-gray-700 dark:text-gray-400">
+                <h3 class="text-sm font-medium text-gray-700 dark:text-gray-400 text-center">
                     Choose the subjects you'd like to study
                 </h3>
                 <div class="flex justify-center">
@@ -105,6 +109,26 @@
                     </div>
                 </div>
             </div>
+            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="sources-choose" role="tabpanel" aria-labelledby="sources-choose">
+                <h3 class="text-sm font-medium text-gray-700 dark:text-gray-400 text-center">
+                    Choose the sources you'd like to use
+                </h3>
+                <div class="flex justify-center">
+                    <div class="mt-2 border shadow-sm p-2">
+                        <div class="flex items-center mb-4">
+                            <input id="all-sources" type="checkbox" value="all" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" checked>
+                            <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">All</label>
+                        </div>
+                        {% for source in exam.get_sources %}
+                            <div class="flex items-center mb-4">
+                                <input id="{{ source.name }}" name="sources" type="checkbox" value="{{ source.id }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" checked>
+                                <label for="{{ source.name }}" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                    {{ source.name }} ({{ source.get_questions|length }})
+                                </label>
+                            </div>
+                        {% endfor %}
+                </div>
+            </div>
         </div>
         
         <div class="flex justify-center mt-3">
@@ -114,8 +138,6 @@
         </div>
     </form>
     
-    
-
 </div>
 
 <!-- Main modal -->
@@ -174,6 +196,16 @@
                     setAlert('Please choose at least one subject.','error')
                     return false;
                 }
+                // check sources choose
+                let sources = [];
+                $('input[name="sources"]:checked').each(function() {
+                    sources.push($(this).val());
+                });
+                if (sources.length == 0) {
+                    $('#sources-choose').click();
+                    setAlert('Please choose at least one source.','error')
+                    return false;
+                }
                 console.log(formData);
                 // $.ajax({
                 //     url: '/api/create_session',
@@ -192,7 +224,7 @@
         });
     </script>
     <script>
-        // handle checkbox 
+        // handle checkbox subjects
         $('#all-subjects').change(function() {
             if ($(this).is(':checked')) {
                 $('input[name="subjects"]').prop('checked', true);
@@ -209,6 +241,26 @@
                     $('#all-subjects').prop('checked', true);
                 } else {
                     $('#all-subjects').prop('checked', false);
+                }
+            });
+        });
+        // handle checkbox sources
+        $('#all-sources').change(function() {
+            if ($(this).is(':checked')) {
+                $('input[name="sources"]').prop('checked', true);
+            } else {
+                $('input[name="sources"]').prop('checked', false);
+            }
+        });
+        $('input[name="sources"]').change(function() {
+            if (!$(this).is(':checked')) {
+                $('#all-sources').prop('checked', false);
+            }
+            $('input[name="sources"]').change(function() {
+                if ($('input[name="sources"]:checked').length == $('input[name="sources"]').length) {
+                    $('#all-sources').prop('checked', true);
+                } else {
+                    $('#all-sources').prop('checked', false);
                 }
             });
         });

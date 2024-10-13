@@ -20,6 +20,11 @@ class Source(models.Model):
     def __str__(self):
         return self.name
 
+    def get_questions(self):
+        # Dynamically load the Question model
+        Question = apps.get_model('exams', 'Question')
+        return Question.objects.filter(sources=self)
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -66,6 +71,12 @@ class Exam(models.Model):
     def get_questions(self):
         Question = apps.get_model('exams', 'Question')
         return Question.objects.filter(exam=self, is_approved=True)
+
+    def get_sources(self):
+        questions = self.get_questions()
+        Source = apps.get_model('exams', 'Source')
+        sources = Source.objects.filter(question__in=questions).distinct()
+        return sources
 
 
 class Subject(models.Model):
