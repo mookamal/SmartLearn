@@ -2,7 +2,7 @@ import json
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
-from .models import Category, Exam, Session
+from .models import Category, Exam, Session, Question
 from django.http import JsonResponse
 # Create your views here.
 
@@ -54,8 +54,24 @@ def create_session(request, slug, sub_category_id, exam_id):
 
 
 @login_required
-def show_session(request, slug, sub_category_id, exam_id, session_id=None):
-    pass
+def show_session(request, session_id):
+    session = get_object_or_404(Session, id=session_id, user=request.user)
+    question_order = session.question_order
+    current_index = session.current_question_index
+    if current_index >= len(question_order):
+        session.completed = True
+        session.save()
+        return render(request, 'exams/session_complete.html')
+    current_question_id = question_order[current_index]
+    current_question = get_object_or_404(Question, id=current_question_id)
+    context = {
+        'session': session,
+        'question': current_question,
+        'current_index': current_index,
+        'total_questions': len(question_order)
+    }
+    return render(request, 'exams/show_session.html', context)
+
 
 # functions for ajax
 
