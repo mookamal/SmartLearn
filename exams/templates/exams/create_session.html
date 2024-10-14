@@ -61,8 +61,10 @@
              </li>
         </ul>
     </div>
+
     <form id="sessionForm">
         <div id="default-styled-tab-content">
+            <!-- end styled-session-feel -->
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-session-feel" role="tabpanel" aria-labelledby="session-feel-tab">
                 <h3 class="text-sm font-medium text-gray-700 dark:text-gray-400">How would you like the session to feel?</h3>
                 <p class="text-sm text-gray-500 dark:text-gray-400">
@@ -85,18 +87,20 @@
                         <option value="SOLVED">Solved</option>
                     </select>
                 </div>
-    
-            </div>
+            </div> <!-- end styled-session-feel -->
+            <!-- subjects-choose -->
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="subjects-choose" role="tabpanel" aria-labelledby="subjects-choose">
                 <h3 class="text-sm font-medium text-gray-700 dark:text-gray-400 text-center">
                     Choose the subjects you'd like to study
                 </h3>
                 <div class="flex justify-center">
                     <div class="mt-2 border shadow-sm p-2">
+
                         <div class="flex items-center mb-4">
                             <input id="all-subjects" type="checkbox" name="subjects" value="all" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" checked>
                             <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">All</label>
                         </div>
+
                         {% for subject in exam.get_subjects %}
                             <div class="flex items-center mb-4">
                                 <input id="{{ subject.name }}" name="subjects" type="checkbox" value="{{ subject.id }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg
@@ -106,19 +110,24 @@
                                 </label>
                             </div>
                         {% endfor %}
+
                     </div>
                 </div>
-            </div>
+            </div> <!-- end subjects-choose -->
+            <!-- sources-choose -->
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="sources-choose" role="tabpanel" aria-labelledby="sources-choose">
                 <h3 class="text-sm font-medium text-gray-700 dark:text-gray-400 text-center">
                     Choose the sources you'd like to use
                 </h3>
+
                 <div class="flex justify-center">
                     <div class="mt-2 border shadow-sm p-2">
+
                         <div class="flex items-center mb-4">
                             <input id="all-sources" name="sources" type="checkbox" value="all" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" checked>
                             <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">All</label>
                         </div>
+
                         {% for source in exam.get_sources %}
                             <div class="flex items-center mb-4">
                                 <input id="{{ source.name }}" name="sources" type="checkbox" value="{{ source.id }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" checked>
@@ -127,9 +136,11 @@
                                 </label>
                             </div>
                         {% endfor %}
+                    </div>
                 </div>
-            </div>
-        </div>
+            </div> <!-- end sources-choose -->
+
+        </div> <!-- end default-styled-tab-content -->
         
         <div class="flex justify-center mt-3">
             <button type="submit" class="text-primary-600 border border-primary-300 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500">
