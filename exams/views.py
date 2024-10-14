@@ -52,6 +52,11 @@ def create_session(request, slug, sub_category_id, exam_id):
     }
     return render(request, 'exams/create_session.html', context)
 
+
+@login_required
+def show_session(request, slug, sub_category_id, exam_id, session_id=None):
+    pass
+
 # functions for ajax
 
 
@@ -106,7 +111,7 @@ def ajax_create_session(request):
         questions = questions.order_by('?')[:num_questions]
 
         session = Session.objects.create(
-            user=current_user, exam=exam, session_mode=session_mode)
+            user=current_user, exam=exam, session_mode=session_mode, number_of_questions=num_questions)
 
         session.questions.add(*questions)
 
