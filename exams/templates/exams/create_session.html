@@ -68,7 +68,8 @@
         </ul>
     </div>
 
-    <form id="sessionForm">
+    <form id="sessionForm" method="post">
+        <input type="hidden" name="exam_id" value="{{ exam.id }}">
         <div id="default-styled-tab-content">
             <!-- end styled-session-feel -->
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-session-feel" role="tabpanel" aria-labelledby="session-feel-tab">
@@ -235,7 +236,6 @@
             // submit form
             $('#sessionForm').on('submit', function(e) {
                 e.preventDefault();
-                let formData = $(this).serialize();
                 // check session feel choose
                 let sessionFeel = $('select[name="session-feel"]').val();
                 if (sessionFeel == '') {
@@ -265,7 +265,6 @@
                 }
                 // check number of questions 
                 let numQuestions = parseInt($('input[name="questions-num"]').val());
-                console.log("numQuestions",numQuestions);
                 if (isNaN(numQuestions) || numQuestions <= 0) {
                     $('#questions-styled-tab').click();
                     setAlert('Please enter a valid number of questions.','error')
@@ -276,21 +275,33 @@
                     setAlert('Number of questions cannot exceed the total number of questions.','error')
                     return false;
                 }
- 
-                console.log(formData);
-                // $.ajax({
-                //     url: '/api/create_session',
-                //     type: 'POST',
-                //     data: formData,
-                //     success: function(response) {
-                //         console.log(response);
-                //         // handle success
-                //     },
-                //     error: function(error) {
-                //         console.log(error);
-                //         // handle error
-                //     }
-                // });
+                // get exam_id value
+                let exam_id = parseInt($('input[name="exam_id"]').val());
+                
+                let formData = {
+                    'sessionFeel': sessionFeel,
+                    'subjects': subjects,
+                    'sources': sources,
+                    'numQuestions': numQuestions,
+                    'exam_id': exam_id,
+                    };
+                $.ajax({
+                    url: '{% url "ajax_create_session" %}',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    data: JSON.stringify(formData),
+                    success: function(response) {
+                        console.log(response);
+                        // handle success
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        // handle error
+                    }
+                });
             });
         });
     </script>

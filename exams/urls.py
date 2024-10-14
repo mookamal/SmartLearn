@@ -12,4 +12,6 @@ urlpatterns = [
     # urls for ajax
     path("ajax/get-question-count/",
          views.get_question_count, name="get_question_count"),
+    path("ajax/create_session", views.ajax_create_session,
+         name="ajax_create_session"),
 ]
