@@ -2,16 +2,31 @@
 <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
     <div class="px-3 py-3 lg:px-5 lg:pl-3">
       <div class="flex items-center justify-between">
+
         <div class="flex items-center justify-start rtl:justify-end">
           <a href="{% url 'dashboard' %}" class="flex ms-2 md:me-24">
             <img src="{{info.logo.url}}" class="h-8 me-3" alt="FlowBite Logo" />
           </a>
         </div>
+
+        <div class="flex gap-2 items-center">
+          <p class="tracking-tighter text-gray-500 md:text-lg dark:text-gray-400 flex gap-3">
+            {{session.exam.category.name}} 
+            <strong>|</strong>
+            Session id: {{session.id}}
+            <strong>|</strong>
+          </p>
+          <span class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">
+            ({{session.session_mode}})
+          </span>
+        </div>
+
         <div class="flex items-center">
             <div class="flex items-center ms-3 gap-3">
                 {% include "parts/theme_btn.html" %}
             </div>
-          </div>
+        </div>
+
       </div>
     </div>
 </nav>
