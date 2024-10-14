@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from .models import Category, Exam, Session, Question
 from django.http import JsonResponse
+from django.contrib import messages
 # Create your views here.
 
 
@@ -131,6 +132,9 @@ def ajax_create_session(request):
             user=current_user, exam=exam, session_mode=session_mode, number_of_questions=num_questions, question_order=question_ids)
 
         session.questions.add(*questions)
+
+        messages.success(
+            request, f'Session created successfully. Session ID: #{session.id}')
 
         return JsonResponse({'session_id': session.id})
 
