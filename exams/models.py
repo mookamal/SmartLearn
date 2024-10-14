@@ -146,6 +146,9 @@ class Session(models.Model):
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     questions = models.ManyToManyField(Question, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    question_order = models.JSONField(default=list)
+    current_question_index = models.IntegerField(default=0)
+    completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -109,9 +109,10 @@ def ajax_create_session(request):
             questions = questions.filter(sources__id__in=sources)
 
         questions = questions.order_by('?')[:num_questions]
+        question_ids = list(questions.values_list('id', flat=True))
 
         session = Session.objects.create(
-            user=current_user, exam=exam, session_mode=session_mode, number_of_questions=num_questions)
+            user=current_user, exam=exam, session_mode=session_mode, number_of_questions=num_questions, question_order=question_ids)
 
         session.questions.add(*questions)
 
