@@ -1,6 +1,10 @@
 {% extends "_base.html" %}
-
+{% load static %}
 {% block title %}Show Session{% endblock title %}
+{% block css %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
+{% endblock %}
+
 
 {% block content %}
 {% include "exams/parts/session_navbar.html" %}
@@ -43,5 +47,16 @@
         {% endif %}
     </div>
 
+<!-- صورة 1 -->
+<a href="{{info.logo.url}}" data-lightbox="gallery" data-title="Image 1">
+    <img class="w-32 cursor-pointer" src="{{info.logo.url}}" alt="Small Image 1">
+</a>
+
+
+
 </div>
 {% endblock content %}
+
+{% block js %}
+<script src="{% static 'src/js/lightbox.min.js' %}"></script>
+{% endblock %}
