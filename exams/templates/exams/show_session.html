@@ -18,6 +18,11 @@
     <hr class="h-px my-8 w-2/4 mx-auto bg-primary-200 border-0 dark:bg-gray-700">
     <div class="flex justify-center"><p class="p-2 text-sm my-2 bg-yellow-100 text-black rounded-md shadow">Question ID: {{question.id}}</p></div>
     <h2 class="text-4xl font-extrabold dark:text-white text-center mt-2">{{question.text}}</h2>
+    {% if question.figure %}
+    <a href="{{ question.figure.url }}" data-lightbox="image-1">
+        <img class="h-auto max-w-sm mx-auto my-5" src="{{ question.figure.url }}" alt="{{ question.text }}">
+    </a>
+    {% endif %}
     <!-- show chooses -->
 
     
@@ -46,13 +51,6 @@
             </button>
         {% endif %}
     </div>
-
-<!-- صورة 1 -->
-<a href="{{info.logo.url}}" data-lightbox="gallery" data-title="Image 1">
-    <img class="w-32 cursor-pointer" src="{{info.logo.url}}" alt="Small Image 1">
-</a>
-
-
 
 </div>
 {% endblock content %}
