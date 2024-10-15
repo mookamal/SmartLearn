@@ -65,11 +65,13 @@ def show_session(request, session_id):
         return render(request, 'exams/session_complete.html')
     current_question_id = question_order[current_index]
     current_question = get_object_or_404(Question, id=current_question_id)
+    index_current_question = question_order.index(current_question_id) + 1
     context = {
         'session': session,
         'question': current_question,
         'current_index': current_index,
-        'total_questions': len(question_order)
+        'total_questions': len(question_order),
+        "index_current_question": index_current_question,
     }
     return render(request, 'exams/show_session.html', context)
 
@@ -77,8 +79,8 @@ def show_session(request, session_id):
 # functions for ajax
 
 
-@login_required
-@require_POST
+@ login_required
+@ require_POST
 def get_question_count(request):
     data = json.loads(request.body)
 
@@ -100,8 +102,8 @@ def get_question_count(request):
     return JsonResponse({'question_count': question_count})
 
 
-@login_required
-@require_POST
+@ login_required
+@ require_POST
 def ajax_create_session(request):
     try:
         data = json.loads(request.body)
