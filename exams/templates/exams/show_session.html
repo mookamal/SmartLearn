@@ -4,7 +4,44 @@
 
 {% block content %}
 {% include "exams/parts/session_navbar.html" %}
-<div class="p-4 sm:ml-64 mt-14 h-screen">
+<div class="container mx-auto mt-14 h-screen p-5">
+
+    <div class="w-2/3 mx-auto">
+        <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
+            <div class="bg-gray-600 h-2.5 rounded-full dark:bg-gray-300" style="width: {{percentage}}%"></div>
+        </div>
+    </div>
+    <hr class="h-px my-8 w-2/4 mx-auto bg-primary-200 border-0 dark:bg-gray-700">
+    <div class="flex justify-center"><p class="p-2 text-sm my-2 bg-yellow-100 text-black rounded-md shadow">Question ID: {{question.id}}</p></div>
+    <h2 class="text-4xl font-extrabold dark:text-white text-center mt-2">{{question.text}}</h2>
+    <!-- show chooses -->
+
+    
+    <div class="flex justify-center">
+        <ul class="md:w-2/3 w-full mx-auto text-sm my-6 font-medium text-gray-900 border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+            {% for choice in choices %}
+                <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600"> 
+                    <div class="flex items-center ps-3 gap-2">
+                        {% if choice.is_right %}
+                        <i class="fa-solid fa-circle-check text-green-400" style="{% if session.session_mode != 'SOLVED' %}display: none;{% endif %}"></i>
+                        {% else %}
+                        <i class="fa-solid fa-circle-xmark text-red-600" style="{% if session.session_mode != 'SOLVED' %}display: none;{% endif %}"></i>
+                        {% endif %}
+                        <input id="choice-{{choice.id}}" type="radio" value="{{choice.id}}" name="choice-list" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                        <label for="choice-{{choice.id}}" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{choice.text}}</label>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="flex justify-center">
+        {% if session.session_mode != "SOLVED" %}
+        <button type="submit" class="py-3 px-6 text-sm font-medium text-white bg-primary-500 border-0 rounded-full shadow hover:bg-primary-600 dark:text-white dark:bg-primary-400 dark:hover:bg-primary-500">
+            Submit
+        </button>
+        {% endif %}
+    </div>
 
 </div>
 {% endblock content %}

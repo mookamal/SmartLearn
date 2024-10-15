@@ -2,7 +2,7 @@ import json
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
-from .models import Category, Exam, Session, Question
+from .models import Category, Exam, Session, Question, Choice
 from django.http import JsonResponse
 from django.contrib import messages
 # Create your views here.
@@ -65,13 +65,17 @@ def show_session(request, session_id):
         return render(request, 'exams/session_complete.html')
     current_question_id = question_order[current_index]
     current_question = get_object_or_404(Question, id=current_question_id)
+    choices = Choice.objects.filter(question=current_question)
     index_current_question = question_order.index(current_question_id) + 1
+    percentage = ((index_current_question - 1) / len(question_order)) * 100
     context = {
         'session': session,
         'question': current_question,
         'current_index': current_index,
         'total_questions': len(question_order),
         "index_current_question": index_current_question,
+        "percentage": percentage,
+        'choices': choices,
     }
     return render(request, 'exams/show_session.html', context)
 
