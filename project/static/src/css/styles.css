@@ -1404,8 +1404,16 @@ input:checked + .toggle-bg {
   height: auto;
 }
 
+.h-3\.5 {
+  height: 0.875rem;
+}
+
 .max-h-full {
   max-height: 100%;
+}
+
+.max-h-32 {
+  max-height: 8rem;
 }
 
 .min-h-screen {
@@ -1488,6 +1496,10 @@ input:checked + .toggle-bg {
   width: auto;
 }
 
+.w-3\.5 {
+  width: 0.875rem;
+}
+
 .max-w-2xl {
   max-width: 42rem;
 }
@@ -1518,6 +1530,10 @@ input:checked + .toggle-bg {
 
 .max-w-lg {
   max-width: 32rem;
+}
+
+.max-w-32 {
+  max-width: 8rem;
 }
 
 .flex-1 {
@@ -2410,6 +2426,11 @@ input:checked + .toggle-bg {
 .text-green-400 {
   --tw-text-opacity: 1;
   color: rgb(49 196 141 / var(--tw-text-opacity));
+}
+
+.text-gray-200 {
+  --tw-text-opacity: 1;
+  color: rgb(229 231 235 / var(--tw-text-opacity));
 }
 
 .antialiased {

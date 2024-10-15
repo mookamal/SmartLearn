@@ -20,7 +20,7 @@
     <h2 class="text-4xl font-extrabold dark:text-white text-center mt-2">{{question.text}}</h2>
     {% if question.figure %}
     <a href="{{ question.figure.url }}" data-lightbox="image-1">
-        <img class="h-auto max-w-sm mx-auto my-5" src="{{ question.figure.url }}" alt="{{ question.text }}">
+        <img class="max-h-32 max-w-32 mx-auto my-5" src="{{ question.figure.url }}" alt="{{ question.text }}">
     </a>
     {% endif %}
     <!-- show chooses -->
@@ -44,6 +44,20 @@
         </ul>
     </div>
 
+    
+    <!-- explained question -->
+    <div class="flex justify-center">
+        <div class="p-6 border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 my-5">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-200">Explanation:</h3>
+            <p class="text-sm my-4 text-gray-700 dark:text-gray-400">{{ question.explanation }}</p>
+            {% if question.explanation_figure %}
+            <a href="{{ question.explanation_figure.url }}" data-lightbox="image-2">
+                <img class="max-h-32 max-w-32 mt-2" src="{{ question.explanation_figure.url }}" alt="{{ question.explanation }}">
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    <!-- button submit -->
     <div class="flex justify-center">
         {% if session.session_mode != "SOLVED" %}
             <button type="submit" class="py-3 px-6 text-sm font-medium text-white bg-primary-500 border-0 rounded-full shadow hover:bg-primary-600 dark:text-white dark:bg-primary-400 dark:hover:bg-primary-500">
