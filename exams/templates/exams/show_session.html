@@ -46,7 +46,7 @@
 
     
     <!-- explained question -->
-    <div class="flex justify-center">
+    <div class="flex justify-center" style="{% if session.session_mode != 'SOLVED' %}display: none;{% endif %}" id="explanation-area">
         <div class="p-6 border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 my-5">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-200">Explanation:</h3>
             <p class="text-sm my-4 text-gray-700 dark:text-gray-400">{{ question.explanation }}</p>
@@ -54,6 +54,11 @@
             <a href="{{ question.explanation_figure.url }}" data-lightbox="image-2">
                 <img class="max-h-32 max-w-32 mt-2" src="{{ question.explanation_figure.url }}" alt="{{ question.explanation }}">
             </a>
+            {% endif %}
+            {% if question.reference  %}
+                <hr class="border border-purple-100 my-2">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-200">Reference:</h3>
+                <p class="text-sm my-4 text-gray-700 dark:text-gray-400">{{ question.reference }}</p>
             {% endif %}
         </div>
     </div>
