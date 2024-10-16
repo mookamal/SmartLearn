@@ -3,7 +3,7 @@
     <div class="flex h-full max-w-lg flex-cols-5 mx-auto justify-between">
         {% comment %} Previous button {% endcomment %}
         {% if current_index > 0 %}
-            <button  type="button" id="doPrev" class="inline-flex gap-2 font-bold text-sm items-center justify-center px-5 rounded-s-full hover:bg-gray-50 dark:hover:bg-gray-800 group">
+            <button  type="button" id="doPrev" class="inline-flex gap-2 font-bold text-sm items-center justify-center dark:text-white px-5 rounded-s-full hover:bg-gray-50 dark:hover:bg-gray-800 group">
                 <i class="fa-solid fa-arrow-left"></i> Prev
             </button>
         {% else %}
@@ -17,12 +17,14 @@
             <div class="w-16"></div>
         {% endif %}
         {% comment %} Next button {% endcomment %}
-        {% if current_index != total_questions %}
-            <button  type="button" id="doNext" class="inline-flex gap-2 font-bold text-sm items-center justify-center px-5 rounded-e-full hover:bg-gray-50 dark:hover:bg-gray-800 group">
+        {% if current_index < last_index %}
+            <button  type="button" id="doNext" class="inline-flex gap-2 font-bold text-sm items-center justify-center dark:text-white px-5 rounded-e-full hover:bg-gray-50 dark:hover:bg-gray-800 group">
                 Next <i class="fa-solid fa-arrow-right"></i>
             </button>
         {% else %}
-            <div class="w-16"></div>
+            <button  type="button" id="doFinish" class="inline-flex gap-2 font-bold text-sm items-center bg-yellow-50 justify-center dark:text-white px-5 rounded-e-full hover:bg-gray-50 dark:hover:bg-gray-800 group">
+                Finish <i class="fa-solid fa-check"></i>
+            </button>
         {% endif %}
     </div>
 </div>

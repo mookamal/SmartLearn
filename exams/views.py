@@ -59,6 +59,8 @@ def show_session(request, session_id):
     session = get_object_or_404(Session, id=session_id, user=request.user)
     question_order = session.question_order
     current_index = session.current_question_index
+    total_questions = len(question_order)
+    last_index = total_questions - 1
     # if current_index >= len(question_order):
     #     session.completed = True
     #     session.save()
@@ -80,11 +82,12 @@ def show_session(request, session_id):
         'session': session,
         'question': current_question,
         'current_index': current_index,
-        'total_questions': len(question_order),
+        'total_questions': total_questions,
         "percentage": percentage,
         'choices': choices,
         'answer': answer,
         'should_display': should_display,
+        "last_index": last_index,
     }
     return render(request, 'exams/show_session.html', context)
 
