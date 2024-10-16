@@ -2,7 +2,7 @@ import json
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
-from .models import Category, Exam, Session, Question, Choice
+from .models import Category, Exam, Session, Question, Choice, Answer
 from django.http import JsonResponse
 from django.contrib import messages
 # Create your views here.
@@ -149,3 +149,31 @@ def ajax_create_session(request):
 
     except ValueError as e:
         return JsonResponse({'error': str(e)}, status=400)
+
+
+@ login_required
+@ require_POST
+def answer(request):
+    try:
+        data = json.loads(request.body)
+        session_id = data.get('session_id', None)
+        question_id = data.get('question_id', None)
+        choice_id = data.get('choice_id', None)
+        session = get_object_or_404(Session, id=session_id, user=request.user)
+        question = get_object_or_404(Question, id=question_id)
+        choice = get_object_or_404(Choice, id=choice_id)
+        answer = Answer.objects.create(
+            session=session, question=question, choice=choice)
+
+        return JsonResponse({'answer_id': answer.id})
+
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+    except ValueError as e:
+        return JsonResponse({'error': str(e)}, status=400)
+    except Session.DoesNotExist:
+        return JsonResponse({'error': 'Session not found'}, status=404)
+    except Question.DoesNotExist:
+        return JsonResponse({'error': 'Question not found'}, status=404)
+    except Choice.DoesNotExist:
+        return JsonResponse({'error': 'Choice not found'}, status=404)

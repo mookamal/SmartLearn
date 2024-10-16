@@ -36,7 +36,7 @@
                         {% else %}
                         <i class="fa-solid fa-circle-xmark text-red-600" style="{% if session.session_mode != 'SOLVED' %}display: none;{% endif %}"></i>
                         {% endif %}
-                        <input id="choice-{{choice.id}}" type="radio" value="{{choice.id}}" name="choice-list" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                        <input id="choice-{{choice.id}}" type="radio" value="{{choice.id}}" name="answer" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
                         <label for="choice-{{choice.id}}" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{choice.text}}</label>
                     </div>
                 </li>
@@ -62,18 +62,46 @@
             {% endif %}
         </div>
     </div>
-    <!-- button submit -->
-    <div class="flex justify-center">
-        {% if session.session_mode != "SOLVED" %}
-            <button type="submit" class="py-3 px-6 text-sm font-medium text-white bg-primary-500 border-0 rounded-full shadow hover:bg-primary-600 dark:text-white dark:bg-primary-400 dark:hover:bg-primary-500">
-                Submit
-            </button>
-        {% endif %}
-    </div>
 
 </div>
+{% include "exams/parts/app_bar.html" %}
 {% endblock content %}
 
 {% block js %}
 <script src="{% static 'src/js/lightbox.min.js' %}"></script>
+<script>
+    // answer sent using jquery
+    function answerSend() {
+        const selectedChoiceId = $('input[name=answer]:checked').val();
+        if (!selectedChoiceId) {
+            setAlert("Please select an answer!","error");
+            return;
+        }
+        const csrfToken = '{{ csrf_token }}';
+        const data = {
+            choice_id: selectedChoiceId,
+            session_id: '{{ session.id }}',
+            question_id: '{{ question.id }}'
+
+        };
+
+        $.ajax({
+            url: '{% url "answer" %}',
+            type: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken
+            },
+            data: JSON.stringify(data),
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(xhr, status, error) {
+                setAlert("Error sending answer: " + error,"error");
+            }
+        });
+
+    }
+    $("#answerSend").on('click', answerSend);
+
+</script>
 {% endblock %}

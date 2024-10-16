@@ -1,0 +1,14 @@
+{% load static %}
+<div class="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2 bg-white border border-gray-200 rounded-full bottom-4 left-1/2 dark:bg-gray-700 dark:border-gray-600">
+    <div class="flex h-full max-w-lg flex-cols-5 mx-auto justify-between">
+        <div class="w-16"></div>
+        {% if session.session_mode != "SOLVED" %}
+            <button type="submit" id="answerSend" class="w-16 h-16 flex items-center justify-center text-sm font-medium text-white bg-primary-500 border-0 rounded-full shadow hover:bg-primary-600 dark:text-white dark:bg-primary-400 dark:hover:bg-primary-500">
+                Submit
+            </button>
+        {% else %}
+            <div class="w-16"></div>
+        {% endif %}
+        <div class="w-16"></div>
+    </div>
+</div>
