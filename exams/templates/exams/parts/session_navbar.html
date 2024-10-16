@@ -23,7 +23,9 @@
 
         <div class="flex items-center">
             <div class="flex items-center ms-3 gap-3">
-                <p class="text-sm font-bold text-slate-900 p-2 bg-yellow-100 rounded-md shadow-sm">{{index_current_question}}/{{total_questions}}</p>
+                <p class="text-sm font-bold text-slate-900 p-2 bg-yellow-100 rounded-md shadow-sm">
+                  {{ current_index|add:"1" }}/{{ total_questions }}
+                </p>
                 {% include "parts/theme_btn.html" %}
             </div>
         </div>

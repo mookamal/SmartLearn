@@ -1,7 +1,14 @@
 {% load static %}
 <div class="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2 bg-white border border-gray-200 rounded-full bottom-4 left-1/2 dark:bg-gray-700 dark:border-gray-600">
     <div class="flex h-full max-w-lg flex-cols-5 mx-auto justify-between">
-        <div class="w-16"></div>
+        {% comment %} Previous button {% endcomment %}
+        {% if current_index > 1 %}
+            <button  type="button" class="inline-flex gap-2 font-bold text-sm items-center justify-center px-5 rounded-s-full hover:bg-gray-50 dark:hover:bg-gray-800 group">
+                <i class="fa-solid fa-arrow-left"></i> Prev
+            </button>
+        {% else %}
+            <div class="w-16"></div>
+        {% endif %}
         {% if  not should_display and not answer  %}
             <button type="submit" id="answerSend" class="w-16 h-16 flex items-center justify-center text-sm font-medium text-white bg-primary-500 border-0 rounded-full shadow hover:bg-primary-600 dark:text-white dark:bg-primary-400 dark:hover:bg-primary-500">
                 Submit
@@ -9,6 +16,13 @@
         {% else %}
             <div class="w-16"></div>
         {% endif %}
-        <div class="w-16"></div>
+        {% comment %} Next button {% endcomment %}
+        {% if current_index != total_questions %}
+            <button  type="button" class="inline-flex gap-2 font-bold text-sm items-center justify-center px-5 rounded-e-full hover:bg-gray-50 dark:hover:bg-gray-800 group">
+                Next <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        {% else %}
+            <div class="w-16"></div>
+        {% endif %}
     </div>
 </div>
