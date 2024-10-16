@@ -150,6 +150,33 @@ class Session(models.Model):
     current_question_index = models.IntegerField(default=0)
     completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    # answer counts
+    correct_answer_count = models.PositiveIntegerField(default=0)
+    incorrect_answer_count = models.PositiveIntegerField(default=0)
+    skipped_answer_count = models.PositiveIntegerField(default=0)
+
+    def update_answer_counts(self):
+        correct_count = self.questions.filter(
+            answer__choice__is_right=True, answer__session=self).count() or 0
+        incorrect_count = self.questions.filter(
+            answer__choice__is_right=False, answer__session=self).count() or 0
+        skipped_count = self.questions.filter(
+            answer__isnull=True, answer__session=self).count() or 0
+        self.correct_answer_count = correct_count
+        self.incorrect_answer_count = incorrect_count
+        self.skipped_answer_count = skipped_count
+        self.save()
+
+    def is_session_completed(self):
+        total_questions = self.number_of_questions or self.questions.count()
+        Answer = apps.get_model('exams', 'Answer')
+        answered_questions = Answer.objects.filter(session=self).count()
+        return answered_questions >= total_questions
+
+    def mark_as_completed(self):
+        if self.is_session_completed():
+            self.completed = True
+            self.save()
 
     def __str__(self):
         return f"Session #{self.pk}"
@@ -188,6 +215,7 @@ class Answer(models.Model):
         if self.choice:
             self.is_correct = self.choice.is_right
         super().save(*args, **kwargs)
+        self.session.update_answer_counts()
 
     def __str__(self):
         return f"Answer for {self.question} in Session #{self.session.pk}"

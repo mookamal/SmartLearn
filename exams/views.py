@@ -95,8 +95,8 @@ def show_session(request, session_id):
 # functions for ajax
 
 
-@ login_required
-@ require_POST
+@login_required
+@require_POST
 def get_question_count(request):
     data = json.loads(request.body)
 
@@ -118,8 +118,8 @@ def get_question_count(request):
     return JsonResponse({'question_count': question_count})
 
 
-@ login_required
-@ require_POST
+@login_required
+@require_POST
 def ajax_create_session(request):
     try:
         data = json.loads(request.body)
@@ -163,8 +163,8 @@ def ajax_create_session(request):
         return JsonResponse({'error': str(e)}, status=400)
 
 
-@ login_required
-@ require_POST
+@login_required
+@require_POST
 def answer(request):
     try:
         data = json.loads(request.body)
@@ -191,8 +191,8 @@ def answer(request):
         return JsonResponse({'error': 'Choice not found'}, status=404)
 
 
-@ login_required
-@ require_POST
+@login_required
+@require_POST
 def navigate_question_index(request):
     try:
         data = json.loads(request.body)
@@ -217,3 +217,22 @@ def navigate_question_index(request):
         return JsonResponse({'error': 'Session not found'}, status=404)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+
+
+@login_required
+@require_POST
+def finish_session(request):
+    try:
+        data = json.loads(request.body)
+        session_id = data.get("session_id", None)
+
+        session = get_object_or_404(Session, id=session_id, user=request.user)
+        session.mark_as_completed()
+
+        return JsonResponse({"success": True})
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON format"}, status=400)
+    except ValueError as e:
+        return JsonResponse({"error": str(e)}, status=400)
+    except Session.DoesNotExist:
+        return JsonResponse({"error": "Session not found"}, status=404)

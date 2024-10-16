@@ -18,4 +18,5 @@ urlpatterns = [
     path("ajax/answer/", views.answer, name="answer"),
     path("ajax/navigate-question-index/",
          views.navigate_question_index, name="navigate_question_index"),
+    path("ajax/finish_session/", views.finish_session, name="finish_session"),
 ]

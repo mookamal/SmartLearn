@@ -137,9 +137,26 @@
         navigateQuestion('next');
     });
     // handle session finish
-    function finishSession(params) {
+    function finishSession() {
         confirmAction("Are you sure you want to end this session","warning",function() {
-            console.log("Finish session");
+            // send session id with finish_session url
+            $.ajax({
+                url: '{% url "finish_session" %}',
+                type: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: JSON.stringify({session_id: '{{ session.id }}'}),
+                success: function(response) {
+                    if (response.success) {
+                        // redirect to results page
+                        console.log("session finished")
+                    }
+                },
+                error: function(xhr, status, error) {
+                    setAlert("Error ending session: " + error,"error");
+                }
+            });
         });
     }
     $("#doFinish").on('click', function() {
