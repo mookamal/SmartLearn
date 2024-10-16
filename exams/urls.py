@@ -16,4 +16,6 @@ urlpatterns = [
     path("ajax/create_session", views.ajax_create_session,
          name="ajax_create_session"),
     path("ajax/answer/", views.answer, name="answer"),
+    path("ajax/navigate-question-index/",
+         views.navigate_question_index, name="navigate_question_index"),
 ]

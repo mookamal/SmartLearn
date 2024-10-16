@@ -104,6 +104,37 @@
 
     }
     $("#answerSend").on('click', answerSend);
-
+    // function to navigate question index
+    function navigateQuestion(action) {
+        const csrfToken = '{{ csrf_token }}';
+        const data = {
+            session_id: '{{ session.id }}',
+            action: action
+        }
+        // send request to navigate_question_index
+        $.ajax({
+            url: '{% url "navigate_question_index" %}',
+            type: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken
+            },
+            data: JSON.stringify(data),
+            success: function(response) {
+                if (response.success) {
+                    // reload page
+                    location.reload();
+                }
+            },
+            error: function(xhr, status, error) {
+                setAlert("Error navigating question: " + error,"error");
+            }
+        });
+    }
+    $("#doPrev").on('click', function() {
+        navigateQuestion('prev');
+    });
+    $("#doNext").on('click', function() {
+        navigateQuestion('next');
+    });
 </script>
 {% endblock %}

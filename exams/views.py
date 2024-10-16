@@ -59,10 +59,10 @@ def show_session(request, session_id):
     session = get_object_or_404(Session, id=session_id, user=request.user)
     question_order = session.question_order
     current_index = session.current_question_index
-    if current_index >= len(question_order):
-        session.completed = True
-        session.save()
-        return render(request, 'exams/session_complete.html')
+    # if current_index >= len(question_order):
+    #     session.completed = True
+    #     session.save()
+    #     return render(request, 'exams/session_complete.html')
     current_question_id = question_order[current_index]
     current_question = get_object_or_404(Question, id=current_question_id)
     try:
@@ -186,3 +186,31 @@ def answer(request):
         return JsonResponse({'error': 'Question not found'}, status=404)
     except Choice.DoesNotExist:
         return JsonResponse({'error': 'Choice not found'}, status=404)
+
+
+@ login_required
+@ require_POST
+def navigate_question_index(request):
+    try:
+        data = json.loads(request.body)
+        session_id = data.get('session_id', None)
+        action = data.get('action', None)
+        session = get_object_or_404(Session, id=session_id, user=request.user)
+        if action == 'next':
+            if session.current_question_index < len(session.question_order) - 1:
+                session.current_question_index += 1
+        elif action == 'prev':
+            if session.current_question_index > 0:
+                session.current_question_index -= 1
+
+        session.save()
+        return JsonResponse({'success': True})
+
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+    except ValueError as e:
+        return JsonResponse({'error': str(e)}, status=400)
+    except Session.DoesNotExist:
+        return JsonResponse({'error': 'Session not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

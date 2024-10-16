@@ -2,8 +2,8 @@
 <div class="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2 bg-white border border-gray-200 rounded-full bottom-4 left-1/2 dark:bg-gray-700 dark:border-gray-600">
     <div class="flex h-full max-w-lg flex-cols-5 mx-auto justify-between">
         {% comment %} Previous button {% endcomment %}
-        {% if current_index > 1 %}
-            <button  type="button" class="inline-flex gap-2 font-bold text-sm items-center justify-center px-5 rounded-s-full hover:bg-gray-50 dark:hover:bg-gray-800 group">
+        {% if current_index > 0 %}
+            <button  type="button" id="doPrev" class="inline-flex gap-2 font-bold text-sm items-center justify-center px-5 rounded-s-full hover:bg-gray-50 dark:hover:bg-gray-800 group">
                 <i class="fa-solid fa-arrow-left"></i> Prev
             </button>
         {% else %}
@@ -18,7 +18,7 @@
         {% endif %}
         {% comment %} Next button {% endcomment %}
         {% if current_index != total_questions %}
-            <button  type="button" class="inline-flex gap-2 font-bold text-sm items-center justify-center px-5 rounded-e-full hover:bg-gray-50 dark:hover:bg-gray-800 group">
+            <button  type="button" id="doNext" class="inline-flex gap-2 font-bold text-sm items-center justify-center px-5 rounded-e-full hover:bg-gray-50 dark:hover:bg-gray-800 group">
                 Next <i class="fa-solid fa-arrow-right"></i>
             </button>
         {% else %}
