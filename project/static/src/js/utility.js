@@ -6,3 +6,16 @@ function setAlert(message, alertType) {
     confirmButtonText: "Okay",
   });
 }
+function confirmAction(message, alertType, actionCallback) {
+  Swal.fire({
+    title: message,
+    icon: alertType,
+    showCancelButton: true,
+    confirmButtonText: "Yes, do it!",
+    cancelButtonText: "Cancel",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      actionCallback();
+    }
+  });
+}

@@ -136,5 +136,14 @@
     $("#doNext").on('click', function() {
         navigateQuestion('next');
     });
+    // handle session finish
+    function finishSession(params) {
+        confirmAction("Are you sure you want to end this session","warning",function() {
+            console.log("Finish session");
+        });
+    }
+    $("#doFinish").on('click', function() {
+        finishSession();
+    });
 </script>
 {% endblock %}
