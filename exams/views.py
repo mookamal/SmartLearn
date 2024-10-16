@@ -65,9 +65,19 @@ def show_session(request, session_id):
         return render(request, 'exams/session_complete.html')
     current_question_id = question_order[current_index]
     current_question = get_object_or_404(Question, id=current_question_id)
+    try:
+        answer = Answer.objects.filter(
+            session=session, question=current_question).first()
+    except Answer.DoesNotExist:
+        answer = None
     choices = Choice.objects.filter(question=current_question)
     index_current_question = question_order.index(current_question_id) + 1
     percentage = ((index_current_question - 1) / len(question_order)) * 100
+
+    # this for show question solved
+    should_display = session.session_mode == 'SOLVED' or (
+        answer is not None) and session.session_mode != 'UNEXPLAINED'
+    print("should_display", should_display)
     context = {
         'session': session,
         'question': current_question,
@@ -76,6 +86,8 @@ def show_session(request, session_id):
         "index_current_question": index_current_question,
         "percentage": percentage,
         'choices': choices,
+        'answer': answer,
+        'should_display': should_display,
     }
     return render(request, 'exams/show_session.html', context)
 

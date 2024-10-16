@@ -30,13 +30,13 @@
         <ul class="md:w-2/3 w-full mx-auto text-sm my-6 font-medium text-gray-900 border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
             {% for choice in choices %}
                 <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600"> 
-                    <div class="flex items-center ps-3 gap-2">
+                    <div class="flex items-center ps-3 gap-2 {% if choice.id == answer.choice.id %}bg-purple-200 dark:bg-primary-950{% endif %}">
                         {% if choice.is_right %}
-                        <i class="fa-solid fa-circle-check text-green-400" style="{% if session.session_mode != 'SOLVED' %}display: none;{% endif %}"></i>
+                        <i class="fa-solid fa-circle-check text-green-400" style="{% if not should_display %}display: none;{% endif %}"></i>
                         {% else %}
-                        <i class="fa-solid fa-circle-xmark text-red-600" style="{% if session.session_mode != 'SOLVED' %}display: none;{% endif %}"></i>
+                        <i class="fa-solid fa-circle-xmark text-red-600" style="{% if not should_display %}display: none;{% endif %}"></i>
                         {% endif %}
-                        <input id="choice-{{choice.id}}" type="radio" value="{{choice.id}}" name="answer" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                        <input id="choice-{{choice.id}}" {% if choice.id == answer.choice.id %}checked{% endif %} type="radio" value="{{choice.id}}" name="answer" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
                         <label for="choice-{{choice.id}}" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{choice.text}}</label>
                     </div>
                 </li>
@@ -46,7 +46,7 @@
 
     
     <!-- explained question -->
-    <div class="flex justify-center" style="{% if session.session_mode != 'SOLVED' %}display: none;{% endif %}" id="explanation-area">
+    <div class="flex justify-center" style="{% if not should_display %}display: none;{% endif %}" id="explanation-area">
         <div class="p-6 border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 my-5">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-200">Explanation:</h3>
             <p class="text-sm my-4 text-gray-700 dark:text-gray-400">{{ question.explanation }}</p>
@@ -62,7 +62,6 @@
             {% endif %}
         </div>
     </div>
-
 </div>
 {% include "exams/parts/app_bar.html" %}
 {% endblock content %}
@@ -93,7 +92,10 @@
             },
             data: JSON.stringify(data),
             success: function(response) {
-                console.log(response);
+                if (response.answer_id) {
+                    // reload page
+                    location.reload();
+                }
             },
             error: function(xhr, status, error) {
                 setAlert("Error sending answer: " + error,"error");
