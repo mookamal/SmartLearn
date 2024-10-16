@@ -92,6 +92,12 @@ def show_session(request, session_id):
     return render(request, 'exams/show_session.html', context)
 
 
+@login_required
+def session_results(request, session_id):
+    session = get_object_or_404(Session, id=session_id, user=request.user)
+
+    # return template
+    return render(request, 'exams/session_results.html', {'session': session})
 # functions for ajax
 
 
@@ -150,7 +156,7 @@ def ajax_create_session(request):
             user=current_user, exam=exam, session_mode=session_mode, number_of_questions=num_questions, question_order=question_ids)
 
         session.questions.add(*questions)
-
+        session.update_answer_counts()
         messages.success(
             request, f'Session created successfully. Session ID: #{session.id}')
 

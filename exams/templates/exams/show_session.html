@@ -149,8 +149,7 @@
                 data: JSON.stringify({session_id: '{{ session.id }}'}),
                 success: function(response) {
                     if (response.success) {
-                        // redirect to results page
-                        console.log("session finished")
+                        window.location.href = '{% url "session_results" session_id=session.id  %}';
                     }
                 },
                 error: function(xhr, status, error) {
