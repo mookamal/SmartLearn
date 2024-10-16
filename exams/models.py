@@ -160,8 +160,8 @@ class Session(models.Model):
             answer__choice__is_right=True, answer__session=self).count() or 0
         incorrect_count = self.questions.filter(
             answer__choice__is_right=False, answer__session=self).count() or 0
-        skipped_count = self.questions.filter(
-            answer__isnull=True, answer__session=self).count() or 0
+        total_count = self.questions.count()
+        skipped_count = total_count - (correct_count + incorrect_count)
         self.correct_answer_count = correct_count
         self.incorrect_answer_count = incorrect_count
         self.skipped_answer_count = skipped_count

@@ -95,9 +95,25 @@ def show_session(request, session_id):
 @login_required
 def session_results(request, session_id):
     session = get_object_or_404(Session, id=session_id, user=request.user)
-
+    total_questions = session.number_of_questions
+    if total_questions > 0:
+        percentage_correct_answer = round(
+            session.correct_answer_count / total_questions * 100)
+        percentage_incorrect_answer = round(
+            session.incorrect_answer_count / total_questions * 100)
+        percentage_skipped_answer = round(
+            session.skipped_answer_count / total_questions * 100)
+        print(session.questions.filter(
+            answer__isnull=True).count())
+    context = {
+        'percentage_correct_answer': percentage_correct_answer,
+        'percentage_incorrect_answer': percentage_incorrect_answer,
+        'percentage_skipped_answer': percentage_skipped_answer,
+        'session': session,
+    }
     # return template
-    return render(request, 'exams/session_results.html', {'session': session})
+    return render(request, 'exams/session_results.html', context)
+
 # functions for ajax
 
 
