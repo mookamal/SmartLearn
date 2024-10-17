@@ -103,8 +103,6 @@ def session_results(request, session_id):
             session.incorrect_answer_count / total_questions * 100)
         percentage_skipped_answer = round(
             session.skipped_answer_count / total_questions * 100)
-        print(session.questions.filter(
-            answer__isnull=True).count())
     context = {
         'percentage_correct_answer': percentage_correct_answer,
         'percentage_incorrect_answer': percentage_incorrect_answer,

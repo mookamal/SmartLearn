@@ -56,12 +56,54 @@
          {% comment %} End details card {% endcomment %}
     </div>
     {% comment %} End show charts {% endcomment %}
+    {% comment %} End show question table {% endcomment %}
+    <div class="p-6 gap-2 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gra">
+      
+    <table id="question-table">
+      <thead>
+          <tr>
+              <th>
+                  <span class="flex items-center">
+                      Status
+                  </span>
+              </th>
+              <th>
+                  <span class="flex items-center">
+                      Text
+                  </span>
+              </th>
+              <th>
+                  <span class="flex items-center">
+                      Subject
+                  </span>
+              </th>
+              <th>
+                  <span class="flex items-center">
+                      Market Capitalization
+                  </span>
+              </th>
+          </tr>
+      </thead>
+      <tbody>
+        {% for question in session.questions.all %}
+          <tr>
+              <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">Apple Inc.</td>
+              <td>{{question.text}}</td>
+              <td>{{question.subject}}</td>
+              <td>$3.04T</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+
+    </div>
+    {% comment %} show question table {% endcomment %}
 </div>
 {% endblock content %}
 {% block js %}
 <script src="{% static "src/js/apexcharts.js" %}"></script>
 <script>
-    
 const getChartOptions = () => {
     return {
       series: [{{percentage_correct_answer}}, {{percentage_incorrect_answer}}, {{percentage_skipped_answer}}],
@@ -125,5 +167,15 @@ const getChartOptions = () => {
     chart.render();
   }
   
+</script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
+
+<script>
+  if (document.getElementById("question-table") && typeof simpleDatatables.DataTable !== 'undefined') {
+    const dataTable = new simpleDatatables.DataTable("#question-table", {
+        searchable: true,
+        sortable: false
+    });
+}
 </script>
 {% endblock js %}
