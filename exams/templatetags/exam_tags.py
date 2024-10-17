@@ -45,3 +45,28 @@ def question_status(session_id, question_id):
 
     except Exception as e:
         return str(e)
+
+
+@register.filter(name="percentage_question")
+def percentage_question(question_id):
+    try:
+        question = Question.objects.filter(id=question_id).first()
+        if not question:
+            return 0
+
+        answers = Answer.objects.filter(question=question)
+        total_count = answers.count()
+
+        if total_count == 0:
+            return 0
+
+        correct_count = answers.filter(is_correct=True).count()
+
+        return round((correct_count / total_count) * 100)
+
+    except Question.DoesNotExist:
+        return 0
+    except Answer.DoesNotExist:
+        return 0
+    except Exception as e:
+        return f"Error: {str(e)}"

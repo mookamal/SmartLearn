@@ -80,7 +80,7 @@
               </th>
               <th>
                   <span class="flex items-center">
-                      Market Capitalization
+                    Correct others (%)
                   </span>
               </th>
           </tr>
@@ -95,7 +95,7 @@
               </td>
               <td>{{question.text}}</td>
               <td>{{question.subject}}</td>
-              <td>$3.04T</td>
+              <td>{{ question.id|percentage_question }}%</td>
           </tr>
         {% endfor %}
       </tbody>
