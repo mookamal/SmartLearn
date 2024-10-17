@@ -256,3 +256,33 @@ def finish_session(request):
         return JsonResponse({"error": str(e)}, status=400)
     except Session.DoesNotExist:
         return JsonResponse({"error": "Session not found"}, status=404)
+
+
+@login_required
+@require_POST
+def re_examine(request):
+    try:
+        data = json.loads(request.body)
+        session_id = data.get("session_id", None)
+        session = get_object_or_404(Session, id=session_id, user=request.user)
+        questions = session.questions.all()
+        # create a new session
+        new_session = Session.objects.create(
+            user=session.user,
+            exam=session.exam,
+            session_mode=session.session_mode,
+            number_of_questions=session.number_of_questions,
+            question_order=list(questions.values_list('id', flat=True)),
+            current_question_index=0,
+        )
+        # add all questions to the new session
+        new_session.questions.add(*questions)
+        # update answer counts for the new session
+        new_session.update_answer_counts()
+        return JsonResponse({"session_id": new_session.id})
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON format"}, status=400)
+    except Session.DoesNotExist:
+        return JsonResponse({"error": "Session not found"}, status=404)
+    except ValueError as e:
+        return JsonResponse({"error": str(e)}, status=400)

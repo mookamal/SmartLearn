@@ -204,8 +204,13 @@ const getChartOptions = () => {
       success: function (response) {
         // hide loader
         hideLoader();
-        // show success message
-        console.log("Re-examined successfully.");
+        if (response.session_id) {
+          confirmAction("Re-examined successfully." , "success", function () {
+            const redirectUrl = "{% url 'show_session' session_id=0 %}".replace("0", response.session_id);
+            window.location.href = redirectUrl;
+          });
+        }
+        
       },
       error: function (xhr, status, error) {
         // hide loader

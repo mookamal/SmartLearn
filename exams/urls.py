@@ -21,4 +21,5 @@ urlpatterns = [
     path("ajax/navigate-question-index/",
          views.navigate_question_index, name="navigate_question_index"),
     path("ajax/finish_session/", views.finish_session, name="finish_session"),
+    path("ajax/re_examine/", views.re_examine, name="re_examine"),
 ]
