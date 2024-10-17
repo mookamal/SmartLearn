@@ -47,29 +47,34 @@
             <div class="py-6" id="session-chart"></div>
          </div>
          {% comment %} details card {% endcomment %}
-         <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
+         <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6 flex flex-col justify-between">
             <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white text-center">of questions responded to correctly</h5>
             <hr class="border mt-3">
             <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg flex justify-around text-xl items-center font-bold">
                 <i class="fa-solid fa-check-double text-green-400"></i> <span>{{percentage_correct_answer}}%</span>
             </div>
+            <hr class="w-48 h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700">
+
             {% comment %} actions {% endcomment %}
             {% comment %} for all {% endcomment %}
             <button type="button" id="reExamineAll" class="w-full p-2 me-2 my-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-              Re-examine on <span class="font-bold">all</span> questions ({{session.number_of_questions}})
+              Re-examine on <span class="font-bold bg-primary-300 p-1 rounded dark:text-primary-950">all</span> questions ({{session.number_of_questions}})
             </button>
             {% comment %} for skipped {% endcomment %}
             {% if session.skipped_answer_count > 0 %}
             <button type="button" id="reExamineSkipped" class="w-full p-2 me-2 my-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-              Re-examine on <span class="font-bold">Skipped</span> questions ({{session.skipped_answer_count}})
+              Re-examine on <span class="font-bold bg-yellow-200 p-1 rounded dark:text-primary-950">Skipped</span> questions ({{session.skipped_answer_count}})
             </button>
             {% endif %}
             {% comment %} for incorrect {% endcomment %}
             {% if session.incorrect_answer_count > 0 %}
             <button type="button" id="reExamineIncorrect" class="w-full p-2 me-2 my-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-              Re-examine on <span class="font-bold">Incorrect</span> questions ({{session.incorrect_answer_count}})
+              Re-examine on <span class="font-bold bg-red-400 p-1 rounded dark:text-primary-950">Incorrect</span> questions ({{session.incorrect_answer_count}})
             </button>
             {% endif %}
+            <hr class="w-48 h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700">
+            {% comment %} show created at {% endcomment %}
+            <p class="text-gray-600 dark:text-gray-400 text-center">Created at: {{ session.created_at }}</p>
          </div>
 
          {% comment %} End details card {% endcomment %}
