@@ -6,12 +6,13 @@
 {% block content %}
 
 {% include "exams/parts/navbar.html" %}
-{% include "exams/parts/sidebar.html" %} 
+{% include "exams/parts/sidebar.html" %}
+{% include "parts/loader.html" %} 
 <div class="p-4 sm:ml-64 mt-14">
     <h1 class="my-4 text-center text-2xl font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl dark:text-white">Session <mark class="px-2 text-white bg-blue-600 rounded dark:bg-blue-500">#{{session.id}}</mark> results</h1>
     <hr class="w-48 h-1 mx-auto my-4 bg-primary-100 border-0 rounded md:my-10 dark:bg-gray-700">
     {% comment %} show charts {% endcomment %}
-    <div class="flex justify-between flex-col lg:flex-row p-6 gap-2 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+    <div class="flex justify-around flex-col lg:flex-row p-6 gap-2 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
         {% comment %} charts card {% endcomment %}
         <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
 
@@ -52,6 +53,11 @@
             <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg flex justify-around text-xl items-center font-bold">
                 <i class="fa-solid fa-check-double text-green-400"></i> <span>{{percentage_correct_answer}}%</span>
             </div>
+            {% comment %} actions {% endcomment %}
+            <button type="button" id="reExamine" class="w-full p-2 me-2 my-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+              Re-examine on <span class="font-bold">all</span> questions ({{session.number_of_questions}})
+            </button>
+
          </div>
 
          {% comment %} End details card {% endcomment %}
@@ -59,49 +65,46 @@
     {% comment %} End show charts {% endcomment %}
     {% comment %} End show question table {% endcomment %}
     <div class="p-6 gap-2 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gra">
-      
-    <table id="question-table" class="border bg-white dark:bg-black dark:border-black shadow-sm">
-      <thead>
-          <tr>
-              <th>
-                  <span class="flex items-center">
-                      Status
-                  </span>
-              </th>
-              <th>
-                  <span class="flex items-center">
-                      Text
-                  </span>
-              </th>
-              <th>
-                  <span class="flex items-center">
-                      Subject
-                  </span>
-              </th>
-              <th>
-                  <span class="flex items-center">
-                    Correct others (%)
-                  </span>
-              </th>
-          </tr>
-      </thead>
-      <tbody>
-        {% for question in session.questions.all %}
-          <tr class="hover:bg-gray-100">
-              <td class="text-xl">
-                {{ session.id|question_status:question.id|safe }}
-                <p class="text-yellow-200 hidden"></p>
-                <p class="text-red-400 hidden"></p>
-              </td>
-              <td>{{question.text}}</td>
-              <td>{{question.subject}}</td>
-              <td>{{ question.id|percentage_question }}%</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-
-
+      <table id="question-table" class="border bg-white dark:bg-black dark:border-black shadow-sm">
+        <thead>
+            <tr>
+                <th>
+                    <span class="flex items-center">
+                        Status
+                    </span>
+                </th>
+                <th>
+                    <span class="flex items-center">
+                        Text
+                    </span>
+                </th>
+                <th>
+                    <span class="flex items-center">
+                        Subject
+                    </span>
+                </th>
+                <th>
+                    <span class="flex items-center">
+                      Correct others (%)
+                    </span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+          {% for question in session.questions.all %}
+            <tr class="hover:bg-gray-100">
+                <td class="text-xl">
+                  {{ session.id|question_status:question.id|safe }}
+                  <p class="text-yellow-200 hidden"></p>
+                  <p class="text-red-400 hidden"></p>
+                </td>
+                <td>{{question.text}}</td>
+                <td>{{question.subject}}</td>
+                <td>{{ question.id|percentage_question }}%</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
     {% comment %} show question table {% endcomment %}
 </div>
@@ -174,13 +177,43 @@ const getChartOptions = () => {
   
 </script>
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
-
 <script>
+  // for data table to display question
   if (document.getElementById("question-table") && typeof simpleDatatables.DataTable !== 'undefined') {
     const dataTable = new simpleDatatables.DataTable("#question-table", {
         searchable: true,
         sortable: true
     });
 }
+</script>
+<script>
+  // for actions
+  $("#reExamine").click(function () {
+    // run loader
+    showLoader();
+    const data = {
+      session_id: "{{ session.id }}",
+    };
+    // send request to re_examine url
+    $.ajax({
+      url: "{% url 're_examine' %}",
+      method: "POST",
+      data: JSON.stringify(data),
+      contentType: "application/json",
+      headers: {'X-CSRFToken': '{{ csrf_token }}'},
+      success: function (response) {
+        // hide loader
+        hideLoader();
+        // show success message
+        console.log("Re-examined successfully.");
+      },
+      error: function (xhr, status, error) {
+        // hide loader
+        hideLoader();
+        // show error message
+        console.log("Failed to re-examine. Please try again later.");
+      },
+    });
+  });
 </script>
 {% endblock js %}
