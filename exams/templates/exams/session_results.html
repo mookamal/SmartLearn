@@ -54,10 +54,22 @@
                 <i class="fa-solid fa-check-double text-green-400"></i> <span>{{percentage_correct_answer}}%</span>
             </div>
             {% comment %} actions {% endcomment %}
-            <button type="button" id="reExamine" class="w-full p-2 me-2 my-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+            {% comment %} for all {% endcomment %}
+            <button type="button" id="reExamineAll" class="w-full p-2 me-2 my-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
               Re-examine on <span class="font-bold">all</span> questions ({{session.number_of_questions}})
             </button>
-
+            {% comment %} for skipped {% endcomment %}
+            {% if session.skipped_answer_count > 0 %}
+            <button type="button" id="reExamineSkipped" class="w-full p-2 me-2 my-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+              Re-examine on <span class="font-bold">Skipped</span> questions ({{session.skipped_answer_count}})
+            </button>
+            {% endif %}
+            {% comment %} for incorrect {% endcomment %}
+            {% if session.incorrect_answer_count > 0 %}
+            <button type="button" id="reExamineIncorrect" class="w-full p-2 me-2 my-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+              Re-examine on <span class="font-bold">Incorrect</span> questions ({{session.incorrect_answer_count}})
+            </button>
+            {% endif %}
          </div>
 
          {% comment %} End details card {% endcomment %}
@@ -188,37 +200,62 @@ const getChartOptions = () => {
 </script>
 <script>
   // for actions
-  $("#reExamine").click(function () {
-    // run loader
-    showLoader();
-    const data = {
-      session_id: "{{ session.id }}",
-    };
-    // send request to re_examine url
-    $.ajax({
-      url: "{% url 're_examine' %}",
-      method: "POST",
-      data: JSON.stringify(data),
-      contentType: "application/json",
-      headers: {'X-CSRFToken': '{{ csrf_token }}'},
-      success: function (response) {
-        // hide loader
-        hideLoader();
-        if (response.session_id) {
-          confirmAction("Re-examined successfully." , "success", function () {
-            const redirectUrl = "{% url 'show_session' session_id=0 %}".replace("0", response.session_id);
-            window.location.href = redirectUrl;
-          });
-        }
-        
-      },
-      error: function (xhr, status, error) {
-        // hide loader
-        hideLoader();
-        // show error message
-        console.log("Failed to re-examine. Please try again later.");
-      },
-    });
-  });
+  /**
+   * This function sends a request to the server to re-examine the session.
+   *
+   * @param {string} action - The action to be performed during re-examination.
+   *                          It can be either "all" or "incorrect".
+   *
+   * @returns {void} - The function does not return any value.
+   */
+  function reExamine(action) {
+        // run loader
+        showLoader();
+        const data = {
+          session_id: "{{ session.id }}",
+          action: action,
+        };
+        // send request to re_examine url
+        $.ajax({
+          url: "{% url 're_examine' %}",
+          method: "POST",
+          data: JSON.stringify(data),
+          contentType: "application/json",
+          headers: {'X-CSRFToken': '{{ csrf_token }}'},
+          success: function (response) {
+            // hide loader
+            hideLoader();
+            if (response.session_id) {
+              confirmAction(`Re-examined successfully. (${action})` , "success", function () {
+                const redirectUrl = "{% url 'show_session' session_id=0 %}".replace("0", response.session_id);
+                window.location.href = redirectUrl;
+              });
+            }
+
+          },
+          error: function (xhr, status, error) {
+            // hide loader
+            hideLoader();
+            // show error message
+            console.log("Failed to re-examine. Please try again later.");
+          },
+        });
+    }
+
+  $("#reExamineAll").click(
+    function () {
+      reExamine("all");
+    }
+  );
+  $("#reExamineSkipped").click(
+    function () {
+      reExamine("skipped");
+    }
+  );
+  $("#reExamineIncorrect").click(
+    function () {
+      reExamine("incorrect");
+    }
+  );
 </script>
 {% endblock js %}

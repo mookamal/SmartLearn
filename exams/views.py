@@ -264,14 +264,34 @@ def re_examine(request):
     try:
         data = json.loads(request.body)
         session_id = data.get("session_id", None)
+        action = data.get("action", None)
+
+        if not session_id or not action:
+            return JsonResponse({"error": "Invalid action or session_id"}, status=400)
+
+        if action not in ["all", "skipped", "incorrect"]:
+            return JsonResponse({"error": "Invalid action"}, status=400)
+
         session = get_object_or_404(Session, id=session_id, user=request.user)
-        questions = session.questions.all()
+
+        if action == "all":
+            questions = session.questions.all()
+        elif action == "skipped":
+            questions = session.questions.filter(
+                answer__isnull=True, session=session)
+        elif action == "incorrect":
+            questions = session.questions.filter(
+                answer__choice__is_right=False, session=session)
+
+        if not questions.exists():
+            return JsonResponse({"error": "No questions found for the specified action"}, status=404)
+
         # create a new session
         new_session = Session.objects.create(
             user=session.user,
             exam=session.exam,
             session_mode=session.session_mode,
-            number_of_questions=session.number_of_questions,
+            number_of_questions=questions.count(),
             question_order=list(questions.values_list('id', flat=True)),
             current_question_index=0,
         )
