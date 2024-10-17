@@ -112,6 +112,11 @@ def session_results(request, session_id):
     # return template
     return render(request, 'exams/session_results.html', context)
 
+
+@login_required
+def my_sessions(request):
+    return render(request, "exams/my_sessions.html")
+
 # functions for ajax
 
 

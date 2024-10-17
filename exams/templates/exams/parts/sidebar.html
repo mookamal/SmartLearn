@@ -32,6 +32,13 @@
                {% endfor %}
             </ul>
           </li>
+          {% comment %} my_sessions url {% endcomment %}
+          <li>
+            <a href="{% url 'my_sessions' %}" class="flex gap-2 items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+               <i class="fa-solid fa-book"></i>
+               My Sessions
+            </a>
+         </li>
        </ul>
     </div>
  </aside>
