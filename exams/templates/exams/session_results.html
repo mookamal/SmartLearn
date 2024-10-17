@@ -1,5 +1,6 @@
 {% extends "_base.html" %}
 {% load static %}
+{% load exam_tags %}
 {% block title %}Session Results{% endblock title %}
 
 {% block content %}
@@ -87,7 +88,11 @@
       <tbody>
         {% for question in session.questions.all %}
           <tr>
-              <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">Apple Inc.</td>
+              <td class="text-xl">
+                {{ session.id|question_status:question.id|safe }}
+                <p class="text-yellow-200 hidden"></p>
+                <p class="text-red-400 hidden"></p>
+              </td>
               <td>{{question.text}}</td>
               <td>{{question.subject}}</td>
               <td>$3.04T</td>
