@@ -70,3 +70,14 @@ def percentage_question(question_id):
         return 0
     except Exception as e:
         return f"Error: {str(e)}"
+
+
+@register.simple_tag
+def percentage_session_questions(session, result):
+    total_questions = session.questions.count()
+    if result == "correct":
+        return round((session.correct_answer_count / total_questions) * 100)
+    elif result == "incorrect":
+        return round((session.incorrect_answer_count / total_questions) * 100)
+    elif result == "skipped":
+        return round((session.skipped_answer_count / total_questions) * 100)

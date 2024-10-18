@@ -1,5 +1,10 @@
+{% load exam_tags %}
+{% percentage_session_questions session=session result="correct" as percent_correct %}
+{% percentage_session_questions session=session result="incorrect" as percent_incorrect %}
+{% percentage_session_questions session=session result="skipped" as percent_skipped %}
+
 {% if session.unused_question_count == 0 and session.session_mode != "SOLVED" and session.session_mode != "INCOMPLETE" %}
-RUN
+
 {% else %}
     {% if session.session_mode == 'SOLVED' or  session.session_mode == 'INCOMPLETE' %}
         N/A
