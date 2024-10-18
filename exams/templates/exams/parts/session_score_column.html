@@ -4,9 +4,21 @@
 {% percentage_session_questions session=session result="skipped" as percent_skipped %}
 
 {% if session.unused_question_count == 0 and session.session_mode != "SOLVED" and session.session_mode != "INCOMPLETE" %}
-
+<div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 relative" data-tooltip-target="percent-session-{{session.id}}">
+    <div class="absolute bg-green-600 h-2.5 rounded-l-full" style="width: {{percent_correct}}%"></div>
+    <div class="absolute bg-red-600 h-2.5" style="width: {{percent_incorrect}}%; left: {{percent_correct}}%"></div>
+    <div class="absolute bg-yellow-400 h-2.5 rounded-r-full" style="width: {{percent_skipped}}%; left: calc({{percent_correct}}% + {{percent_incorrect}}%)"></div>
+</div>
+<div id="percent-session-{{session.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+    <div class="tooltip-inner">
+        Correct: {{ percent_correct }}%<br>
+        Incorrect: {{ percent_incorrect }}%<br>
+        Skipped: {{ percent_skipped }}%
+    </div>
+    <div class="tooltip-arrow" data-popper-arrow></div>
+</div>
 {% else %}
-    {% if session.session_mode == 'SOLVED' or  session.session_mode == 'INCOMPLETE' %}
+    {% if session.session_mode == 'SOLVED' or session.session_mode == 'INCOMPLETE' %}
         N/A
     {% else %}
         Ongoing
