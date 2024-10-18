@@ -16,10 +16,12 @@
             View results
           </a>
           {% else %}
-          <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-center">
-            <i class="fa-regular fa-circle-play mx-2"></i>
-            Continue
-          </a>
+            {% if session.session_mode != "SOLVED" and session.session_mode != "INCOMPLETE" %}
+            <a href="{% url 'show_session' session.id %}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-center">
+              <i class="fa-regular fa-circle-play mx-2"></i>
+              Continue
+            </a>
+            {% endif %}
           {% endif %}
         </li>
       </ul>
