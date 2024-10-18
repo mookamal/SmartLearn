@@ -11,9 +11,9 @@
 </div>
 <div id="percent-session-{{session.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
     <div class="tooltip-inner">
-        Correct: {{ percent_correct }}%<br>
-        Incorrect: {{ percent_incorrect }}%<br>
-        Skipped: {{ percent_skipped }}%
+        Correct: {{ percent_correct }}% ({{session.correct_answer_count}})<br>
+        Incorrect: {{ percent_incorrect }}% ({{session.incorrect_answer_count}})<br>
+        Skipped: {{ percent_skipped }}% ({{session.skipped_answer_count}})
     </div>
     <div class="tooltip-arrow" data-popper-arrow></div>
 </div>
