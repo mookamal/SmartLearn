@@ -150,6 +150,7 @@ class Session(models.Model):
     current_question_index = models.IntegerField(default=0)
     completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    unused_question_count = models.PositiveIntegerField(default=0)
     # answer counts
     correct_answer_count = models.PositiveIntegerField(default=0)
     incorrect_answer_count = models.PositiveIntegerField(default=0)
@@ -160,11 +161,20 @@ class Session(models.Model):
             answer__choice__is_right=True, answer__session=self).count() or 0
         incorrect_count = self.questions.filter(
             answer__choice__is_right=False, answer__session=self).count() or 0
-        total_count = self.questions.count()
-        skipped_count = total_count - (correct_count + incorrect_count)
         self.correct_answer_count = correct_count
         self.incorrect_answer_count = incorrect_count
-        self.skipped_answer_count = skipped_count
+        self.update_skipped_answer_count()
+        self.save()
+
+    def update_skipped_answer_count(self):
+        total_questions = self.number_of_questions or self.questions.count()
+        answered_questions = self.correct_answer_count + self.incorrect_answer_count
+        self.skipped_answer_count = max(
+            0, total_questions - answered_questions - self.unused_question_count)
+
+        if self.skipped_answer_count < 0:
+            self.skipped_answer_count = 0
+
         self.save()
 
     def is_session_completed(self):

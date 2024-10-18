@@ -61,10 +61,6 @@ def show_session(request, session_id):
     current_index = session.current_question_index
     total_questions = len(question_order)
     last_index = total_questions - 1
-    # if current_index >= len(question_order):
-    #     session.completed = True
-    #     session.save()
-    #     return render(request, 'exams/session_complete.html')
     current_question_id = question_order[current_index]
     current_question = get_object_or_404(Question, id=current_question_id)
     try:
@@ -115,7 +111,9 @@ def session_results(request, session_id):
 
 @login_required
 def my_sessions(request):
-    return render(request, "exams/my_sessions.html")
+    sessions = Session.objects.filter(user=request.user)
+    context = {'sessions': sessions}
+    return render(request, "exams/my_sessions.html", context)
 
 # functions for ajax
 
@@ -169,12 +167,11 @@ def ajax_create_session(request):
             questions = questions.filter(sources__id__in=sources)
 
         questions = questions.order_by('?')[:num_questions]
-        question_ids = list(questions.values_list('id', flat=True))
-
         session = Session.objects.create(
-            user=current_user, exam=exam, session_mode=session_mode, number_of_questions=num_questions, question_order=question_ids)
-
+            user=current_user, exam=exam, session_mode=session_mode, number_of_questions=num_questions)
+        session.question_order = list(questions.values_list('id', flat=True))
         session.questions.add(*questions)
+        session.unused_question_count = questions.count()
         session.update_answer_counts()
         messages.success(
             request, f'Session created successfully. Session ID: #{session.id}')
@@ -201,7 +198,6 @@ def answer(request):
         choice = get_object_or_404(Choice, id=choice_id)
         answer = Answer.objects.create(
             session=session, question=question, choice=choice)
-
         return JsonResponse({'answer_id': answer.id})
 
     except json.JSONDecodeError:
@@ -224,8 +220,21 @@ def navigate_question_index(request):
         session_id = data.get('session_id', None)
         action = data.get('action', None)
         session = get_object_or_404(Session, id=session_id, user=request.user)
+        question_order = session.question_order
         if action == 'next':
             if session.current_question_index < len(session.question_order) - 1:
+                current_question_id = question_order[session.current_question_index]
+                get_current_question = Question.objects.get(
+                    id=current_question_id)
+                if get_current_question.id not in session.questions.values_list('id', flat=True):
+                    return JsonResponse({'error': 'Question does not belong to this session'}, status=400)
+                get_answer_correct_question = Answer.objects.filter(
+                    session=session, question=get_current_question
+                )
+                if not get_answer_correct_question.exists():
+                    session.skipped_answer_count += 1
+                if session.unused_question_count > 0:
+                    session.unused_question_count -= 1
                 session.current_question_index += 1
         elif action == 'prev':
             if session.current_question_index > 0:
@@ -242,6 +251,8 @@ def navigate_question_index(request):
         return JsonResponse({'error': 'Session not found'}, status=404)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+    except Question.DoesNotExist:
+        return JsonResponse({'error': 'Question not found'}, status=404)
 
 
 @login_required

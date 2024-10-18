@@ -6,6 +6,62 @@
 {% include "exams/parts/navbar.html" %}
 {% include "exams/parts/sidebar.html" %} 
 <div class="p-4 sm:ml-64 mt-14">
-
+    <h1 class="my-4 text-center text-2xl font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl dark:text-white">
+        My Sessions
+    </h1>
+    <hr class="w-48 h-1 mx-auto my-4 bg-primary-100 border-0 rounded md:my-10 dark:bg-gray-700">
+    {% comment %} show session as tables {% endcomment %}
+    <div class="p-6 gap-2 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gra">
+        <table id="session-table" class="border bg-white dark:bg-black dark:border-black shadow-sm">
+          <thead>
+              <tr>
+                  <th>
+                      <span class="flex items-center">
+                          Session
+                      </span>
+                  </th>
+                  <th>
+                      <span class="flex items-center">
+                          Date
+                      </span>
+                  </th>
+                  <th>
+                      <span class="flex items-center">
+                          Questions
+                      </span>
+                  </th>
+                  <th>
+                      <span class="flex items-center">
+                        Score
+                      </span>
+                  </th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for session in sessions %}
+              <tr class="hover:bg-gray-100">
+                  <td>{{session.exam.category.name}} #{{session.id}}</td>
+                  <td>{{session.created_at}}</td>
+                  <td>{{session.number_of_questions}}</td>
+                  <td>
+                    {% include "exams/parts/session_score_column.html" %}
+                  </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
 </div>
 {% endblock content %}
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
+<script>
+    // for data table to display question
+    if (document.getElementById("session-table") && typeof simpleDatatables.DataTable !== 'undefined') {
+      const dataTable = new simpleDatatables.DataTable("#session-table", {
+          searchable: true,
+          sortable: true
+      });
+  }
+</script>
+{% endblock js %}
