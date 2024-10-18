@@ -44,20 +44,21 @@
           </thead>
           <tbody>
             {% for session in sessions %}
-              <tr class="hover:bg-gray-100">
-                  <td>{{session.exam.category.name}} #{{session.id}}</td>
+              <tr class="hover:bg-gray-100 dark:hover:bg-gray-950">
+                  <td class="bg-yellow-50 dark:bg-gray-800">{{session.exam.category.name}} #{{session.id}}</td>
                   <td>{{session.created_at}}</td>
-                  <td>{{session.number_of_questions}}</td>
+                  <td class="bg-yellow-50 dark:bg-gray-800">{{session.number_of_questions}}</td>
                   <td>
                     {% include "exams/parts/session_score_column.html" %}
                   </td>
-                  <td>
+                  <td class="bg-yellow-50 dark:bg-gray-800 flex justify-center">
+                    {% include "exams/parts/session_actions_column.html" %}
                   </td>
               </tr>
             {% endfor %}
           </tbody>
         </table>
-      </div>
+    </div>
 </div>
 {% endblock content %}
 {% block js %}
