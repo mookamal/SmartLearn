@@ -1,4 +1,4 @@
-{% if session.skipped_answer_count != session.number_of_question and session.session_mode != "SOLVED" and session.session_mode != "INCOMPLETE" %}
+{% if session.unused_question_count == 0 and session.session_mode != "SOLVED" and session.session_mode != "INCOMPLETE" %}
 RUN
 {% else %}
     {% if session.session_mode == 'SOLVED' or  session.session_mode == 'INCOMPLETE' %}
@@ -6,5 +6,4 @@ RUN
     {% else %}
         Ongoing
     {% endif %}
-
 {% endif %}
