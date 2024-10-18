@@ -35,6 +35,11 @@
                         Score
                       </span>
                   </th>
+                  <th>
+                    <span class="flex items-center">
+                      Actions
+                    </span>
+                </th>
               </tr>
           </thead>
           <tbody>
@@ -45,6 +50,8 @@
                   <td>{{session.number_of_questions}}</td>
                   <td>
                     {% include "exams/parts/session_score_column.html" %}
+                  </td>
+                  <td>
                   </td>
               </tr>
             {% endfor %}
