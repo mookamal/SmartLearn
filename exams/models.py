@@ -4,6 +4,7 @@ from django_ckeditor_5.fields import CKEditor5Field
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator
 from django.apps import apps
+from .manager import QuestionManager
 # Create your models here.
 
 
@@ -109,6 +110,8 @@ class Question(models.Model):
     marking_users = models.ManyToManyField(User, blank=True,
                                            related_name="marked_questions")
     created_at = models.DateTimeField(auto_now_add=True)
+
+    objects = QuestionManager()
 
     def save(self, *args, **kwargs):
         if self.is_approved and not self.approval_date:

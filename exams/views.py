@@ -118,7 +118,21 @@ def my_sessions(request):
 
 @login_required
 def performance(request):
-    context = {}
+    user_question_pks = Answer.objects.filter(
+        session__user=request.user).values('question')
+    user_questions = Question.objects.filter(pk__in=user_question_pks)
+    correct_count = Question.objects.correct_by_user(request.user).count()
+    incorrect_count = Question.objects.incorrect_by_user(request.user).count()
+    skipped_count = Question.objects.skipped_by_user(request.user).count()
+    # Get only exams that the user has passed.
+    exams = Exam.objects.select_related("category").filter(
+        session__user=request.user, session__answer__isnull=False).distinct()
+    context = {
+        'correct_count': correct_count,
+        'incorrect_count': incorrect_count,
+        'skipped_count': skipped_count,
+        'exams': exams,
+    }
     return render(request, "exams/performance.html", context)
 
 # functions for ajax
