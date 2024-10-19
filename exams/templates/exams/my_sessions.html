@@ -121,4 +121,32 @@ $(".re-examine").click(function (event) {
   reExamine(sessionId);
 });
 </script>
+<script>
+  // for delete action
+  $(".delete-session").click(function (event) {
+    event.preventDefault();
+    const sessionId = $(this).data("session-id");
+    // show confirm for user
+    confirmAction(`Are you sure you want to delete this session?`, "warning", function () {
+      // send request to delete url
+      $.ajax({
+        url: "{% url 'delete_session' %}",
+        method: "POST",
+        data: JSON.stringify({ session_id: sessionId }),
+        contentType: "application/json",
+        headers: {'X-CSRFToken': '{{ csrf_token }}'},
+        success: function (response) {
+          if (response.success) {
+            // reload page
+            window.location.reload();
+          }
+        },
+        error: function (xhr, status, error) {
+          // show error message
+          console.log("Failed to delete session. Please try again later.");
+        },
+      });
+    });
+  });
+</script>
 {% endblock js %}

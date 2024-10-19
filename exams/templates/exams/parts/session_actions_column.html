@@ -24,6 +24,7 @@
             {% endif %}
           {% endif %}
         </li>
+        <hr class="border">
         {% if session.number_of_questions > 0 %}
         <li>
           <a href="#" class="re-examine block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-center" data-session-id={{session.id}}>
@@ -32,6 +33,13 @@
           </a>
         </li>
         {% endif %}
+        <hr class="border">
+        <li>
+          <a href="#" class="delete-session block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-center" data-session-id={{session.id}}>
+            <i class="fa-solid fa-trash"></i>
+            Delete
+          </a>
+        </li>
       </ul>
   </div>
     

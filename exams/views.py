@@ -313,3 +313,21 @@ def re_examine(request):
         return JsonResponse({"error": "Session not found"}, status=404)
     except ValueError as e:
         return JsonResponse({"error": str(e)}, status=400)
+
+
+@login_required
+@require_POST
+def delete_session(request):
+    try:
+        data = json.loads(request.body)
+        session_id = data.get("session_id", None)
+        session = get_object_or_404(Session, id=session_id, user=request.user)
+        session.delete()
+        messages.success(request, "Session deleted successfully.")
+        return JsonResponse({"success": True})
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON format"}, status=400)
+    except Session.DoesNotExist:
+        return JsonResponse({"error": "Session not found"}, status=404)
+    except ValueError as e:
+        return JsonResponse({"error": str(e)}, status=400)
