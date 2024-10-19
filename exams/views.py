@@ -320,10 +320,20 @@ def re_examine(request):
 def delete_session(request):
     try:
         data = json.loads(request.body)
+        action = data.get("action", None)
         session_id = data.get("session_id", None)
-        session = get_object_or_404(Session, id=session_id, user=request.user)
-        session.delete()
-        messages.success(request, "Session deleted successfully.")
+
+        if action == "all":
+            Session.objects.filter(user=request.user).delete()
+            messages.success(request, "All sessions deleted successfully.")
+        elif action == "single" and session_id:
+            session = get_object_or_404(
+                Session, id=session_id, user=request.user)
+            session.delete()
+            messages.success(request, "Session deleted successfully.")
+        else:
+            return JsonResponse({"error": "Invalid action or missing session_id"}, status=400)
+
         return JsonResponse({"success": True})
     except json.JSONDecodeError:
         return JsonResponse({"error": "Invalid JSON format"}, status=400)
