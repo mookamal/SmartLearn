@@ -1,5 +1,5 @@
 {% extends "_base.html" %}
-
+{% load static %}
 {% block title %}My Performance{% endblock title %}
 
 {% block content %}
@@ -7,6 +7,84 @@
 {% include "exams/parts/navbar.html" %}
 {% include "exams/parts/sidebar.html" %} 
 <div class="p-4 sm:ml-64 mt-14">
-
+    <h1 class="my-4 text-center text-2xl font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl dark:text-white">
+        My performance
+    </h1>
+    <hr class="w-48 h-1 mx-auto my-4 bg-primary-100 border-0 rounded md:my-10 dark:bg-gray-700">
+    <div class="w-full border rounded shadow-sm dark:bg-gray-800 p-4 md:p-6">
+        <!-- Line Chart -->
+        <div class="py-6" id="performance-chart"></div>
+        <hr class="border">
+        <p class="py-2 text-purple-950 dark:text-white text-lg">
+            Your performance summary is displayed here. You can view the number of questions you answered correctly, incorrectly, or skipped across all your exams. Additionally, you can see the percentage breakdown of your answers for a quick overview of how well you did.
+        </p>
+    </div>
 </div>
 {% endblock content %}
+{% block js %}
+<script src="{% static "src/js/apexcharts.js" %}"></script>
+<script>
+const getChartOptions = () => {
+    return {
+      series: [{{percent_correct}}, {{percent_incorrect}}, {{percent_skipped}}],
+      colors: ["#31C48D", "#F98080", "#FCE96A"],
+      chart: {
+        height: 420,
+        width: "100%",
+        type: "pie",
+      },
+      stroke: {
+        colors: ["white"],
+        lineCap: "",
+      },
+      plotOptions: {
+        pie: {
+          labels: {
+            show: true,
+          },
+          size: "100%",
+          dataLabels: {
+            offset: -25
+          }
+        },
+      },
+      labels: ["Correct", "Incorrect", "Skipped"],
+      dataLabels: {
+        enabled: true,
+        style: {
+          fontFamily: "Inter, sans-serif",
+        },
+      },
+      legend: {
+        position: "bottom",
+        fontFamily: "Inter, sans-serif",
+      },
+      yaxis: {
+        labels: {
+          formatter: function (value) {
+            return value + "%"
+          },
+        },
+      },
+      xaxis: {
+        labels: {
+          formatter: function (value) {
+            return value  + "%"
+          },
+        },
+        axisTicks: {
+          show: false,
+        },
+        axisBorder: {
+          show: false,
+        },
+      },
+    }
+  }
+  
+  if (document.getElementById("performance-chart") && typeof ApexCharts !== 'undefined') {
+    const chart = new ApexCharts(document.getElementById("performance-chart"), getChartOptions());
+    chart.render();
+  }
+</script>
+{% endblock js %}

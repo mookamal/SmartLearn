@@ -124,6 +124,13 @@ def performance(request):
     correct_count = Question.objects.correct_by_user(request.user).count()
     incorrect_count = Question.objects.incorrect_by_user(request.user).count()
     skipped_count = Question.objects.skipped_by_user(request.user).count()
+    # percent data
+    percent_correct = round(
+        correct_count / (correct_count + incorrect_count + skipped_count) * 100)
+    percent_incorrect = round(
+        incorrect_count / (correct_count + incorrect_count + skipped_count) * 100)
+    percent_skipped = round(
+        skipped_count / (correct_count + incorrect_count + skipped_count) * 100)
     # Get only exams that the user has passed.
     exams = Exam.objects.select_related("category").filter(
         session__user=request.user, session__answer__isnull=False).distinct()
@@ -132,6 +139,9 @@ def performance(request):
         'incorrect_count': incorrect_count,
         'skipped_count': skipped_count,
         'exams': exams,
+        'percent_correct': percent_correct,
+        'percent_incorrect': percent_incorrect,
+        'percent_skipped': percent_skipped,
     }
     return render(request, "exams/performance.html", context)
 
