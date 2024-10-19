@@ -115,6 +115,12 @@ def my_sessions(request):
     context = {'sessions': sessions}
     return render(request, "exams/my_sessions.html", context)
 
+
+@login_required
+def performance(request):
+    context = {}
+    return render(request, "exams/performance.html", context)
+
 # functions for ajax
 
 

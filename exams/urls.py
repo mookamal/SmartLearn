@@ -13,6 +13,8 @@ urlpatterns = [
     path("session/<int:session_id>/results/",
          views.session_results, name="session_results"),
     path("session/my_sessions/", views.my_sessions, name="my_sessions"),
+    # performance
+    path("performance/", views.performance, name="performance"),
     # urls for ajax
     path("ajax/get-question-count/",
          views.get_question_count, name="get_question_count"),
