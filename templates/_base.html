@@ -33,7 +33,8 @@
       {% endif %}
     {% endif %}
 
-
+    {% comment %} loader  {% endcomment %}
+    {% include "parts/loader.html" %}
     {% comment %} toast {% endcomment %}
     {% if messages %}
       {% for message in messages %}

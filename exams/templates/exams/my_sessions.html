@@ -72,4 +72,53 @@
       });
   }
 </script>
+<script>
+    // for actions
+  /**
+   * This function sends a request to the server to re-examine the session.
+   *
+   * @param {string} action - The action to be performed during re-examination.
+   *                          It can be either "all" or "incorrect".
+   *
+   * @returns {void} - The function does not return any value.
+   */
+   function reExamine(sessionId) {
+    // run loader
+    showLoader();
+    const data = {
+      session_id: sessionId,
+      action: "all",
+    };
+    // send request to re_examine url
+    $.ajax({
+      url: "{% url 're_examine' %}",
+      method: "POST",
+      data: JSON.stringify(data),
+      contentType: "application/json",
+      headers: {'X-CSRFToken': '{{ csrf_token }}'},
+      success: function (response) {
+        // hide loader
+        hideLoader();
+        if (response.session_id) {
+          confirmAction(`Re-examined successfully.` , "success", function () {
+            const redirectUrl = "{% url 'show_session' session_id=0 %}".replace("0", response.session_id);
+            window.location.href = redirectUrl;
+          });
+        }
+
+      },
+      error: function (xhr, status, error) {
+        // hide loader
+        hideLoader();
+        // show error message
+        console.log("Failed to re-examine. Please try again later.");
+      },
+    });
+}
+$(".re-examine").click(function (event) {
+  event.preventDefault();
+  const sessionId = $(this).data("session-id");
+  reExamine(sessionId);
+});
+</script>
 {% endblock js %}
