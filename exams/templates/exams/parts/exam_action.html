@@ -1,0 +1,32 @@
+
+<button id="dropdownButton{{exam.id}}" data-dropdown-toggle="dropdown{{exam.id}}" class="bg-gray-50 hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-yellow-50 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+    Actions 
+    <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+    </svg>
+</button>
+    
+
+  <div id="dropdown{{exam.id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow  dark:bg-gray-700">
+      <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownButton{{exam.id}}">
+        {% if percent.incorrect_count > 0 %}
+        <li>
+          <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-center">
+            <i class="fa-solid fa-power-off"></i>
+            Re-examine on <span class="font-bold bg-red-400 p-1 rounded dark:text-primary-950">Incorrect</span> questions ({{percent.incorrect_count}})
+          </a>
+        </li>
+        <hr class="border">
+        {% endif %}
+        {% if percent.skipped_count > 0 %}
+        <li>
+          <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-center">
+            <i class="fa-solid fa-power-off"></i>
+            Re-examine on <span class="font-bold bg-yellow-200 p-1 rounded dark:text-primary-950">Skipped</span> questions ({{percent.skipped_count}})
+          </a>
+        </li>
+        <hr class="border">
+        {% endif %}
+      </ul>
+  </div>
+    

@@ -85,11 +85,9 @@ def percentage_session_questions(session, result):
 
 @register.simple_tag
 def user_questions_answered_in_exam(exam, user, target):
-    all_pks = Answer.objects.filter(
-        question__exam=exam, session__user=user).values('question')
-
-    q = Question.objects.filter(exam=exam)
-    total_count = q.filter(pk__in=all_pks).count()
+    sessions = Session.objects.filter(user=user, exam=exam)
+    questions = Question.objects.filter(session__in=sessions).distinct()
+    total_count = questions.count()
 
     if total_count == 0:
         return 0 if target == "total" else {"correct": 0, "incorrect": 0, "skipped": 0}
@@ -97,16 +95,14 @@ def user_questions_answered_in_exam(exam, user, target):
     if target == "total":
         return total_count
 
-    correct_count = q.filter(pk__in=all_pks, answer__choice__is_right=True,
-                             answer__session__user=user).distinct().count()
-    incorrect_count = q.filter(pk__in=all_pks, answer__choice__is_right=False,
-                               answer__session__user=user).distinct().count()
-    skipped_count = q.filter(pk__in=all_pks, answer__choice__is_right__isnull=True,
-                             answer__session__user=user).distinct().count()
-
+    correct_count = questions.filter(answer__choice__is_right=True).count()
+    incorrect_count = questions.filter(answer__choice__is_right=False).count()
+    skipped_count = total_count - (correct_count + incorrect_count)
     if target == "percent":
         return {
             "correct": round((correct_count / total_count) * 100),
             "incorrect": round((incorrect_count / total_count) * 100),
+            "incorrect_count": incorrect_count,
             "skipped": round((skipped_count / total_count) * 100),
+            "skipped_count": skipped_count,
         }
