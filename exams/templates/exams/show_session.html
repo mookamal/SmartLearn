@@ -162,4 +162,36 @@
         finishSession();
     });
 </script>
+<!-- JavaScript for Report issue modal -->
+<script>
+    // use ajax to send data form to report_issue path with issueForm id
+    $("#issueForm").on('submit', function(e) {
+        e.preventDefault();
+        const csrfToken = '{{ csrf_token }}';
+        const data = new FormData(this);
+        $.ajax({
+            url: '{% url "report_issue" %}',
+            type: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken
+            },
+            data: data,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                if (response.success) {
+                    setAlert("Issue has been reported successfully!","success");
+                    // clear FormData
+                    $("#issueForm")[0].reset();
+                    // close modal
+                    const btnCloseModal = $('#closeModalReport');
+                    btnCloseModal.click();
+                }
+            },
+            error: function(xhr, status, error) {
+                setAlert("Error reporting issue: " + error,"error");
+            }
+        });
+    });
+</script>
 {% endblock %}

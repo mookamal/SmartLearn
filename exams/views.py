@@ -2,7 +2,7 @@ import json
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
-from .models import Category, Exam, Session, Question, Choice, Answer
+from .models import Category, Exam, Session, Question, Choice, Answer, Issue
 from django.http import JsonResponse
 from django.contrib import messages
 # Create your views here.
@@ -420,5 +420,29 @@ def re_examine_by_exam(request):
         return JsonResponse({"error": str(e)}, status=400)
     except Session.DoesNotExist:
         return JsonResponse({"error": "Session not found"}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+
+@login_required
+@require_POST
+def report_issue(request):
+    try:
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        question_id = request.POST.get('question_id')
+        if not title or not description:
+            return JsonResponse({"error": "Title and description are required"}, status=400)
+        question = get_object_or_404(Question, id=question_id)
+        issue = Issue(
+            title=title,
+            description=description,
+            user=request.user
+        )
+        issue.save()
+        question.issues.add(issue)
+        return JsonResponse({"success": True}, status=200)
+    except Question.DoesNotExist:
+        return JsonResponse({"error": "Question not found"}, status=404)
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
