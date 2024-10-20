@@ -19,6 +19,40 @@
             Your performance summary is displayed here. You can view the number of questions you answered correctly, incorrectly, or skipped across all your exams. Additionally, you can see the percentage breakdown of your answers for a quick overview of how well you did.
         </p>
     </div>
+    {% comment %} End show exam table {% endcomment %}
+    <div class="p-6 gap-2 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gra">
+      <table id="exam-table" class="border bg-white dark:bg-black dark:border-black shadow-sm">
+        <thead>
+            <tr>
+                <th>
+                    <span class="flex items-center">
+                        Exam
+                    </span>
+                </th>
+                <th>
+                    <span class="flex items-center">
+                        Performance
+                    </span>
+                </th>
+                <th>
+                    <span class="flex items-center">
+                        Actions
+                    </span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+          {% for exam in exams %}
+            <tr class="hover:bg-gray-100">
+                <td>{{exam.name}}</td>
+                <td></td>
+                <td></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% comment %} show exam table {% endcomment %}
 </div>
 {% endblock content %}
 {% block js %}
@@ -86,5 +120,15 @@ const getChartOptions = () => {
     const chart = new ApexCharts(document.getElementById("performance-chart"), getChartOptions());
     chart.render();
   }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
+<script>
+  // for data table to display question
+  if (document.getElementById("exam-table") && typeof simpleDatatables.DataTable !== 'undefined') {
+    const dataTable = new simpleDatatables.DataTable("#exam-table", {
+        searchable: true,
+        sortable: true
+    });
+}
 </script>
 {% endblock js %}
