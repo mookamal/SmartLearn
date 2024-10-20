@@ -371,3 +371,54 @@ def delete_session(request):
         return JsonResponse({"error": "Session not found"}, status=404)
     except ValueError as e:
         return JsonResponse({"error": str(e)}, status=400)
+
+
+@login_required
+@require_POST
+def re_examine_by_exam(request):
+    try:
+        data = json.loads(request.body)
+        exam_id = data.get("exam_id", None)
+        action = data.get("action", None)
+        if not exam_id or not action:
+            return JsonResponse({"error": "Invalid action or exam_id"}, status=400)
+        if action not in ["skipped", "incorrect"]:
+            return JsonResponse({"error": "Invalid action"}, status=400)
+        exam = get_object_or_404(Exam, id=exam_id)
+        sessions = Session.objects.filter(user=request.user, exam=exam)
+        if action == "skipped":
+            questions = Question.objects.filter(session__in=sessions).filter(
+                answer__isnull=True).distinct()
+        elif action == "incorrect":
+            questions = Question.objects.filter(session__in=sessions).filter(
+                answer__choice__is_right=False).distinct()
+        if not questions.exists():
+            return JsonResponse({"error": "No questions found for the specified action"}, status=404)
+        # create a new session
+        new_session = Session.objects.create(
+            user=request.user,
+            exam=exam,
+            session_mode="auto",
+            number_of_questions=questions.count(),
+            question_order=list(questions.values_list('id', flat=True)),
+            current_question_index=0,
+        )
+        # add all questions to the new session
+        new_session.questions.add(*questions)
+        # update answer counts for the new session
+        # update question_order using new_session.questions
+        new_session.question_order = [
+            question.id for question in new_session.questions.all()]
+        new_session.save()
+        new_session.update_answer_counts()
+        return JsonResponse({"session_id": new_session.id})
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON format"}, status=400)
+    except Exam.DoesNotExist:
+        return JsonResponse({"error": "Exam not found"}, status=404)
+    except ValueError as e:
+        return JsonResponse({"error": str(e)}, status=400)
+    except Session.DoesNotExist:
+        return JsonResponse({"error": "Session not found"}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)

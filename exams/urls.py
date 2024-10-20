@@ -26,4 +26,6 @@ urlpatterns = [
     path("ajax/finish_session/", views.finish_session, name="finish_session"),
     path("ajax/re_examine/", views.re_examine, name="re_examine"),
     path("ajax/delete-session/", views.delete_session, name="delete_session"),
+    path("ajax/re-examine-by-exam/",
+         views.re_examine_by_exam, name="re_examine_by_exam"),
 ]

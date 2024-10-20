@@ -11,7 +11,7 @@
       <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownButton{{exam.id}}">
         {% if percent.incorrect_count > 0 %}
         <li>
-          <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-center">
+          <a href="#" class="re-examine block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-center" data-action="incorrect" data-exam-id={{exam.id}}>
             <i class="fa-solid fa-power-off"></i>
             Re-examine on <span class="font-bold bg-red-400 p-1 rounded dark:text-primary-950">Incorrect</span> questions ({{percent.incorrect_count}})
           </a>
@@ -20,7 +20,7 @@
         {% endif %}
         {% if percent.skipped_count > 0 %}
         <li>
-          <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-center">
+          <a href="#" class="re-examine block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-center" data-action="skipped" data-exam-id={{exam.id}}>
             <i class="fa-solid fa-power-off"></i>
             Re-examine on <span class="font-bold bg-yellow-200 p-1 rounded dark:text-primary-950">Skipped</span> questions ({{percent.skipped_count}})
           </a>

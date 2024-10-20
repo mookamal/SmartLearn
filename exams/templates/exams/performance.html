@@ -159,4 +159,40 @@ const getChartOptions = () => {
     });
 }
 </script>
+<script>
+  // for actions
+  $(".re-examine").click(function (event){
+    event.preventDefault();
+    showLoader();
+    const action = $(this).data("action");
+    const examId = $(this).data("exam-id");
+    const url = `{% url 're_examine_by_exam' %}`;
+    const data = { action: action, exam_id: examId };
+    $.ajax({
+          url: url,
+          method: "POST",
+          data: JSON.stringify(data),
+          contentType: "application/json",
+          headers: {'X-CSRFToken': '{{ csrf_token }}'},
+          success: function (response) {
+            // hide loader
+            hideLoader();
+            if (response.session_id) {
+              confirmAction(`Re-examined successfully. (${action})` , "success", function () {
+                const redirectUrl = "{% url 'show_session' session_id=0 %}".replace("0", response.session_id);
+                window.location.href = redirectUrl;
+              });
+            }
+
+          },
+          error: function (xhr, status, error) {
+            // hide loader
+            hideLoader();
+            // show error message
+            console.log(error);
+          },
+        });
+  });
+
+</script>
 {% endblock js %}
