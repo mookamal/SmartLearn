@@ -1,5 +1,6 @@
 {% extends "_base.html" %}
 {% load static %}
+{% load exam_tags %}
 {% block title %}My Performance{% endblock title %}
 
 {% block content %}
@@ -43,9 +44,34 @@
         </thead>
         <tbody>
           {% for exam in exams %}
-            <tr class="hover:bg-gray-100">
-                <td>{{exam.name}}</td>
-                <td></td>
+            <tr class="hover:bg-gray-100 text-lg">
+                <td>
+                    {{exam.name}}
+                    {% user_questions_answered_in_exam exam=exam user=user target="total" as total %}
+                    <span data-tooltip-target="total-count-tooltip{{exam.id}}">
+                        ({{total}})
+                    </span>
+                    <div id="total-count-tooltip{{exam.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                        Number of questions answered.
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
+                </td>
+                <td>
+                    {% user_questions_answered_in_exam exam=exam user=user target="percent" as percent %}
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 relative" data-tooltip-target="percent-exam-{{exam.id}}">
+                        <div class="absolute bg-green-600 h-2.5 rounded-l-full" style="width: {{percent.correct}}%"></div>
+                        <div class="absolute bg-red-600 h-2.5" style="width: {{percent.incorrect}}%; left: {{percent.correct}}%"></div>
+                        <div class="absolute bg-yellow-400 h-2.5 rounded-r-full" style="width: {{percent.skipped}}%; left: calc({{percent.correct}}% + {{percent.incorrect}}%)"></div>
+                    </div>
+                    <div id="percent-exam-{{exam.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                        <div class="tooltip-inner">
+                            Correct: {{ percent.correct}}% ({{total}})<br>
+                            Incorrect: {{ percent.incorrect }}% ({{total}})<br>
+                            Skipped: {{ percent.skipped }}% ({{total}})
+                        </div>
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
+                </td>
                 <td></td>
             </tr>
           {% endfor %}
