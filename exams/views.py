@@ -1,10 +1,11 @@
 import json
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from .models import Category, Exam, Session, Question, Choice, Answer, Issue
 from django.http import JsonResponse
 from django.contrib import messages
+from .utility import check_subscription
 # Create your views here.
 
 
@@ -120,7 +121,6 @@ def my_sessions(request):
 def performance(request):
     user_question_pks = Answer.objects.filter(
         session__user=request.user).values('question')
-    user_questions = Question.objects.filter(pk__in=user_question_pks)
     correct_count = Question.objects.correct_by_user(request.user).count()
     incorrect_count = Question.objects.incorrect_by_user(request.user).count()
     skipped_count = Question.objects.skipped_by_user(request.user).count()
@@ -175,6 +175,8 @@ def get_question_count(request):
 @require_POST
 def ajax_create_session(request):
     try:
+        if not check_subscription(request):
+            return JsonResponse({'error': 'You do not have a subscription'}, status=400)
         data = json.loads(request.body)
         current_user = request.user
         subjects = data.get('subjects', None)
@@ -299,6 +301,8 @@ def finish_session(request):
 @require_POST
 def re_examine(request):
     try:
+        if not check_subscription(request):
+            return JsonResponse({'error': 'You do not have a subscription'}, status=400)
         data = json.loads(request.body)
         session_id = data.get("session_id", None)
         action = data.get("action", None)

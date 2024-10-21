@@ -115,11 +115,11 @@
         }
 
       },
-      error: function (xhr, status, error) {
+      error: function (error) {
         // hide loader
         hideLoader();
         // show error message
-        console.log("Failed to re-examine. Please try again later.");
+        setAlert(error.responseJSON.error,'error')
       },
     });
 }
