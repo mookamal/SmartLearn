@@ -1,16 +1,30 @@
 from django.contrib import admin
 from . import models
-# Register your models here.
+from import_export import fields, resources
+from import_export.widgets import ManyToManyWidget
+from import_export.admin import ImportExportModelAdmin
 
 
-class QuestionAdmin(admin.ModelAdmin):
+class QuestionResource(resources.ModelResource):
+    choices = fields.Field(
+        column_name='choices',
+        attribute='choices',
+        widget=ManyToManyWidget(models.Choice, separator=',', field='text')
+    )
+
+    class Meta:
+        model = models.Question
+        fields = ('id', 'text', 'exam__name', 'subject__name',
+                  'is_approved', 'created_at', 'choices')
+
+
+@admin.register(models.Question)
+class QuestionAdmin(ImportExportModelAdmin):
+    resource_class = QuestionResource
     list_display = ('text', 'exam', 'subject', 'is_approved',
                     'created_at', 'approval_date')
-
     list_filter = ('is_approved', 'exam', 'subject', 'created_at')
-
     search_fields = ('text', 'explanation', 'exam__name', 'subject__name')
-
     readonly_fields = ('created_at', 'approval_date')
 
     class ChoiceInline(admin.TabularInline):
@@ -18,9 +32,6 @@ class QuestionAdmin(admin.ModelAdmin):
         extra = 1
 
     inlines = [ChoiceInline]
-
-
-admin.site.register(models.Question, QuestionAdmin)
 
 
 class ExamAdmin(admin.ModelAdmin):

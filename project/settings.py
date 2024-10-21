@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'django_ckeditor_5',
+    'import_export',
     # my apps
     'core',
     'exams',
