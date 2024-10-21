@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     # my apps
     'core',
     'exams',
+    'plan',
 ]
 
 AUTHENTICATION_BACKENDS = [
