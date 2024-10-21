@@ -381,6 +381,8 @@ def delete_session(request):
 @require_POST
 def re_examine_by_exam(request):
     try:
+        if not check_subscription(request):
+            return JsonResponse({'error': 'You do not have a subscription'}, status=400)
         data = json.loads(request.body)
         exam_id = data.get("exam_id", None)
         action = data.get("action", None)

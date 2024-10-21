@@ -185,11 +185,11 @@ const getChartOptions = () => {
             }
 
           },
-          error: function (xhr, status, error) {
+          error: function (error) {
             // hide loader
             hideLoader();
             // show error message
-            console.log(error);
+            setAlert(error.responseJSON.error,'error')
           },
         });
   });
