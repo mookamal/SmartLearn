@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import date, timedelta
+from django.utils import timezone
 SUBSCRIPTION_PLAN_CHOICES = [
     ('FREE', 'Free Plan'),
     ('BASIC', 'Basic Plan'),
@@ -25,6 +26,7 @@ class UserSubscription(models.Model):
         SubscriptionPlan, on_delete=models.SET_NULL, null=True)
     start_date = models.DateField(auto_now_add=True)
     sessions_used = models.IntegerField(default=0)
+    last_reset = models.DateField(default=timezone.now)
 
     @property
     def end_date(self):
