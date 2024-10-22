@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+
+from celery.schedules import crontab
 from pathlib import Path
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -268,3 +270,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # celery
 CELERY_RESULT_BACKEND = "redis://redis:6379"
 CELERY_BROKER_URL = "redis://redis:6379"
+CELERY_IMPORTS = ('project.tasks')
+CELERY_BEAT_SCHEDULE = {
+    'reset-free-plan-sessions': {
+        'task': 'project.tasks.reset_free_plan_sessions',
+        'schedule': crontab(minute=0, hour=0, day_of_month=1),
+    },
+}

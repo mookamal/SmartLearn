@@ -1,5 +1,5 @@
 import json
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from .models import Category, Exam, Session, Question, Choice, Answer, Issue

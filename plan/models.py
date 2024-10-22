@@ -35,6 +35,7 @@ class UserSubscription(models.Model):
     def reset_sessions(self):
         if date.today().day == 1:
             self.sessions_used = 0
+            self.last_reset = timezone.now()
             self.save()
 
     def can_use_session(self):
