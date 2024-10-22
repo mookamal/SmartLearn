@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SubscriptionPlan, UserSubscription
+from .models import SubscriptionPlan, UserSubscription, Payment
 # Register your models here.
 
 
@@ -14,3 +14,11 @@ class UserSubscriptionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(UserSubscription, UserSubscriptionAdmin)
+
+
+@admin.register(Payment)
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = ('subscription', 'amount', 'timestamp')
+    list_filter = ('subscription', 'timestamp')
+    search_fields = ('subscription',
+                     'subscription__user__email')
