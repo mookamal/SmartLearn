@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 
+from decouple import config
 from celery.schedules import crontab
 from pathlib import Path
 import os
@@ -277,3 +278,9 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(minute=0, hour=0, day_of_month=1),
     },
 }
+
+# checkout settings
+
+
+CHECKOUT_SECRET_KEY = config('CHECKOUT_SECRET_KEY')
+CHECKOUT_PROCESSING_CHANNEL_ID = config('CHECKOUT_PROCESSING_CHANNEL_ID')

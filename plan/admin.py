@@ -18,7 +18,7 @@ admin.site.register(UserSubscription, UserSubscriptionAdmin)
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('subscription', 'amount', 'timestamp')
-    list_filter = ('subscription', 'timestamp')
+    list_display = ('subscription', 'amount', 'currency', 'status')
+    list_filter = ('subscription', 'currency', 'status')
     search_fields = ('subscription',
                      'subscription__user__email')
