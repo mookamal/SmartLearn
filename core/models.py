@@ -5,9 +5,18 @@ from django.template.defaultfilters import slugify
 
 
 class Info(models.Model):
+    USD = 'USD'
+    SAR = 'SAR'
+
+    CURRENCY_CHOICES = [
+        (USD, 'US Dollar'),
+        (SAR, 'Saudi Riyal'),
+    ]
     name = models.CharField(max_length=200, blank=True, null=True)
     desc = models.TextField()
     logo = models.ImageField(upload_to='logo', default='logo.png')
+    currency = models.CharField(
+        max_length=3, choices=CURRENCY_CHOICES, default=USD)
     # social media links
     facebook = models.URLField(max_length=200, null=True, blank=True)
     instagram = models.URLField(max_length=200, null=True, blank=True)
