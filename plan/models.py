@@ -22,7 +22,7 @@ class SubscriptionPlan(models.Model):
 
 class UserSubscription(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    plan = models.ForeignKey(
+    plan = models.OneToOneField(
         SubscriptionPlan, on_delete=models.SET_NULL, null=True)
     start_date = models.DateField(auto_now_add=True)
     sessions_used = models.IntegerField(default=0)
