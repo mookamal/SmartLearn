@@ -56,20 +56,23 @@ class Payment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     subscription = models.ForeignKey(
         UserSubscription, on_delete=models.CASCADE)
-    payment_id = models.CharField(max_length=100, unique=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    currency = models.CharField(max_length=10)
-    approved = models.BooleanField()
-    status = models.CharField(max_length=50)
-    auth_code = models.CharField(max_length=20)
-    reference = models.CharField(max_length=100)
-    last4 = models.CharField(max_length=4)
-    expiry_month = models.IntegerField()
-    expiry_year = models.IntegerField()
-    issuer = models.CharField(max_length=100)
-    processed_on = models.DateTimeField()
-    expires_on = models.DateTimeField()
-    acquirer_transaction_id = models.CharField(max_length=100)
+    payment_id = models.CharField(
+        max_length=100, unique=True, blank=True, null=True)
+    amount = models.DecimalField(
+        max_digits=10, decimal_places=2, blank=True, null=True)
+    currency = models.CharField(max_length=10, blank=True, null=True)
+    approved = models.BooleanField(blank=True, null=True)
+    status = models.CharField(max_length=50, blank=True, null=True)
+    auth_code = models.CharField(max_length=20, blank=True, null=True)
+    reference = models.CharField(max_length=100, blank=True, null=True)
+    last4 = models.CharField(max_length=4, blank=True, null=True)
+    expiry_month = models.IntegerField(blank=True, null=True)
+    expiry_year = models.IntegerField(blank=True, null=True)
+    issuer = models.CharField(max_length=100, blank=True, null=True)
+    processed_on = models.DateTimeField(blank=True, null=True)
+    expires_on = models.DateTimeField(blank=True, null=True)
+    acquirer_transaction_id = models.CharField(
+        max_length=100, blank=True, null=True)
 
     def __str__(self):
         return f"{self.reference} - {self.amount} {self.currency}"

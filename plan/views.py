@@ -3,10 +3,10 @@ from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from .models import SubscriptionPlan, Payment
-import json
 from django.contrib import messages
 from django.http import JsonResponse
-from .payment_method import process_payment
+from .payment_method import process_payment, get_payment_status
+import requests
 # Create your views here.
 
 
@@ -30,9 +30,57 @@ def payment(request):
     cvv = request.POST.get('cvv')
     currency = request.POST.get('currency')
     plan = request.POST.get('plans')
-    plan_obj = get_object_or_404(SubscriptionPlan, id=int(plan))
-    amount = int(plan_obj.price)
-    response = process_payment(amount=amount, currency=currency,
-                               expiry_year=expiry_year, expiry_month=expiry_month, card_number=card_number, cvv=cvv)
-    print("response", response)
-    return JsonResponse({"success": True})
+
+    # Get the new plan
+    new_plan_obj = get_object_or_404(SubscriptionPlan, id=int(plan))
+    amount = int(new_plan_obj.price)
+
+    # Get the current user and their subscription
+    current_user = request.user
+    user_subscription = current_user.usersubscription
+
+    # Create a Payment object
+    payment_obj = Payment(subscription=user_subscription, user=current_user)
+
+    # Process the payment
+    try:
+        response = process_payment(
+            amount=amount,
+            currency=currency,
+            expiry_year=expiry_year,
+            expiry_month=expiry_month,
+            card_number=card_number,
+            cvv=cvv
+        )
+        status_code = response.status_code
+        response = response.json()
+        # Check if payment was approved and authorized
+        if status_code == 201:
+            if response.get('approved'):
+                if response.get('status') in ["Captured", "Authorized"]:
+                    # Update the user's subscription
+                    user_subscription.plan = new_plan_obj
+                    user_subscription.save()
+                    # set data from response to payment object
+                    payment_obj.payment_id = response.get('id')
+                    payment_obj.amount = amount
+                    payment_obj.currency = currency
+                    payment_obj.approved = response.get('approved')
+                    payment_obj.status = response.get('status')
+                    payment_obj.auth_code = response.get('auth_code')
+                    payment_obj.reference = response.get('reference')
+                    payment_obj.last4 = response.get('source')['last4']
+                    payment_obj.expiry_month = expiry_month
+                    payment_obj.expiry_year = expiry_year
+                    payment_obj.issuer = response.get('source')['issuer']
+                    payment_obj.processed_on = response.get('processed_on')
+                    payment_obj.save()
+                    # cerate DJ message success
+                    messages.success(request, "Payment Successful")
+                    return JsonResponse({"success": "Payment Successful"})
+            else:
+                return JsonResponse({"error": "Payment failed"}, status=400)
+
+    except requests.exceptions.RequestException as e:
+        # Log the error and notify the user
+        return JsonResponse({"error": f"Payment service error: {str(e)}"}, status=500)

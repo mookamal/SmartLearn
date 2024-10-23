@@ -109,6 +109,7 @@
   });
 </script>
 <script>
+  const dashboardPath = '{% url "dashboard" %}';
   // handle submit
   $("#paymentForm").submit(function (e) {
     showLoader();
@@ -118,6 +119,7 @@
     // validate selected plan
     if (!$("#plans").val()) {
       setAlert("Please select a plan","error");
+      hideLoader();
       return;
     }
     const csrfToken = '{{ csrf_token }}';
@@ -134,14 +136,13 @@
       success: function (response) {
         hideLoader();
         if (response.success) {
-          setAlert(response.message,"success");
-          // clear FormData
-          $(this).trigger("reset");
-        } 
+          // redirect dashboardPath
+          window.location.href = dashboardPath;
+        }
       }, // end success
       error: function (error) {
         hideLoader();
-        setAlert(error.error,"error");
+        setAlert(error.responseJSON.error,"error");
       } // end error
     }); // end ajax
 

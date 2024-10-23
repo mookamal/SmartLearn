@@ -17,7 +17,7 @@ def process_payment(card_number, expiry_month, expiry_year, amount, currency, cv
             "expiry_month": int(expiry_month),
             "expiry_year": int(expiry_year),
         },
-        "amount": amount,
+        "amount": int(amount * 100),
         "currency": currency,
         "processing_channel_id": settings.CHECKOUT_PROCESSING_CHANNEL_ID,
         "reference": "ORD-5023-4E89",
@@ -30,4 +30,14 @@ def process_payment(card_number, expiry_month, expiry_year, amount, currency, cv
 
     response = requests.post(url, json=payload, headers=headers)
 
+    return response
+
+
+def get_payment_status(payment_id):
+    url = f"https://api.sandbox.checkout.com/payments/{payment_id}"
+    headers = {
+        "Authorization": f"Bearer {settings.CHECKOUT_SECRET_KEY}",
+        "Content-Type": "application/json",
+    }
+    response = requests.get(url, headers=headers)
     return response.json()
