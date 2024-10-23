@@ -30,7 +30,8 @@ def payment(request):
     cvv = request.POST.get('cvv')
     currency = request.POST.get('currency')
     plan = request.POST.get('plans')
-
+    if not all([full_name, card_number, expiry_month, expiry_year, cvv, currency, plan]):
+        return JsonResponse({"error": "Please fill all fields."}, status=400)
     # Get the new plan
     new_plan_obj = get_object_or_404(SubscriptionPlan, id=int(plan))
     amount = int(new_plan_obj.price)
@@ -56,30 +57,33 @@ def payment(request):
         response = response.json()
         # Check if payment was approved and authorized
         if status_code == 201:
+            # set data from response to payment object
+            payment_obj.payment_id = response.get('id')
+            payment_obj.amount = amount
+            payment_obj.currency = currency
+            payment_obj.approved = response.get('approved')
+            payment_obj.status = response.get('status')
+            payment_obj.auth_code = response.get('auth_code')
+            payment_obj.reference = response.get('reference')
+            payment_obj.last4 = response.get('source')['last4']
+            payment_obj.expiry_month = expiry_month
+            payment_obj.expiry_year = expiry_year
+            payment_obj.issuer = response.get('source')['issuer']
+            payment_obj.processed_on = response.get('processed_on')
             if response.get('approved'):
                 if response.get('status') in ["Captured", "Authorized"]:
                     # Update the user's subscription
                     user_subscription.plan = new_plan_obj
                     user_subscription.save()
-                    # set data from response to payment object
-                    payment_obj.payment_id = response.get('id')
-                    payment_obj.amount = amount
-                    payment_obj.currency = currency
-                    payment_obj.approved = response.get('approved')
-                    payment_obj.status = response.get('status')
-                    payment_obj.auth_code = response.get('auth_code')
-                    payment_obj.reference = response.get('reference')
-                    payment_obj.last4 = response.get('source')['last4']
-                    payment_obj.expiry_month = expiry_month
-                    payment_obj.expiry_year = expiry_year
-                    payment_obj.issuer = response.get('source')['issuer']
-                    payment_obj.processed_on = response.get('processed_on')
                     payment_obj.save()
+                    # renew date in user_subscription
+                    user_subscription.renew_subscription()
                     # cerate DJ message success
                     messages.success(request, "Payment Successful")
                     return JsonResponse({"success": "Payment Successful"})
             else:
-                return JsonResponse({"error": "Payment failed"}, status=400)
+                payment_obj.save()
+                return JsonResponse({"error": response['response_summary']}, status=400)
 
     except requests.exceptions.RequestException as e:
         # Log the error and notify the user
