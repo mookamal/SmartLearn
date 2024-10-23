@@ -28,10 +28,13 @@ class UserSubscription(models.Model):
     end_date = models.DateField(null=True, blank=True)
     sessions_used = models.IntegerField(default=0)
     last_reset = models.DateField(default=timezone.now)
+    active_paid_plan = models.BooleanField(default=False)
 
     def renew_subscription(self):
         self.start_date = timezone.now().date()
         self.end_date = timezone.now().date() + timedelta(days=30)
+        self.active_paid_plan = True
+        self.sessions_used = 0
         self.save()
 
     def reset_sessions(self):
