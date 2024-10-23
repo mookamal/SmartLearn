@@ -55,6 +55,16 @@
          <p class="text-gray-600 dark:text-gray-400 text-center">
             You have used {{ user.usersubscription.sessions_used }} out of {{ user.usersubscription.plan.sessions_per_month }} sessions this month.
          </p>
+         {% if user.usersubscription.plan.name != "FREE" %}
+         <hr class="border my-2">
+         {% comment %} show start and end date {% endcomment %}
+         <p class="text-gray-600 dark:text-gray-400 text-center">
+            Start date: {{ user.usersubscription.start_date }}
+         </p>
+         <p class="text-gray-600 dark:text-gray-400 text-center">
+            End date: {{ user.usersubscription.end_date }}
+         </p>
+         {% endif %}
        </div>
     </div>
  </aside>
