@@ -26,6 +26,7 @@ urlpatterns = [
     path("", include("core.urls")),
     path("e/", include("exams.urls")),
     path("plan/", include("plan.urls")),
+    path("notify/", include("notify.urls")),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
 ]
 

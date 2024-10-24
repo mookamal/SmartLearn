@@ -51,6 +51,28 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{% static 'src/js/jquery.js' %}"></script>
     <script src="{% static 'src/js/utility.js' %}"></script>
+    <script>
+      const notifyCount = '{{notifications.count}}';
+      if (notifyCount > 0) {
+
+        $('#dropdownNotificationButton').click(function() {
+          $.ajax({
+              url: '{% url "read_all_notify" %}',
+              type: 'GET',
+              success: function(response) {
+                  if (response.success) {
+                      $('#notReadNotify').addClass('hidden');
+                  }
+              },
+              error: function(error) {
+                  console.error(error);
+              }
+          });
+        });
+
+      }
+
+    </script>
     {% block js %}{% endblock js %}
   </body>
 </html>

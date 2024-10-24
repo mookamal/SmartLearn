@@ -9,6 +9,10 @@ class Notify(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
 
+    @classmethod
+    def mark_all_as_read(self, user):
+        self.objects.filter(user=user, is_read=False).update(is_read=True)
+
     def __str__(self):
         return self.notification
 

@@ -3,6 +3,7 @@ from django.core.cache import cache
 from core.models import Info, Page
 from plan.models import SubscriptionPlan
 from exams.models import Category
+from notify.models import Notify
 logger = logging.getLogger(__name__)
 
 
@@ -30,11 +31,16 @@ def my_context(request):
             subscription_plans = SubscriptionPlan.objects.all()
             cache.set('plans', subscription_plans, timeout=60*15)
 
+        # get not read notify for user
+        notifications = Notify.objects.filter(
+            user=request.user, is_read=False)
+
         return {
             'info': info,
             'pages': pages,
             'parent_categories': parent_categories,
-            'plans': subscription_plans
+            'plans': subscription_plans,
+            'notifications': notifications,
         }
 
     except Info.DoesNotExist:
