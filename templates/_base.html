@@ -22,7 +22,7 @@
   </script>
   </head>
   <body class="bg-slate-100 dark:bg-gray-900">
-    {% if not "/accounts" in request.path and not "/e" in request.path  and not "/plan" in request.path %}
+    {% if not "/accounts" in request.path and not "/e" in request.path  and not "/plan" in request.path and not "/notify" in request.path %}
       {% include 'core/parts/navbar.html' %}
     {% endif %}
     

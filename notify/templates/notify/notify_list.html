@@ -1,0 +1,20 @@
+{% extends "_base.html" %}
+
+{% block title %}Notifications list{% endblock title %}
+
+{% block content %}
+
+{% include "exams/parts/navbar.html" %}
+{% include "exams/parts/sidebar.html" %} 
+<div class="p-4 sm:ml-64 mt-14">
+    <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white text-center">Notifications</h1>
+<section class="p-5">
+    {% for notify in notification_all %}
+        <div class="bg-white border dark:bg-slate-800 dark:border-black shadow dark:text-white  text-primary-950 p-3 my-2 flex justify-between flex-col md:flex-row gap-2 rounded">
+            <h3>{{notify.notification}}</h3>
+            <p class="text-sm text-gray-400">{{notify.created_at}}</p>
+        </div>
+    {% endfor %}
+</section>
+</div>
+{% endblock content %}
