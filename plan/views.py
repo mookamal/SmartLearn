@@ -5,7 +5,7 @@ from django.views.decorators.http import require_POST
 from .models import SubscriptionPlan, Payment
 from django.contrib import messages
 from django.http import JsonResponse
-from .payment_method import process_payment, get_payment_status
+from .payment_method import process_payment
 import requests
 from notify.models import Notify
 # Create your views here.
