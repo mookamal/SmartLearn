@@ -8,6 +8,7 @@ module.exports = {
     "./accounts/templates/**/*.html",
     "./exams/templates/**/*.html",
     "./plan/templates/**/*.html",
+    "./notify/templates/**/*.html",
 
     "./node_modules/flowbite/**/*.js",
   ],

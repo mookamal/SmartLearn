@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'core',
     'exams',
     'plan',
+    'notify',
 ]
 
 AUTHENTICATION_BACKENDS = [
