@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from .payment_method import process_payment, get_payment_status
 import requests
+from notify.models import Notify
 # Create your views here.
 
 
@@ -80,9 +81,23 @@ def payment(request):
                     user_subscription.renew_subscription()
                     # cerate DJ message success
                     messages.success(request, "Payment Successful")
+                    # create Notify
+                    notify = Notify(
+                        user=current_user,
+                        notification=f"Your payment for {
+                            new_plan_obj.name} plan was successful.",
+                    )
+                    notify.save()
                     return JsonResponse({"success": "Payment Successful"})
             else:
                 payment_obj.save()
+                # create Notify with
+                notify = Notify(
+                    user=current_user,
+                    notification=f"Payment failed. {
+                        response['response_summary']}",
+                )
+                notify.save()
                 return JsonResponse({"error": response['response_summary']}, status=400)
 
     except requests.exceptions.RequestException as e:
