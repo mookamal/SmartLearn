@@ -11,36 +11,47 @@
         Welcome {{user.username}}!
     </h1>
     <hr class="w-48 h-1 mx-auto my-4 bg-primary-300 border-0 rounded md:my-10 dark:bg-gray-700">
-    <div class="flex justify-center items-center gap-2 p-2 mt-5">
-        <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
-
-            <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white text-center">
-            Correct and Incorrect Answer Rate
-            </h5>
-            <hr class="border mt-3">
-    
-            <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
-                <div class="grid grid-cols-2 gap-3 mb-2">
-                   <dl class="bg-green-400 dark:bg-gray-600 rounded-lg flex flex-col items-center justify-center h-[78px]">
+    <div class="flex justify-between items-stretch gap-2 p-2 mt-5 flex-wrap flex-col md:flex-row">
+      {% comment %} start card Correct and Incorrect Answer Rate {% endcomment %}
+      <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6 flex-1 flex flex-col">
+          <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white text-center">
+              Correct and Incorrect Answer Rate
+          </h5>
+          <hr class="border mt-3">
+          
+          <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg flex-grow">
+              <div class="grid grid-cols-2 gap-3 mb-2">
+                  <dl class="bg-green-400 dark:bg-gray-600 rounded-lg flex flex-col items-center justify-center h-[78px]">
                       <dt class="w-8 h-8 rounded-full bg-teal-100 dark:bg-gray-500 text-teal-600 dark:text-teal-300 text-sm font-medium flex items-center justify-center mb-1">
-                        {{user_answer.correct_answers}}
+                          {{user_answer.correct_answers}}
                       </dt>
                       <dd class="text-teal-600 dark:text-teal-300 text-sm font-medium">Correct</dd>
-                   </dl>
-                   <dl class="bg-red-400 dark:bg-gray-600 rounded-lg flex flex-col items-center justify-center h-[78px]">
-                        <dt class="w-8 h-8 rounded-full bg-blue-100 dark:bg-gray-500 text-blue-600 dark:text-blue-300 text-sm font-medium flex items-center justify-center mb-1">
-                            {{user_answer.incorrect_answers}}
-                        </dt>
-                        <dd class="text-blue-600 dark:text-blue-300 text-sm font-medium">
-                            Incorrect
-                        </dd>
-                   </dl>
-                </div>
-             </div>
-            <!-- Line Chart -->
-            <div class="py-6" id="user-answers-chart"></div>
-         </div>
-    </div>
+                  </dl>
+                  <dl class="bg-red-400 dark:bg-gray-600 rounded-lg flex flex-col items-center justify-center h-[78px]">
+                      <dt class="w-8 h-8 rounded-full bg-blue-100 dark:bg-gray-500 text-blue-600 dark:text-blue-300 text-sm font-medium flex items-center justify-center mb-1">
+                          {{user_answer.incorrect_answers}}
+                      </dt>
+                      <dd class="text-blue-600 dark:text-blue-300 text-sm font-medium">Incorrect</dd>
+                  </dl>
+              </div>
+          </div>
+          <!-- Line Chart -->
+          <div class="py-6" id="user-answers-chart"></div>
+      </div>
+      {% comment %} end card Correct and Incorrect Answer Rate {% endcomment %}
+      
+      {% comment %} start card referral {% endcomment %}
+      <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6 flex-1 flex flex-col">
+          <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white text-center">
+              Details for your referral
+          </h5>
+          <hr class="border mt-3">
+          <!-- يمكنك إضافة محتوى إضافي هنا إذا لزم الأمر -->
+          <div class="flex-grow"></div> <!-- لضمان أن هذا الكارت يأخذ الارتفاع الكامل -->
+      </div>
+      {% comment %} end card referral {% endcomment %}
+  </div>
+  
 
 {% include "parts/plans.html" %}
 </div>

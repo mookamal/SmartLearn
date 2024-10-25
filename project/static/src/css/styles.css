@@ -1939,6 +1939,10 @@ input:checked + .toggle-bg {
   height: 100vh;
 }
 
+.h-svh {
+  height: 100svh;
+}
+
 .max-h-32 {
   max-height: 8rem;
 }
@@ -2075,6 +2079,10 @@ input:checked + .toggle-bg {
   flex-shrink: 0;
 }
 
+.flex-grow {
+  flex-grow: 1;
+}
+
 .grow {
   flex-grow: 1;
 }
@@ -2192,6 +2200,10 @@ input:checked + .toggle-bg {
 
 .items-baseline {
   align-items: baseline;
+}
+
+.items-stretch {
+  align-items: stretch;
 }
 
 .justify-start {
