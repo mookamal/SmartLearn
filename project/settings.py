@@ -273,10 +273,15 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 CELERY_RESULT_BACKEND = "redis://redis:6379"
 CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_IMPORTS = ('project.tasks')
+
 CELERY_BEAT_SCHEDULE = {
     'reset-free-plan-sessions': {
         'task': 'project.tasks.reset_free_plan_sessions',
         'schedule': crontab(minute=0, hour=0, day_of_month=1),
+    },
+    'send_notification_to_users_about_expiring_subscriptions': {
+        'task': 'project.tasks.send_notification_to_users_about_expiring_subscriptions',
+        'schedule': crontab(hour=0, minute=0),
     },
 }
 
