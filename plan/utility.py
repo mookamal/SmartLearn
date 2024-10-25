@@ -1,4 +1,6 @@
-from .models import UserSubscription
+import random
+import string
+from .models import ReferralCode, UserSubscription
 from django.utils import timezone
 from datetime import timedelta
 
@@ -21,3 +23,12 @@ def get_all_user_subscriptions_expiring_today():
     )
 
     return expiring_subscriptions
+
+
+def generate_referral_code():
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+
+
+def create_referral_code(user):
+    code = generate_referral_code()
+    ReferralCode.objects.create(code=code, user=user)

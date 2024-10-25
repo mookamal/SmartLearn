@@ -78,3 +78,24 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"{self.reference} - {self.amount} {self.currency}"
+
+
+class ReferralCode(models.Model):
+    code = models.CharField(max_length=50, unique=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    sessions_for_referrer = models.PositiveIntegerField(default=30)
+    sessions_for_referred = models.PositiveIntegerField(default=50)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.code
+
+
+class ReferredUser(models.Model):
+    referral_code = models.ForeignKey(
+        ReferralCode, related_name='referred_users', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} referred by {self.referral_code.code}"

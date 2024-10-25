@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SubscriptionPlan, UserSubscription, Payment
+from .models import SubscriptionPlan, UserSubscription, Payment, ReferralCode, ReferredUser
 # Register your models here.
 
 
@@ -22,3 +22,15 @@ class PaymentAdmin(admin.ModelAdmin):
     list_filter = ('subscription', 'currency', 'status')
     search_fields = ('subscription',
                      'subscription__user__email')
+
+
+@admin.register(ReferralCode)
+class ReferralCodeAdmin(admin.ModelAdmin):
+    list_display = ('code', 'user', 'is_active')
+    list_filter = ('is_active',)
+    search_fields = ('code', 'user__email')
+
+
+@admin.register(ReferredUser)
+class ReferredUserAdmin(admin.ModelAdmin):
+    list_display = ('referral_code', 'user', 'created_at')
