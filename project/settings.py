@@ -283,6 +283,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'project.tasks.send_notification_to_users_about_expiring_subscriptions',
         'schedule': crontab(hour=0, minute=0),
     },
+    'convent_plan_to_free_plan': {
+        'task': 'project.tasks.convent_plan_to_free_plan',
+        'schedule': crontab(hour=0, minute=0),
+    },
 }
 
 # checkout settings

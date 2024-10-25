@@ -11,3 +11,13 @@ def get_subscriptions_expiring_in_3_days():
     )
 
     return expiring_subscriptions
+
+
+def get_all_user_subscriptions_expiring_today():
+    target_date = timezone.now().date()
+    expiring_subscriptions = UserSubscription.objects.filter(
+        active_paid_plan=True,
+        end_date=target_date
+    )
+
+    return expiring_subscriptions
