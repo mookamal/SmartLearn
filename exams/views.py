@@ -5,13 +5,14 @@ from django.views.decorators.http import require_POST
 from .models import Category, Exam, Session, Question, Choice, Answer, Issue
 from django.http import JsonResponse
 from django.contrib import messages
-from .utility import check_subscription
+from .utility import check_subscription, get_user_answer_statistics
 # Create your views here.
 
 
 @login_required
 def dashboard(request):
-    return render(request, 'exams/dashboard.html')
+    user_answer_statistics = get_user_answer_statistics(request.user)
+    return render(request, 'exams/dashboard.html', {'user_answer': user_answer_statistics})
 
 
 @login_required

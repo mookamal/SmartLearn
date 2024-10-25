@@ -1831,6 +1831,10 @@ input:checked + .toggle-bg {
   margin-top: auto;
 }
 
+.mt-5 {
+  margin-top: 1.25rem;
+}
+
 .block {
   display: block;
 }

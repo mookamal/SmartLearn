@@ -1,13 +1,115 @@
 {% extends "_base.html" %}
-
+{% load static %}
 {% block title %}{{info.name}} | {{user.username}}{% endblock title %}
 
 {% block content %}
 
 {% include "exams/parts/navbar.html" %}
 {% include "exams/parts/sidebar.html" %} 
-<div class="p-4 sm:ml-64 mt-14 h-screen">
-{% include "parts/plans.html" %}
+<div class="p-4 sm:ml-64 mt-14">
+    <h1 class="text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white text-center">
+        Welcome {{user.username}}!
+    </h1>
+    <hr class="w-48 h-1 mx-auto my-4 bg-primary-300 border-0 rounded md:my-10 dark:bg-gray-700">
+    <div class="flex justify-center items-center gap-2 p-2 mt-5">
+        <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
+
+            <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white text-center">
+            Correct and Incorrect Answer Rate
+            </h5>
+            <hr class="border mt-3">
     
+            <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                <div class="grid grid-cols-2 gap-3 mb-2">
+                   <dl class="bg-green-400 dark:bg-gray-600 rounded-lg flex flex-col items-center justify-center h-[78px]">
+                      <dt class="w-8 h-8 rounded-full bg-teal-100 dark:bg-gray-500 text-teal-600 dark:text-teal-300 text-sm font-medium flex items-center justify-center mb-1">
+                        {{user_answer.correct_answers}}
+                      </dt>
+                      <dd class="text-teal-600 dark:text-teal-300 text-sm font-medium">Correct</dd>
+                   </dl>
+                   <dl class="bg-red-400 dark:bg-gray-600 rounded-lg flex flex-col items-center justify-center h-[78px]">
+                        <dt class="w-8 h-8 rounded-full bg-blue-100 dark:bg-gray-500 text-blue-600 dark:text-blue-300 text-sm font-medium flex items-center justify-center mb-1">
+                            {{user_answer.incorrect_answers}}
+                        </dt>
+                        <dd class="text-blue-600 dark:text-blue-300 text-sm font-medium">
+                            Incorrect
+                        </dd>
+                   </dl>
+                </div>
+             </div>
+            <!-- Line Chart -->
+            <div class="py-6" id="user-answers-chart"></div>
+         </div>
+    </div>
+
+{% include "parts/plans.html" %}
 </div>
 {% endblock content %}
+{% block js %}
+<script src="{% static "src/js/apexcharts.js" %}"></script>
+<script>
+const getChartOptions = () => {
+    return {
+      series: [{{user_answer.correct_rate}}, {{user_answer.incorrect_rate}}],
+      colors: ["#31C48D", "#F98080"],
+      chart: {
+        height: 420,
+        width: "100%",
+        type: "pie",
+      },
+      stroke: {
+        colors: ["white"],
+        lineCap: "",
+      },
+      plotOptions: {
+        pie: {
+          labels: {
+            show: true,
+          },
+          size: "100%",
+          dataLabels: {
+            offset: -25
+          }
+        },
+      },
+      labels: ["Correct", "Incorrect"],
+      dataLabels: {
+        enabled: true,
+        style: {
+          fontFamily: "Inter, sans-serif",
+        },
+      },
+      legend: {
+        position: "bottom",
+        fontFamily: "Inter, sans-serif",
+      },
+      yaxis: {
+        labels: {
+          formatter: function (value) {
+            return value + "%"
+          },
+        },
+      },
+      xaxis: {
+        labels: {
+          formatter: function (value) {
+            return value  + "%"
+          },
+        },
+        axisTicks: {
+          show: false,
+        },
+        axisBorder: {
+          show: false,
+        },
+      },
+    }
+  }
+  
+  if (document.getElementById("user-answers-chart") && typeof ApexCharts !== 'undefined') {
+    const chart = new ApexCharts(document.getElementById("user-answers-chart"), getChartOptions());
+    chart.render();
+  }
+  
+</script>
+{% endblock js %}
