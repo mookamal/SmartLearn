@@ -1640,6 +1640,10 @@ input:checked + .toggle-bg {
   right: 0.625rem;
 }
 
+.bottom-2\.5 {
+  bottom: 0.625rem;
+}
+
 .z-10 {
   z-index: 10;
 }
@@ -2093,6 +2097,10 @@ input:checked + .toggle-bg {
 
 .max-w-\[16rem\] {
   max-width: 16rem;
+}
+
+.max-w-md {
+  max-width: 28rem;
 }
 
 .flex-1 {
@@ -2916,6 +2924,10 @@ input:checked + .toggle-bg {
 
 .pt-8 {
   padding-top: 2rem;
+}
+
+.ps-10 {
+  padding-inline-start: 2.5rem;
 }
 
 .text-left {
