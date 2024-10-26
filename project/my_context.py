@@ -32,8 +32,11 @@ def my_context(request):
             cache.set('plans', subscription_plans, timeout=60*15)
 
         # get not read notify for user
-        notifications = Notify.objects.filter(
-            user=request.user, is_read=False)
+        if request.user.is_authenticated:
+            notifications = Notify.objects.filter(
+                user=request.user, is_read=False)
+        else:
+            notifications = []
 
         return {
             'info': info,
