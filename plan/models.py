@@ -31,6 +31,9 @@ class UserSubscription(models.Model):
     last_reset = models.DateField(default=timezone.now)
     active_paid_plan = models.BooleanField(default=False)
 
+    def total_count(self):
+        return self.plan.sessions_per_month + self.free_sessions
+
     def renew_subscription(self):
         self.start_date = timezone.now().date()
         self.end_date = timezone.now().date() + timedelta(days=30)

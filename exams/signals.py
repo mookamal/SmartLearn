@@ -16,7 +16,9 @@ def set_slug(sender, instance, **kwargs):
 def check_user_subscription(sender, instance, created, **kwargs):
     if created:
         user_subscription = instance.user.usersubscription
-        if user_subscription.sessions_used < user_subscription.plan.sessions_per_month:
+        total_count = user_subscription.plan.sessions_per_month + \
+            user_subscription.free_sessions
+        if user_subscription.sessions_used < total_count:
             user_subscription.sessions_used += 1
             user_subscription.save()
 

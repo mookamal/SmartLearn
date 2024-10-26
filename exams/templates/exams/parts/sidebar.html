@@ -61,7 +61,7 @@
             {{user.usersubscription.plan.name}}
          </h4>
          <p class="text-gray-600 dark:text-gray-400 text-center">
-            You have used {{ user.usersubscription.sessions_used }} out of {{ user.usersubscription.plan.sessions_per_month }} sessions this month.
+            You have used {{ user.usersubscription.sessions_used }} out of {{ user.usersubscription.total_count }} sessions this month.
          </p>
          {% if user.usersubscription.plan.name != "FREE" %}
          <hr class="border my-2">
