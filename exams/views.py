@@ -6,13 +6,27 @@ from .models import Category, Exam, Session, Question, Choice, Answer, Issue
 from django.http import JsonResponse
 from django.contrib import messages
 from .utility import check_subscription, get_user_answer_statistics
+from plan.models import ReferralCode, ReferredUser
 # Create your views here.
 
 
 @login_required
 def dashboard(request):
+    try:
+        referral_code = ReferralCode.objects.get(user=request.user)
+        refereed_user_count = ReferredUser.objects.filter(
+            referral_code=referral_code).count()
+    except ReferralCode.DoesNotExist:
+        referral_code = None
+        refereed_user_count = 0
+
     user_answer_statistics = get_user_answer_statistics(request.user)
-    return render(request, 'exams/dashboard.html', {'user_answer': user_answer_statistics})
+
+    context = {
+        'user_answer': user_answer_statistics,
+        "refereed_user_count": refereed_user_count,
+    }
+    return render(request, 'exams/dashboard.html', context)
 
 
 @login_required

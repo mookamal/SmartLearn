@@ -68,8 +68,15 @@
               </h5>
               {% include "exams/parts/referral_input.html" %}
           {% endif %}
-      
-      
+            
+          {% if refereed_user_count > 0 %}
+          <p class="dark:text-white">
+            Number of referrals :
+            <span class="bg-blue-100 text-blue-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+              {{refereed_user_count}}
+            </span>
+          </p>
+          {% endif %}
       </div>
       {% comment %} end card referral {% endcomment %}
   </div>
