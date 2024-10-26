@@ -1,6 +1,6 @@
 import random
 import string
-from .models import ReferralCode, UserSubscription
+from .models import ReferralCode, UserSubscription, ReferredUser
 from django.utils import timezone
 from datetime import timedelta
 
@@ -32,3 +32,21 @@ def generate_referral_code():
 def create_referral_code(user):
     code = generate_referral_code()
     ReferralCode.objects.create(code=code, user=user)
+
+
+def apply_referral_code(user, code):
+    try:
+        referral_code = ReferralCode.objects.get(code=code, is_active=True)
+
+        if not ReferredUser.objects.filter(referral_code=referral_code, user=user).exists():
+            referral_code.user.usersubscription.free_sessions += referral_code.sessions_for_referrer
+            referral_code.user.save()
+
+            user.usersubscription.free_sessions += referral_code.sessions_for_referred
+            user.save()
+
+            ReferredUser.objects.create(referral_code=referral_code, user=user)
+
+            return True
+    except ReferralCode.DoesNotExist:
+        return False

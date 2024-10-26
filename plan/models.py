@@ -24,6 +24,7 @@ class UserSubscription(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     plan = models.ForeignKey(
         SubscriptionPlan, on_delete=models.SET_NULL, null=True)
+    free_sessions = models.IntegerField(default=0)
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
     sessions_used = models.IntegerField(default=0)
