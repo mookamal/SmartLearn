@@ -18,7 +18,7 @@
                   <option selected disabled hidden>Select plan</option>
                   {% for plan in plans %}
                     {% if plan.name != "FREE" %}
-                      <option value="{{plan.id}}">{{plan.name}} => {{info.currency}} {{plan.price}} | {{plan.sessions_per_month}} Sessions per month</option>
+                      <option value="{{plan.id}}" data-price="{{plan.price}}">{{plan.name}} => {{info.currency}} {{plan.price}} | {{plan.sessions_per_month}} Sessions per month</option>
                     {% endif %}
                   {% endfor %}
                 </select>
@@ -104,8 +104,9 @@
 <script>
   // handle total price from select a plan
   $("#plans").change(function () {
-    const planPrice = $(this).val();
-    $("#total").text(planPrice);
+    const selectedOption = $(this).find(':selected'); // Get the selected option
+    const planPrice = selectedOption.data('price'); // Get the price from data-price attribute
+    $("#total").text(planPrice); // Display the price
   });
 </script>
 <script>
