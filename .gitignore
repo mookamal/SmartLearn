@@ -89,5 +89,3 @@ MANIFEST
 *.rej
 *.bak
 *.swp
-*.sqlite
-*.sqlite3
