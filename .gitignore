@@ -73,8 +73,7 @@ local_settings.py
 .env
 
 # Ignore local database configuration
-*.db
-*.sqlite
+
 
 # Ignore any other generated files or directories
 __pycache__/
@@ -90,6 +89,5 @@ MANIFEST
 *.rej
 *.bak
 *.swp
-*.db
 *.sqlite
 *.sqlite3
