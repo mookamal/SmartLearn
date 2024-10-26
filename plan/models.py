@@ -98,7 +98,8 @@ class ReferralCode(models.Model):
 class ReferredUser(models.Model):
     referral_code = models.ForeignKey(
         ReferralCode, related_name='referred_users', on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name='referred_by')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

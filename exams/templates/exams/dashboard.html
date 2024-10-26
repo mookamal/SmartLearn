@@ -58,10 +58,18 @@
           </h5>
           {% include "exams/parts/referral_code_btn.html" %}
           <hr class="border mt-3 w-2/3">
-          <h5 class="text-xl leading-none text-gray-900 dark:text-white text-center">
-            Do you have an active referral code?
-          </h5>
-          {% include "exams/parts/referral_input.html" %}
+          {% if user.referred_by %}
+          <p class="text-lg font-thin text-gray-900 dark:text-white">
+            Referred by: <span class="font-bold">{{ user.referred_by.referral_code.code }}</span>
+          </p>
+          {% else %}
+              <h5 class="text-xl leading-none text-gray-900 dark:text-white text-center">
+                  Do you have an active referral code?
+              </h5>
+              {% include "exams/parts/referral_input.html" %}
+          {% endif %}
+      
+      
       </div>
       {% comment %} end card referral {% endcomment %}
   </div>
