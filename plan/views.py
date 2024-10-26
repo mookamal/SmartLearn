@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from .payment_method import process_payment
 import requests
 from notify.models import Notify
+from .utility import apply_referral_code
 # Create your views here.
 
 
@@ -103,3 +104,17 @@ def payment(request):
     except requests.exceptions.RequestException as e:
         # Log the error and notify the user
         return JsonResponse({"error": f"Payment service error: {str(e)}"}, status=500)
+
+
+@require_POST
+@login_required
+def apply_referral(request):
+    referral_code = request.POST.get('referral_code')
+    if not referral_code:
+        return JsonResponse({"error": "Please provide a referral code."}, status=400)
+    # Apply the referral code
+    applied = apply_referral_code(request.user, referral_code)
+    if applied:
+        return JsonResponse({"success": "Referral code applied successfully."})
+    else:
+        return JsonResponse({"error": "Invalid or expired referral code."}, status=400)

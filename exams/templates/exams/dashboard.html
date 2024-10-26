@@ -135,6 +135,33 @@ const getChartOptions = () => {
     const chart = new ApexCharts(document.getElementById("user-answers-chart"), getChartOptions());
     chart.render();
   }
-  
+</script>
+<script>
+  {% comment %} apply_referral {% endcomment %}
+  $("#apply_referral").on('submit', function(e) {
+      e.preventDefault();
+      console.log("Apply ....")
+      const csrfToken = '{{ csrf_token }}';
+      const data = { referral_code: $("#referral_code").val() };
+      $.ajax({
+          url: '{% url "apply_referral" %}',
+          type: 'POST',
+          headers: {
+              'X-CSRFToken': csrfToken
+          },
+          data: data,
+          success: function (response) {
+              // handle success
+              confirmAction(response.success,"success",function () {
+                //reload page
+                location.reload();
+              });
+          },
+          error: function (error) {
+              // handle error
+              setAlert(error.responseJSON.error,"error");
+          }
+      });
+  });
 </script>
 {% endblock js %}
