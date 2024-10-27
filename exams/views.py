@@ -1,3 +1,4 @@
+from django.db.models import Exists, OuterRef
 import json
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
@@ -70,6 +71,34 @@ def create_session(request, slug, sub_category_id, exam_id):
     return render(request, 'exams/create_session.html', context)
 
 
+def get_questions_info(user, session_id):
+    session = get_object_or_404(Session, id=session_id, user=user)
+    question_order = session.question_order
+    questions_info = Question.objects.filter(id__in=question_order).annotate(
+        is_marked=Exists(
+            Question.marking_users.through.objects.filter(
+                user_id=user.id,
+                question_id=OuterRef('pk')
+            )
+        ),
+        is_answered=Exists(
+            Answer.objects.filter(session=session, question_id=OuterRef('pk'))
+        )
+    ).values('id', 'is_marked', 'is_answered')
+
+    questions_info_list = [
+        {
+            **question,
+            'order_index': question_order.index(question['id'])
+        }
+        for question in questions_info
+    ]
+
+    questions_info_list.sort(key=lambda x: x['order_index'])
+
+    return questions_info_list
+
+
 @login_required
 def show_session(request, session_id):
     session = get_object_or_404(Session, id=session_id, user=request.user)
@@ -81,6 +110,7 @@ def show_session(request, session_id):
     current_question = get_object_or_404(Question, id=current_question_id)
     is_marked = current_question.marking_users.filter(
         id=request.user.id).exists()
+    questions_info_list = get_questions_info(request.user, session_id)
     try:
         answer = Answer.objects.filter(
             session=session, question=current_question).first()
@@ -103,6 +133,7 @@ def show_session(request, session_id):
         'should_display': should_display,
         "last_index": last_index,
         'is_marked': is_marked,
+        'questions_info_list': questions_info_list,
     }
     return render(request, 'exams/show_session.html', context)
 
