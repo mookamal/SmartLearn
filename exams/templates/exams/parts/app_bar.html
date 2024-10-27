@@ -9,6 +9,11 @@
         {% else %}
             <div class="w-16"></div>
         {% endif %}
+        {% comment %} session navigate {% endcomment %}
+        <button data-modal-target="navigate-modal" data-modal-toggle="navigate-modal" type="button" class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group">
+            Navigate
+        </button>
+        {% comment %}End  session navigate {% endcomment %}
         {% if  not should_display and not answer  %}
             <button type="submit" id="answerSend" class="w-16 h-16 flex items-center justify-center text-sm font-medium text-white bg-primary-500 border-0 rounded-full shadow hover:bg-primary-600 dark:text-white dark:bg-primary-400 dark:hover:bg-primary-500">
                 Submit
@@ -16,6 +21,11 @@
         {% else %}
             <div class="w-16"></div>
         {% endif %}
+        {% comment %} lab values {% endcomment %}
+        <button data-modal-target="lab-values-modal" data-modal-toggle="lab-values-modal" type="button" class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group">
+            Lab Values
+        </button>
+        {% comment %} end values {% endcomment %}
         {% comment %} Next button {% endcomment %}
         {% if current_index < last_index %}
             <button  type="button" id="doNext" class="inline-flex gap-2 font-bold text-sm items-center justify-center dark:text-white px-5 rounded-e-full hover:bg-gray-50 dark:hover:bg-gray-800 group">
@@ -28,3 +38,5 @@
         {% endif %}
     </div>
 </div>
+{% include "exams/parts/navigate_session.html" %}
+{% include "exams/parts/modal_lab_values.html" %}
