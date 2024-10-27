@@ -521,3 +521,28 @@ def mark_question(request):
         return JsonResponse({"error": "Question not found"}, status=404)
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+
+# set question order with question id and session id
+
+
+@login_required
+@require_POST
+def set_question_order(request):
+    try:
+        question_id = request.POST.get('question_id')
+        session_id = request.POST.get('session_id')
+        if not question_id or not session_id:
+            return JsonResponse({"error": "Question ID and session ID are required"}, status=400)
+        question = get_object_or_404(Question, id=question_id)
+        session = get_object_or_404(Session, id=session_id, user=request.user)
+        get_index_to_target_question = session.question_order.index(
+            question.id)
+        session.current_question_index = get_index_to_target_question
+        session.save()
+        return JsonResponse({"success": True}, status=200)
+    except Question.DoesNotExist:
+        return JsonResponse({"error": "Question not found"}, status=404)
+    except Session.DoesNotExist:
+        return JsonResponse({"error": "Session not found"}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)

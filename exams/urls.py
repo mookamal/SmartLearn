@@ -30,4 +30,6 @@ urlpatterns = [
          views.re_examine_by_exam, name="re_examine_by_exam"),
     path("ajax/report-issue/", views.report_issue, name="report_issue"),
     path("ajax/mark-question/", views.mark_question, name="mark_question"),
+    path("ajax/set_question_order/",
+         views.set_question_order, name="set_question_order"),
 ]

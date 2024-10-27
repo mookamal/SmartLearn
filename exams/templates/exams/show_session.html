@@ -217,4 +217,28 @@
         });
     });
 </script>
+<script>
+    // handle session navigate 
+    $(".questionNav").click(function () {
+        const questionId = $(this).data('question-id');
+        // send question id with navigate_question url
+        $.ajax({
+            url: '{% url "set_question_order" %}',
+            type: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: {question_id: questionId,session_id: '{{ session.id }}'},
+            success: function(response) {
+                if (response.success) {
+                    // reload page
+                    location.reload();
+                }
+            },
+            error: function(xhr, status, error) {
+                setAlert("Error navigating to question: " + error,"error");
+            }
+        });
+    });
+</script>
 {% endblock %}
