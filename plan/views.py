@@ -8,7 +8,8 @@ from django.http import JsonResponse
 from .payment_method import process_payment
 import requests
 from notify.models import Notify
-from .utility import apply_referral_code
+from .utility import apply_referral_code, send_invoice_email
+from allauth.account.models import EmailAddress
 # Create your views here.
 
 
@@ -96,6 +97,10 @@ def payment(request):
                             new_plan_obj.name} plan was successful.",
                     )
                     notify.save()
+                    # send email with payment object and user email
+                    primary_email = EmailAddress.objects.filter(
+                        user=request.user, primary=True).first()
+                    send_invoice_email(primary_email, payment_obj)
                     return JsonResponse({"success": "Payment Successful"})
             else:
                 payment_obj.save()

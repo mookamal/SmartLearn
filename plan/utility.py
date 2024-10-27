@@ -1,3 +1,9 @@
+from datetime import datetime
+from django.core.mail import EmailMessage
+from django.conf import settings
+from reportlab.lib.pagesizes import A4
+from django.core.files.base import ContentFile
+from reportlab.pdfgen import canvas
 import random
 import string
 from .models import ReferralCode, UserSubscription, ReferredUser
@@ -68,3 +74,31 @@ def apply_referral_code(user, code):
             return True
     except ReferralCode.DoesNotExist:
         return False
+
+
+def generate_invoice_pdf(payment):
+    buffer = ContentFile(b"")
+    pdf = canvas.Canvas(buffer, pagesize=A4)
+    pdf.drawString(100, 750, f"Amount : {payment.amount}")
+    pdf.drawString(100, 700, f"Plan name : {payment.plan}")
+    processed_on = payment.processed_on
+    if isinstance(processed_on, str):
+        processed_on = datetime.fromisoformat(processed_on[:-1])
+
+    pdf.drawString(100, 650, f"Processed on : {
+                   processed_on.strftime('%d-%m-%Y %H:%M:%S')}")
+    pdf.showPage()
+    pdf.save()
+    buffer.seek(0)
+    return buffer
+
+
+def send_invoice_email(email, payment):
+    pdf_buffer = generate_invoice_pdf(payment)
+    subject = f"Invoice for {payment.currency} {payment.plan}"
+    message = f"Your invoice for {
+        payment.plan} has been generated. Please find it attached."
+    email = EmailMessage(
+        subject, message, settings.DEFAULT_FROM_EMAIL, [email])
+    email.attach("invoice.pdf", pdf_buffer.read(), "application/pdf")
+    email.send()
