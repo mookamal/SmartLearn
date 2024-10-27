@@ -7,6 +7,65 @@
 {% include "exams/parts/navbar.html" %}
 {% include "exams/parts/sidebar.html" %} 
 <div class="p-4 sm:ml-64 mt-14">
-
+    <div class="p-6 gap-2 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gra">
+        <table id="payment-table" class="border bg-white dark:bg-black dark:border-black shadow-sm">
+          <thead>
+              <tr>
+                  <th>
+                      <span class="flex items-center">
+                          Amount
+                      </span>
+                  </th>
+                  <th>
+                      <span class="flex items-center">
+                        Approved
+                      </span>
+                  </th>
+                  <th>
+                      <span class="flex items-center">
+                          Plan
+                      </span>
+                  </th>
+                  <th>
+                      <span class="flex items-center">
+                        Processed on
+                      </span>
+                  </th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for payment in payments %}
+              <tr class="hover:bg-gray-100 dark:hover:bg-gray-950">
+                <td class="bg-yellow-50 dark:bg-gray-800">{{payment.currency}}  {{payment.amount}}</td>
+                <td>
+                    {% if payment.approved %}
+                    <i class="fa-solid fa-thumbs-up text-green-400"></i>
+                    {% else %}
+                    <i class="fa-solid fa-thumbs-down text-red-400"></i>
+                    {% endif %}
+                </td>
+                <td class="bg-yellow-50 dark:bg-gray-800">
+                    {{payment.plan}}
+                </td>
+                <td>
+                    {{payment.processed_on|date:"F j, Y, g:i A"}}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
 </div>
 {% endblock content %}
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
+<script>
+    // for data table to display question
+    if (document.getElementById("payment-table") && typeof simpleDatatables.DataTable !== 'undefined') {
+      const dataTable = new simpleDatatables.DataTable("#payment-table", {
+          searchable: true,
+          sortable: true
+      });
+  }
+</script>
+{% endblock js %}

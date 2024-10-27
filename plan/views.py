@@ -14,13 +14,14 @@ from .utility import apply_referral_code
 
 @login_required
 def payment_view(request):
-    payments = Payment.objects.filter(user=request.user)
-    return render(request, 'plan/payment_view.html', {'payments': payments})
+    return render(request, 'plan/payment_view.html')
 
 
 @login_required
 def payment_details(request):
-    return render(request, 'plan/payment_details.html')
+    payments = Payment.objects.filter(user=request.user)
+    context = {'payments': payments}
+    return render(request, 'plan/payment_details.html', context)
 
 # for ajax
 
