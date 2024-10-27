@@ -3,7 +3,7 @@ import json
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
-from .models import Category, Exam, Session, Question, Choice, Answer, Issue
+from .models import Category, Exam, Session, Question, Choice, Answer, Issue, TestCategory
 from django.http import JsonResponse
 from django.contrib import messages
 from .utility import check_subscription, get_user_answer_statistics
@@ -122,6 +122,7 @@ def show_session(request, session_id):
     # this for show question solved
     should_display = session.session_mode == 'SOLVED' or (
         answer is not None) and session.session_mode != 'UNEXPLAINED'
+    test_categories = TestCategory.objects.all()
     context = {
         'session': session,
         'question': current_question,
@@ -134,6 +135,7 @@ def show_session(request, session_id):
         "last_index": last_index,
         'is_marked': is_marked,
         'questions_info_list': questions_info_list,
+        'test_categories': test_categories,
     }
     return render(request, 'exams/show_session.html', context)
 

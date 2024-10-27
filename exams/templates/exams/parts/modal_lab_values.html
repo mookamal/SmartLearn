@@ -16,7 +16,37 @@
             </div>
             <!-- Modal body -->
             <div class="p-4 md:p-5 space-y-4">
-                
+                {% for t_category in test_categories %}
+                <!-- Category Card -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">{{t_category.title}}</h2>
+            
+                    <!-- Table of Rows -->
+                    <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                        <tr>
+                            <th class="py-3 px-6 text-left font-medium text-gray-700 border-b border-gray-300">Test Name</th>
+                            <th class="py-3 px-6 text-left font-medium text-gray-700 border-b border-gray-300">Reference Range</th>
+                            <th class="py-3 px-6 text-left font-medium text-gray-700 border-b border-gray-300">SI Reference Intervals</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Loop through rows for each category -->
+                         {% for test in t_category.rows.all %}
+                        <tr class="bg-gray-50 hover:bg-gray-100">
+                            <td class="py-4 px-6 border-b border-gray-300">{{test.test_name}}</td>
+                            <td class="py-4 px-6 border-b border-gray-300">{{test.reference_range}}</td>
+                            <td class="py-4 px-6 border-b border-gray-300">{{test.si_reference_intervals}}</td>
+                        </tr>
+                        {% endfor %}
+                        <!-- Repeat rows as necessary -->
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                <!-- End Category Card -->
+                {% endfor %}
             </div>
         </div>
     </div>
