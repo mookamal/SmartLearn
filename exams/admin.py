@@ -54,6 +54,8 @@ admin.site.register(models.Category, CategoryAdmin)
 admin.site.register(models.Session)
 admin.site.register(models.Issue)
 admin.site.register(models.Choice)
+admin.site.register(models.TestCategory)
+admin.site.register(models.TestRow)
 
 
 class SubjectAdmin(admin.ModelAdmin):

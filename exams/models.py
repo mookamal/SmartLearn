@@ -231,3 +231,30 @@ class Answer(models.Model):
 
     def __str__(self):
         return f"Answer for {self.question} in Session #{self.session.pk}"
+
+
+class TestCategory(models.Model):
+    """
+    Model representing the main category for a group of tests.
+    """
+    title = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.title
+
+
+class TestRow(models.Model):
+    """
+    Model representing a row within a category, containing three fields:
+    1. Test name
+    2. Reference range
+    3. SI reference intervals
+    """
+    category = models.ForeignKey(
+        TestCategory, on_delete=models.CASCADE, related_name="rows")
+    test_name = models.CharField(max_length=255)
+    reference_range = models.CharField(max_length=100)
+    si_reference_intervals = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.test_name} - {self.reference_range} - {self.si_reference_intervals}"
