@@ -65,6 +65,8 @@ class Payment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     subscription = models.ForeignKey(
         UserSubscription, on_delete=models.CASCADE)
+    plan = models.ForeignKey(
+        SubscriptionPlan,  on_delete=models.CASCADE, blank=True, null=True)
     payment_id = models.CharField(
         max_length=100, unique=True, blank=True, null=True)
     amount = models.DecimalField(

@@ -77,6 +77,7 @@ def payment(request):
             payment_obj.expiry_year = expiry_year
             payment_obj.issuer = response.get('source')['issuer']
             payment_obj.processed_on = response.get('processed_on')
+            payment_obj.plan = new_plan_obj
             if response.get('approved'):
                 if response.get('status') in ["Captured", "Authorized"]:
                     # Update the user's subscription
