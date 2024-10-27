@@ -79,6 +79,8 @@ def show_session(request, session_id):
     last_index = total_questions - 1
     current_question_id = question_order[current_index]
     current_question = get_object_or_404(Question, id=current_question_id)
+    is_marked = current_question.marking_users.filter(
+        id=request.user.id).exists()
     try:
         answer = Answer.objects.filter(
             session=session, question=current_question).first()
@@ -100,6 +102,7 @@ def show_session(request, session_id):
         'answer': answer,
         'should_display': should_display,
         "last_index": last_index,
+        'is_marked': is_marked,
     }
     return render(request, 'exams/show_session.html', context)
 
@@ -462,6 +465,26 @@ def report_issue(request):
         )
         issue.save()
         question.issues.add(issue)
+        return JsonResponse({"success": True}, status=200)
+    except Question.DoesNotExist:
+        return JsonResponse({"error": "Question not found"}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+
+@login_required
+@require_POST
+def mark_question(request):
+    try:
+        question_id = request.POST.get('question_id')
+        if not question_id:
+            return JsonResponse({"error": "Question ID is required"}, status=400)
+        question = get_object_or_404(Question, id=question_id)
+        if request.user in question.marking_users.all():
+            question.marking_users.remove(request.user)
+        else:
+            question.marking_users.add(request.user)
+        question.save()
         return JsonResponse({"success": True}, status=200)
     except Question.DoesNotExist:
         return JsonResponse({"error": "Question not found"}, status=404)

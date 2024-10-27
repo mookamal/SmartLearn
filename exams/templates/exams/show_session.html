@@ -194,4 +194,27 @@
         });
     });
 </script>
+<script>
+    // JavaScript for mark question
+    $("#markQuestion").click(function () {
+        // TODO: send question id with mark_question url
+        $.ajax({
+            url: '{% url "mark_question" %}',
+            type: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: {question_id: '{{ question.id }}'},
+            success: function(response) {
+                if (response.success) {
+                    // reload page
+                    location.reload();
+                }
+            },
+            error: function(xhr, status, error) {
+                setAlert("Error marking question: " + error,"error");
+            }
+        });
+    });
+</script>
 {% endblock %}
