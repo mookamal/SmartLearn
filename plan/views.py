@@ -14,7 +14,8 @@ from .utility import apply_referral_code
 
 @login_required
 def payment_view(request):
-    return render(request, 'plan/payment_view.html')
+    payments = Payment.objects.filter(user=request.user)
+    return render(request, 'plan/payment_view.html', {'payments': payments})
 
 
 @login_required
