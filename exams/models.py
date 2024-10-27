@@ -143,8 +143,7 @@ session_mode_choices = (
 class Session(models.Model):
     session_mode = models.CharField(
         max_length=20, choices=session_mode_choices, default='EXPLAINED')
-    number_of_questions = models.PositiveIntegerField(
-        null=True, validators=[MaxValueValidator(25)])
+    number_of_questions = models.PositiveIntegerField(null=True)
     subjects = models.ManyToManyField(Subject, blank=True)
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     questions = models.ManyToManyField(Question, blank=True)
