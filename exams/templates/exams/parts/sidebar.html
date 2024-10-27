@@ -53,6 +53,26 @@
                Performance
             </a>
          </li>
+         {% comment %} user settings {% endcomment %}
+         <li>
+            <button type="button" class="flex  gap-2 items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="usersettings" data-collapse-toggle="usersettings">
+               <i class="fa-solid fa-user"></i>
+               <span class="flex-1  text-left rtl:text-right whitespace-nowrap">Settings</span>
+               <i class="fa-solid fa-arrow-down"></i>
+            </button>
+            <ul id="usersettings" class="hidden py-2 space-y-2">
+               <li>
+                  <a href="{% url 'profile' user.username %}" class="flex gap-2 items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                     User Settings
+                  </a>
+               </li>
+               <li>
+                  <a href="{% url 'payment_details' %}" class="flex gap-2 items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                     Payment details
+                  </a>
+               </li>
+            </ul>
+         </li>
        </ul>
        <hr class="border my-2">
        <!-- show details plan's user -->

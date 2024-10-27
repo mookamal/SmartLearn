@@ -17,6 +17,10 @@ def payment_view(request):
     return render(request, 'plan/payment_view.html')
 
 
+@login_required
+def payment_details(request):
+    return render(request, 'plan/payment_details.html')
+
 # for ajax
 
 
