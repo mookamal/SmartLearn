@@ -15,6 +15,11 @@
         <table id="payment-table" class="border bg-white dark:bg-black dark:border-black shadow-sm">
           <thead>
               <tr>
+                <th>
+                    <span class="flex items-center">
+                        ID
+                    </span>
+                </th>
                   <th>
                       <span class="flex items-center">
                           Amount
@@ -40,6 +45,9 @@
           <tbody>
             {% for payment in payments %}
               <tr class="hover:bg-gray-100 dark:hover:bg-gray-950">
+                <td class="bg-yellow-50 dark:bg-gray-800">
+                    {{payment.id}}
+                </td>
                 <td class="bg-yellow-50 dark:bg-gray-800">{{payment.currency}}  {{payment.amount}}</td>
                 <td>
                     {% if payment.approved %}

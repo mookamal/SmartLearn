@@ -107,6 +107,7 @@ class Question(models.Model):
     is_approved = models.BooleanField(default=False)
     approval_date = models.DateField(blank=True, null=True)
     reference = models.TextField(default="", blank=True)
+    labs = models.ManyToManyField('TestCategory', blank=True)
     marking_users = models.ManyToManyField(User, blank=True,
                                            related_name="marked_questions")
     created_at = models.DateTimeField(auto_now_add=True)

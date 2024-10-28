@@ -16,7 +16,7 @@
             </div>
             <!-- Modal body -->
             <div class="p-4 md:p-5 space-y-4">
-                {% for t_category in test_categories %}
+                {% for t_category in question.labs.all %}
                 <!-- Category Card -->
                 <div class="bg-white rounded-lg shadow p-6">
                     <h2 class="text-2xl font-semibold text-gray-800 mb-4">{{t_category.title}}</h2>
