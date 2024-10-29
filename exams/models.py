@@ -255,7 +255,7 @@ class TestRow(models.Model):
         TestCategory, on_delete=models.CASCADE, related_name="rows")
     test_name = models.CharField(max_length=255)
     reference_range = models.CharField(max_length=100)
-    si_reference_intervals = models.CharField(max_length=100)
+    test_result = models.CharField(max_length=100)
 
     def __str__(self):
         return f"{self.test_name} - {self.reference_range} - {self.si_reference_intervals}"

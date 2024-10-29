@@ -27,8 +27,8 @@
                         <thead>
                         <tr>
                             <th class="py-3 px-6 text-left font-medium text-gray-700 border-b border-gray-300">Test Name</th>
-                            <th class="py-3 px-6 text-left font-medium text-gray-700 border-b border-gray-300">Reference Range</th>
-                            <th class="py-3 px-6 text-left font-medium text-gray-700 border-b border-gray-300">SI Reference Intervals</th>
+                            <th class="py-3 px-6 text-left font-medium text-gray-700 border-b border-gray-300">Test result</th>
+                            <th class="py-3 px-6 text-left font-medium text-gray-700 border-b border-gray-300">Reference range</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -36,8 +36,8 @@
                          {% for test in t_category.rows.all %}
                         <tr class="bg-gray-50 hover:bg-gray-100">
                             <td class="py-4 px-6 border-b border-gray-300">{{test.test_name}}</td>
+                            <td class="py-4 px-6 border-b border-gray-300">{{test.test_result}}</td>
                             <td class="py-4 px-6 border-b border-gray-300">{{test.reference_range}}</td>
-                            <td class="py-4 px-6 border-b border-gray-300">{{test.si_reference_intervals}}</td>
                         </tr>
                         {% endfor %}
                         <!-- Repeat rows as necessary -->
