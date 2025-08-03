@@ -1,7 +1,7 @@
 import pytest
 from pytest_factoryboy import register
 
-from .fixtures.factories import (
+from tests.fixtures.factories import (
     UserFactory,
     CategoryFactory,
     ExamFactory,
@@ -15,13 +15,13 @@ from .fixtures.factories import (
 )
 
 # Register factories as fixtures
-register("user_factory", UserFactory)
-register("category_factory", CategoryFactory)
-register("exam_factory", ExamFactory)
-register("subject_factory", SubjectFactory)
-register("source_factory", SourceFactory)
-register("question_factory", QuestionFactory)
-register("choice_factory", ChoiceFactory)
-register("issue_factory", IssueFactory)
-register("session_factory", SessionFactory)
-register("answer_factory", AnswerFactory)
+register(UserFactory)
+register(CategoryFactory)
+register(ExamFactory)
+register(SubjectFactory)
+register(SourceFactory)
+register(QuestionFactory)
+register(ChoiceFactory)
+register(IssueFactory)
+register(SessionFactory)
+register(AnswerFactory)
