@@ -56,8 +56,7 @@ def apply_referral_code(user, code):
             # create notify to referral_code.user
             Notify.objects.create(
                 user=referral_code.user,
-                notification=f"Your friend {
-                    user.username} has referred you for free sessions.",
+                notification=f"Your friend {user.username} has referred you for free sessions.",
             )
             # get user_subscription for current user
             user_subscription = UserSubscription.objects.get(user=user)
@@ -66,8 +65,7 @@ def apply_referral_code(user, code):
             # create notify to user
             Notify.objects.create(
                 user=user,
-                notification=f"You have earned free sessions for referring {
-                    referral_code.user.username}.",
+                notification=f"You have earned free sessions for referring {referral_code.user.username}.",
             )
             ReferredUser.objects.create(referral_code=referral_code, user=user)
 
@@ -85,8 +83,7 @@ def generate_invoice_pdf(payment):
     if isinstance(processed_on, str):
         processed_on = datetime.fromisoformat(processed_on[:-1])
 
-    pdf.drawString(100, 650, f"Processed on : {
-                   processed_on.strftime('%d-%m-%Y %H:%M:%S')}")
+    pdf.drawString(100, 650, f"Processed on : {processed_on.strftime('%d-%m-%Y %H:%M:%S')}")
     pdf.showPage()
     pdf.save()
     buffer.seek(0)
@@ -96,9 +93,7 @@ def generate_invoice_pdf(payment):
 def send_invoice_email(email, payment):
     pdf_buffer = generate_invoice_pdf(payment)
     subject = f"Invoice for {payment.currency} {payment.plan}"
-    message = f"Your invoice for {
-        payment.plan} has been generated. Please find it attached."
-    email = EmailMessage(
-        subject, message, settings.DEFAULT_FROM_EMAIL, [email])
+    message = f"Your invoice for {payment.plan} has been generated. Please find it attached."
+    email = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL, [email])
     email.attach("invoice.pdf", pdf_buffer.read(), "application/pdf")
     email.send()

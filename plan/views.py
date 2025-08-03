@@ -93,8 +93,7 @@ def payment(request):
                     # create Notify
                     notify = Notify(
                         user=current_user,
-                        notification=f"Your payment for {
-                            new_plan_obj.name} plan was successful.",
+                        notification=f"Your payment for {new_plan_obj.name} plan was successful.",
                     )
                     notify.save()
                     # send email with payment object and user email
@@ -107,8 +106,7 @@ def payment(request):
                 # create Notify with
                 notify = Notify(
                     user=current_user,
-                    notification=f"Payment failed. {
-                        response['response_summary']}",
+                    notification=f"Payment failed. {response['response_summary']}",
                 )
                 notify.save()
                 return JsonResponse({"error": response['response_summary']}, status=400)
