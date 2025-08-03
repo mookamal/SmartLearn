@@ -1,0 +1,1 @@
+from tests.fixtures.user_factory import user_factory
