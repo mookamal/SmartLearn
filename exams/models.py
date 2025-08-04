@@ -258,4 +258,4 @@ class TestRow(models.Model):
     test_result = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"{self.test_name} - {self.reference_range} - {self.si_reference_intervals}"
+        return f"{self.test_name} - {self.reference_range} - {self.test_result}"
