@@ -1,3 +1,4 @@
+# This file is part of SmartLearn by Mohamed Kamal (github.com/mookamal) – Licensed under the MIT License
 from django.contrib.auth.models import User
 from exams.models import Answer
 

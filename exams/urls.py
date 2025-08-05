@@ -1,3 +1,4 @@
+# This file is part of SmartLearn by Mohamed Kamal (github.com/mookamal) – Licensed under the MIT License
 from django.urls import path
 from . import views
 

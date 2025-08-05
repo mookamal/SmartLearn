@@ -1,3 +1,4 @@
+# This file is part of SmartLearn by Mohamed Kamal (github.com/mookamal) – Licensed under the MIT License
 from django.contrib import admin
 from . import models
 from import_export import fields, resources

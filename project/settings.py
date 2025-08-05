@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+# This file is part of SmartLearn by Mohamed Kamal (github.com/mookamal) – Licensed under the MIT License
 
 from decouple import config
 from celery.schedules import crontab

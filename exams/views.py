@@ -1,3 +1,4 @@
+# This file is part of SmartLearn by Mohamed Kamal (github.com/mookamal) – Licensed under the MIT License
 from django.db.models import Exists, OuterRef
 import json
 from django.shortcuts import get_object_or_404, render

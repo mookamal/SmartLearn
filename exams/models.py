@@ -1,3 +1,4 @@
+# This file is part of SmartLearn by Mohamed Kamal (github.com/mookamal) – Licensed under the MIT License
 from datetime import datetime
 from django.db import models
 from django_ckeditor_5.fields import CKEditor5Field
