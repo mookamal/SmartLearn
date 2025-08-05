@@ -6,6 +6,10 @@ SmartLearn is a modern, interactive learning platform built with Django, offerin
 
 ---
 
+## Live Demo:mokamal1.pythonanywhere.com
+
+---
+
 ## 🔧 Features
 
 - 📚 Categorized exams with subjects & questions
