@@ -135,40 +135,81 @@
 </section>
 {% comment %} end hero section {% endcomment %}
 {% comment %} features section {% endcomment %}
-<section class="bg-white dark:bg-gray-800 border-y-2 border-gray-300 dark:border-gray-700">
-    <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
-        <div class="max-w-screen-md mb-8 lg:mb-16">
-            <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Overview</h2>
-            <p class="text-gray-500 sm:text-xl dark:text-gray-400">
-                Our platform is dedicated to enhancing the learning experience by fostering a community of inquisitive minds. Here, users can ask questions, share knowledge, and receive constructive feedback on their answers. This interactive approach not only helps in knowledge acquisition but also enhances critical thinking skills.
+<section class="py-20 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-16 animate-fade-in-up">
+            <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+                Why Choose SmartLearn?
+            </h2>
+            <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                Our platform combines cutting-edge technology with proven learning methodologies to create an unparalleled educational experience.
             </p>
         </div>
-        <div class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0">
-            <div>
-                <div class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12 dark:bg-primary-900">
-                    <i class="fas fa-users text-primary-600 dark:text-primary-300"></i>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div class="feature-card glass-effect rounded-2xl p-8 group hover:shadow-2xl">
+                <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fas fa-users text-white text-2xl"></i>
                 </div>
-                <h3 class="mb-2 text-xl font-bold dark:text-white">Continuous Collaboration</h3>
-                <p class="text-gray-500 dark:text-gray-400">
-                    Our platform is fundamentally collaborative, encouraging users to actively participate in improving and developing content. By correcting test questions and refining their wording, we ensure that the material remains accurate and reliable. This collaboration allows everyone to contribute to creating a comprehensive learning experience.
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Collaborative Learning</h3>
+                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    Join a community of learners where you can share knowledge, get feedback, and collaborate on improving content quality together.
                 </p>
             </div>
-            <div>
-                <div class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12 dark:bg-primary-900">
-                    <i class="fas fa-chart-line text-primary-600 dark:text-primary-300"></i>
+
+            <!-- Feature 2 -->
+            <div class="feature-card glass-effect rounded-2xl p-8 group hover:shadow-2xl">
+                <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-teal-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fas fa-chart-line text-white text-2xl"></i>
                 </div>
-                <h3 class="mb-2 text-xl font-bold dark:text-white">Ongoing Improvement</h3>
-                <p class="text-gray-500 dark:text-gray-400">
-                    We strive for continuous improvement in content quality by allowing users to report errors and add explanations. Every feedback or modification presented is considered an essential part of platform development. With each contribution, we can elevate the educational standards and ensure that the content remains updated and aligned with learners' needs.
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Smart Progress Tracking</h3>
+                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    Advanced analytics track your learning journey, identify weak areas, and provide personalized recommendations for improvement.
                 </p>
             </div>
-            <div>
-                <div class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12 dark:bg-primary-900">
-                    <i class="fas fa-trophy text-primary-600 dark:text-primary-300"></i>                 
+
+            <!-- Feature 3 -->
+            <div class="feature-card glass-effect rounded-2xl p-8 group hover:shadow-2xl">
+                <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fas fa-trophy text-white text-2xl"></i>
                 </div>
-                <h3 class="mb-2 text-xl font-bold dark:text-white">Knowledge Enrichment</h3>
-                <p class="text-gray-500 dark:text-gray-400">
-                    By empowering the community, we work towards enriching the knowledge available on our platform. We believe that every user can add value through their contributions, whether by providing additional explanations or enhancing questions. This culture of collaboration and sharing fosters a fruitful educational environment that enhances the learning experience for all.
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Gamified Experience</h3>
+                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    Earn achievements, compete with peers, and unlock new levels as you progress through your learning journey.
+                </p>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="feature-card glass-effect rounded-2xl p-8 group hover:shadow-2xl">
+                <div class="w-16 h-16 bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fas fa-brain text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">AI-Powered Learning</h3>
+                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    Intelligent algorithms adapt to your learning style and pace, providing personalized questions and explanations.
+                </p>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="feature-card glass-effect rounded-2xl p-8 group hover:shadow-2xl">
+                <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fas fa-mobile-alt text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Mobile Optimized</h3>
+                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    Learn anywhere, anytime with our fully responsive design that works seamlessly across all devices.
+                </p>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="feature-card glass-effect rounded-2xl p-8 group hover:shadow-2xl">
+                <div class="w-16 h-16 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fas fa-infinity text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Unlimited Practice</h3>
+                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    Access thousands of questions across multiple subjects with unlimited practice sessions and detailed explanations.
                 </p>
             </div>
         </div>
