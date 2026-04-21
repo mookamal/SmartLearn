@@ -1,42 +1,311 @@
 {% load static %}
-<footer class="bg-white dark:bg-gray-900">
-    <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
-        <div class="sm:flex sm:items-center sm:justify-between">
-            <a href="/" class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
-                <img src="{{info.logo.url}}" class="h-8" alt="{{info.name}}" />
-                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">{{info.name}}</span>
-            </a>
-            <ul class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
-                {% for page in pages %}
-                <li>
-                    <a href="{% url 'page' slug=page.slug %}" class="hover:underline me-4 md:me-6">{{page.title}}</a>
-                </li>
-                {% endfor %}
-            </ul>
-            <div class="flex mt-4 sm:justify-center sm:mt-0 gap-2">
-                {% if info.facebook %}
-                    <a href="{{info.facebook}}" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
-                        <i class="fa-brands fa-square-facebook text-2xl"></i>
-                    </a>
-                {% endif %}
-                {% if info.instagram %}
-                <a href="{{info.instagram}}" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
-                    <i class="fa-brands fa-instagram text-2xl"></i>
-                </a>
-                {% endif %}
-                {% if info.twitter %}
-                <a href="{{info.twitter}}" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
-                    <i class="fa-brands fa-twitter text-2xl"></i>
-                </a>
-                {% endif %}
-            </div>
+<!-- Footer - Cognitive Catalyst Design System -->
+<footer class="footer-editorial">
+  <style>
+    .footer-editorial {
+      background: #fdf8fd;
+      padding: 64px 0 32px;
+      margin-top: auto;
+    }
+    
+    .dark .footer-editorial {
+      background: #1c1b1f;
+    }
+    
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    
+    @media (max-width: 768px) {
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+    }
+    
+    /* Brand Column */
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .footer-brand a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    
+    .footer-brand img {
+      height: 40px;
+      width: auto;
+      border-radius: 10px;
+    }
+    
+    .footer-brand span {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1c0070;
+      letter-spacing: -0.02em;
+    }
+    
+    .dark .footer-brand span {
+      color: #ffffff;
+    }
+    
+    .footer-tagline {
+      color: #474553;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      max-width: 280px;
+    }
+    
+    .dark .footer-tagline {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    /* Social Icons */
+    .footer-social {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: #f7f2f8;
+      border-radius: 10px;
+      color: #474553;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    
+    .social-link:hover {
+      background: #8df5e4;
+      color: #002420;
+      transform: translateY(-2px);
+    }
+    
+    .dark .social-link {
+      background: #2d2c31;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .dark .social-link:hover {
+      background: #70d8c8;
+      color: #002420;
+    }
+    
+    /* Navigation Columns */
+    .footer-column h4 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #1c0070;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+    }
+    
+    .dark .footer-column h4 {
+      color: #feb300;
+    }
+    
+    .footer-column ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .footer-column li {
+      margin-bottom: 12px;
+    }
+    
+    .footer-column a {
+      color: #474553;
+      font-size: 0.9375rem;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    
+    .footer-column a:hover {
+      color: #1c0070;
+    }
+    
+    .dark .footer-column a {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .dark .footer-column a:hover {
+      color: #8df5e4;
+    }
+    
+    /* Bottom Bar - No border, use surface nesting */
+    .footer-bottom {
+      padding-top: 32px;
+      background: #f7f2f8;
+      margin: 0 -24px -32px;
+      padding-left: 24px;
+      padding-right: 24px;
+      padding-bottom: 32px;
+    }
+    
+    .dark .footer-bottom {
+      background: #161518;
+    }
+    
+    .footer-bottom-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    
+    @media (max-width: 768px) {
+      .footer-bottom-content {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+    
+    .footer-copyright {
+      color: #474553;
+      font-size: 0.875rem;
+    }
+    
+    .footer-copyright a {
+      color: #1c0070;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    
+    .dark .footer-copyright {
+      color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .dark .footer-copyright a {
+      color: #feb300;
+    }
+    
+    .footer-credit {
+      color: #474553;
+      font-size: 0.875rem;
+    }
+    
+    .footer-credit a {
+      color: #1c0070;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    
+    .footer-credit a:hover {
+      color: #feb300;
+    }
+    
+    .dark .footer-credit {
+      color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .dark .footer-credit a {
+      color: #8df5e4;
+    }
+  </style>
+  
+  <div class="footer-container">
+    <div class="footer-grid">
+      <!-- Brand Column -->
+      <div class="footer-brand">
+        <a href="/">
+          <img src="{{info.logo.url}}" alt="{{info.name}}" />
+          <span>{{info.name}}</span>
+        </a>
+        <p class="footer-tagline">Structured assessments to track your progress and achieve your learning goals.</p>
+        <div class="footer-social">
+          {% if info.facebook %}
+          <a href="{{info.facebook}}" class="social-link" target="_blank" rel="noopener">
+            <i class="fa-brands fa-facebook-f"></i>
+          </a>
+          {% endif %}
+          {% if info.instagram %}
+          <a href="{{info.instagram}}" class="social-link" target="_blank" rel="noopener">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+          {% endif %}
+          {% if info.twitter %}
+          <a href="{{info.twitter}}" class="social-link" target="_blank" rel="noopener">
+            <i class="fa-brands fa-x-twitter"></i>
+          </a>
+          {% endif %}
         </div>
-        <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
-        <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400">
-            © {% now "Y" %} <a href="/" class="hover:underline">{{info.name}}™</a>. All Rights Reserved.
-        </span>
-        <div class="mt-4 text-sm text-gray-500 sm:text-center dark:text-gray-400">
-            <span>Developed by <a href="https://mostaql.com/u/kamalAhmmed" class="hover:underline">M.Kamal</a></span>
-        </div>
+      </div>
+      
+      <!-- Pages Column -->
+      <div class="footer-column">
+        <h4>Pages</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          {% for page in pages|slice:":4" %}
+          <li><a href="{% url 'page' slug=page.slug %}">{{page.title}}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      
+      <!-- Account Column -->
+      <div class="footer-column">
+        <h4>Account</h4>
+        <ul>
+          {% if user.is_authenticated %}
+          <li><a href="{% url 'exam_list' %}">My Exams</a></li>
+          <li><a href="{% url 'profile' %}">Profile</a></li>
+          <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
+          {% else %}
+          <li><a href="{% url 'account_login' %}">Sign In</a></li>
+          <li><a href="{% url 'account_signup' %}">Create Account</a></li>
+          {% endif %}
+        </ul>
+      </div>
+      
+      <!-- Legal Column -->
+      <div class="footer-column">
+        <h4>Legal</h4>
+        <ul>
+          {% for page in pages|slice:"4:" %}
+          <li><a href="{% url 'page' slug=page.slug %}">{{page.title}}</a></li>
+          {% empty %}
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
+  </div>
+  
+  <!-- Bottom Bar - Surface nesting instead of border -->
+  <div class="footer-bottom">
+    <div class="footer-bottom-content">
+      <span class="footer-copyright">
+        © {% now "Y" %} <a href="/">{{info.name}}</a>. All Rights Reserved.
+      </span>
+      <span class="footer-credit">
+        Developed by <a href="https://mostaql.com/u/kamalAhmmed" target="_blank" rel="noopener">M.Kamal</a>
+      </span>
+    </div>
+  </div>
 </footer>
