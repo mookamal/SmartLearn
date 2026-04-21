@@ -15,6 +15,33 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // Design System Colors (Cognitive Catalyst)
+        indigo: {
+          DEFAULT: '#1c0070',
+          dark: '#311b92',
+          light: '#3d2780',
+        },
+        amber: {
+          DEFAULT: '#feb300',
+          dark: '#e5a100',
+          light: '#ffc41f',
+        },
+        teal: {
+          DEFAULT: '#8df5e4',
+          dark: '#70d8c8',
+          dim: '#002420',
+        },
+        surface: {
+          base: '#fdf8fd',
+          low: '#f7f2f8',
+          high: '#ebe7ec',
+          card: '#ffffff',
+        },
+        body: {
+          DEFAULT: '#1c1b1f',
+          secondary: '#474553',
+        },
+        // Keep existing primary palette for compatibility
         primary: {
           50: "#eff6ff",
           100: "#dbeafe",
@@ -28,6 +55,10 @@ module.exports = {
           900: "#1e3a8a",
           950: "#172554",
         },
+      },
+      boxShadow: {
+        'card': '0px 4px 20px rgba(28, 27, 31, 0.04)',
+        'card-hover': '0px 8px 30px rgba(28, 27, 31, 0.08)',
       },
       animation: {
         'float': 'float 6s ease-in-out infinite',
