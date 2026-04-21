@@ -4,53 +4,62 @@
 {% block title %}{{info.name}} | {{category.name}}{% endblock title %}
 
 {% block content %}
-
 {% include "exams/parts/navbar.html" %}
-{% include "exams/parts/sidebar.html" %} 
-<div class="p-4 sm:ml-64 mt-14 min-h-screen">
-    <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white text-center">
-        {{category.name}}
-    </h1>
-    <hr class="w-48 h-1 mx-auto my-4 bg-primary-300 border-0 rounded md:my-10 dark:bg-gray-700">
+{% include "exams/parts/sidebar.html" %}
+
+<div class="p-6 sm:ml-64 mt-16 min-h-screen bg-surface-base dark:bg-gray-900">
+    <!-- Header -->
+    <div class="mb-8 text-center">
+        <h1 class="text-3xl md:text-4xl font-bold text-indigo dark:text-white tracking-tight">
+            {{category.name}}
+        </h1>
+        <p class="mt-2 text-body-secondary dark:text-white/60">Select a subcategory to browse exams</p>
+    </div>
+
     {% if category.children.all %}
-        <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-2">
-            {% for child in category.children.all  %}
-                <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 pt-4">
-                    <div class="flex flex-col items-center pb-10">
-                        <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="{% if child.image %}{{child.image.url}}{% else %}{% static 'src/images/category.jpg' %}{% endif %}" alt="{{child.name}}"/>
-                        <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{{child.name}}</h5>
-                        <div class="flex justify-between gap-2 items-center">
-                            <span class="text-sm font-bold text-gray-500 dark:text-gray-400 my-2">
-                                {% if child.total_questions > 0 %}
-                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
-                                        {{child.total_questions}}
-                                    </span>
-                                    Questions
-                                {% else %}
-                                    <span class="text-gray-500 dark:text-gray-400">No questions</span>
-                                {% endif %}
-                            </span>
-                            <span class="font-bold text-purple-200 shadow-md">|</span>
-                            <span class="text-sm font-bold text-gray-500 dark:text-gray-400 my-2">
-                                {% if child.total_exams > 0 %}
-                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
-                                        {{child.total_exams}}
-                                    </span>
-                                    Exams
-                                {% else %}
-                                    <span class="text-gray-500 dark:text-gray-400">No exams</span>
-                                {% endif %}
-                            </span>
+        <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {% for child in category.children.all %}
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1 p-6">
+                    <div class="flex flex-col items-center">
+                        <div class="relative mb-4">
+                            <img class="w-24 h-24 rounded-2xl shadow-lg object-cover" src="{% if child.image %}{{child.image.url}}{% else %}{% static 'src/images/category.jpg' %}{% endif %}" alt="{{child.name}}"/>
+                            <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-indigo rounded-lg flex items-center justify-center shadow-md">
+                                <i class="fa-solid fa-folder text-white text-sm"></i>
+                            </div>
                         </div>
-                        <div class="flex mt-4 md:mt-6">
-                            <a href="{% url 'show_exams_by_category' slug=category.slug sub_category_id=child.id %}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-slate-900 bg-yellow-100 rounded-lg hover:bg-yellow-50 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Show exams</a>
+                        <h5 class="mb-3 text-xl font-bold text-body dark:text-white text-center">{{child.name}}</h5>
+
+                        <!-- Stats -->
+                        <div class="flex items-center gap-4 mb-4">
+                            {% if child.total_questions > 0 %}
+                            <div class="flex items-center gap-1.5 px-3 py-1 bg-teal/10 dark:bg-teal/20 rounded-full">
+                                <i class="fa-solid fa-question-circle text-teal text-xs"></i>
+                                <span class="text-teal-dim dark:text-teal text-xs font-semibold">{{child.total_questions}}</span>
+                            </div>
+                            {% endif %}
+                            {% if child.total_exams > 0 %}
+                            <div class="flex items-center gap-1.5 px-3 py-1 bg-amber/10 dark:bg-amber/20 rounded-full">
+                                <i class="fa-solid fa-file-alt text-amber text-xs"></i>
+                                <span class="text-amber-dark dark:text-amber text-xs font-semibold">{{child.total_exams}}</span>
+                            </div>
+                            {% endif %}
                         </div>
+
+                        <a href="{% url 'show_exams_by_category' slug=category.slug sub_category_id=child.id %}" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-body bg-amber hover:bg-amber-dark rounded-xl transition-colors shadow-sm">
+                            <span>Browse Exams</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </a>
                     </div>
                 </div>
             {% endfor %}
         </div>
     {% else %}
-    <p class="text-center text-sm font-medium text-gray-500 dark:text-gray-400">No categories found.</p>
+    <div class="text-center py-12">
+        <div class="w-16 h-16 bg-surface-low dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fa-solid fa-folder-open text-body-secondary dark:text-white/40 text-2xl"></i>
+        </div>
+        <p class="text-body-secondary dark:text-white/60">No subcategories found.</p>
+    </div>
     {% endif %}
 </div>
 {% endblock content %}

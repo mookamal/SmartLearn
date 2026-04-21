@@ -4,83 +4,93 @@
 {% block title %}My Performance{% endblock title %}
 
 {% block content %}
-
 {% include "exams/parts/navbar.html" %}
-{% include "exams/parts/sidebar.html" %} 
-<div class="p-4 sm:ml-64 mt-14">
-    <h1 class="my-4 text-center text-2xl font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl dark:text-white">
-        My performance
-    </h1>
-    <hr class="w-48 h-1 mx-auto my-4 bg-primary-100 border-0 rounded md:my-10 dark:bg-gray-700">
-    <div class="w-full border rounded shadow-sm dark:bg-gray-800 p-4 md:p-6">
-        <!-- Line Chart -->
-        <div class="py-6" id="performance-chart"></div>
-        <hr class="border">
-        <p class="py-2 text-purple-950 dark:text-white text-lg">
-            Your performance summary is displayed here. You can view the number of questions you answered correctly, incorrectly, or skipped across all your exams. Additionally, you can see the percentage breakdown of your answers for a quick overview of how well you did.
-        </p>
+{% include "exams/parts/sidebar.html" %}
+
+<div class="p-6 sm:ml-64 mt-16 min-h-screen bg-surface-base dark:bg-gray-900">
+    <!-- Header -->
+    <div class="mb-8 text-center">
+        <h1 class="text-3xl md:text-4xl font-bold text-indigo dark:text-white tracking-tight">
+            My Performance
+        </h1>
+        <p class="mt-2 text-body-secondary dark:text-white/60">Track your progress across all exams</p>
     </div>
-    {% comment %} End show exam table {% endcomment %}
-    <div class="p-6 gap-2 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gra">
-      <table id="exam-table" class="border bg-white dark:bg-black dark:border-black shadow-sm">
-        <thead>
-            <tr>
-                <th>
-                    <span class="flex items-center">
-                        Exam
-                    </span>
-                </th>
-                <th>
-                    <span class="flex items-center">
-                        Performance
-                    </span>
-                </th>
-                <th>
-                    <span class="flex items-center">
-                        Actions
-                    </span>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-          {% for exam in exams %}
-            <tr class="hover:bg-gray-100 text-lg">
-                <td>
-                    {{exam.name}}
-                    {% user_questions_answered_in_exam exam=exam user=user target="total" as total %}
-                    <span data-tooltip-target="total-count-tooltip{{exam.id}}">
-                        ({{total}})
-                    </span>
-                    <div id="total-count-tooltip{{exam.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                        Number of questions answered.
-                        <div class="tooltip-arrow" data-popper-arrow></div>
-                    </div>
-                </td>
-                <td>
-                    {% user_questions_answered_in_exam exam=exam user=user target="percent" as percent %}
-                    <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 relative" data-tooltip-target="percent-exam-{{exam.id}}">
-                        <div class="absolute bg-green-600 h-2.5 rounded-l-full" style="width: {{percent.correct}}%"></div>
-                        <div class="absolute bg-red-600 h-2.5" style="width: {{percent.incorrect}}%; left: {{percent.correct}}%"></div>
-                        <div class="absolute bg-yellow-400 h-2.5 rounded-r-full" style="width: {{percent.skipped}}%; left: calc({{percent.correct}}% + {{percent.incorrect}}%)"></div>
-                    </div>
-                    <div id="percent-exam-{{exam.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                        <div class="tooltip-inner">
-                            Correct: {{ percent.correct}}% ({{total}})<br>
-                            Incorrect: {{ percent.incorrect }}% ({{total}})<br>
-                            Skipped: {{ percent.skipped }}% ({{total}})
+
+    <!-- Chart Card -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-card p-6 md:p-8 mb-8">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-12 h-12 bg-indigo/10 dark:bg-indigo/20 rounded-xl flex items-center justify-center">
+                <i class="fa-solid fa-chart-pie text-indigo text-xl"></i>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-body dark:text-white">Overall Statistics</h2>
+                <p class="text-sm text-body-secondary">Your answer distribution</p>
+            </div>
+        </div>
+
+        <!-- Chart -->
+        <div class="py-4" id="performance-chart"></div>
+
+        <!-- Legend -->
+        <div class="flex justify-center gap-6 mt-4">
+            <div class="flex items-center gap-2">
+                <div class="w-3 h-3 rounded-full bg-teal"></div>
+                <span class="text-sm text-body-secondary">Correct</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="w-3 h-3 rounded-full bg-amber"></div>
+                <span class="text-sm text-body-secondary">Incorrect</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="w-3 h-3 rounded-full bg-surface-high"></div>
+                <span class="text-sm text-body-secondary">Skipped</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exam Performance Table -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-card overflow-hidden">
+        <div class="p-6 border-b border-surface-high dark:border-gray-700">
+            <h2 class="text-lg font-bold text-body dark:text-white">Exam Breakdown</h2>
+        </div>
+        <table id="exam-table" class="w-full text-sm text-left border-separate border-spacing-0">
+            <thead class="text-xs text-body-secondary uppercase bg-surface-low dark:bg-gray-700/50 dark:text-white/70">
+                <tr>
+                    <th scope="col" class="px-6 py-4 font-semibold w-1/3">Exam</th>
+                    <th scope="col" class="px-6 py-4 font-semibold w-1/3">Performance</th>
+                    <th scope="col" class="px-6 py-4 font-semibold text-center w-1/3">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-surface-high dark:divide-gray-700">
+                {% for exam in exams %}
+                <tr class="hover:bg-surface-low/50 dark:hover:bg-gray-700/30 transition-colors">
+                    <td class="px-6 py-5">
+                        <div class="font-medium text-body dark:text-white mb-1">{{exam.name}}</div>
+                        {% user_questions_answered_in_exam exam=exam user=user target="total" as total %}
+                        <span class="text-xs text-body-secondary bg-surface-low dark:bg-gray-700/50 px-2 py-1 rounded-full">{{total}} questions answered</span>
+                    </td>
+                    <td class="px-6 py-5">
+                        {% user_questions_answered_in_exam exam=exam user=user target="percent" as percent %}
+                        <div class="space-y-2">
+                            <div class="w-full bg-surface-high dark:bg-gray-700 rounded-full h-3 relative overflow-hidden">
+                                <div class="absolute bg-teal h-3 rounded-l-full transition-all" style="width: {{percent.correct}}%"></div>
+                                <div class="absolute bg-amber h-3 transition-all" style="width: {{percent.incorrect}}%; left: {{percent.correct}}%"></div>
+                                <div class="absolute bg-surface-high dark:bg-gray-600 h-3 rounded-r-full transition-all" style="width: {{percent.skipped}}%; left: calc({{percent.correct}}% + {{percent.incorrect}}%)"></div>
+                            </div>
+                            <div class="flex justify-between text-xs">
+                                <span class="text-teal-dim dark:text-teal font-medium">{{percent.correct}}% correct</span>
+                                <span class="text-amber-dark dark:text-amber font-medium">{{percent.incorrect}}% incorrect</span>
+                            </div>
                         </div>
-                        <div class="tooltip-arrow" data-popper-arrow></div>
-                    </div>
-                </td>
-                <td class="flex justify-center">
-                  {% include "exams/parts/exam_action.html" %}
-                </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+                    </td>
+                    <td class="px-6 py-5 text-center">
+                        {% include "exams/parts/exam_action.html" %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-    {% comment %} show exam table {% endcomment %}
 </div>
 {% endblock content %}
 {% block js %}
@@ -89,7 +99,7 @@
 const getChartOptions = () => {
     return {
       series: [{{percent_correct}}, {{percent_incorrect}}, {{percent_skipped}}],
-      colors: ["#31C48D", "#F98080", "#FCE96A"],
+      colors: ["#70d8c8", "#feb300", "#ebe7ec"],
       chart: {
         height: 420,
         width: "100%",

@@ -4,67 +4,68 @@
 
 {% block content %}
 {% include "exams/parts/navbar.html" %}
-{% include "exams/parts/sidebar.html" %} 
-<div class="p-4 sm:ml-64 mt-14">
-    <h1 class="my-4 text-center text-2xl font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl dark:text-white">
-        My Sessions
-    </h1>
-    <hr class="w-48 h-1 mx-auto my-4 bg-primary-100 border-0 rounded md:my-10 dark:bg-gray-700">
-    {% comment %} show session as tables {% endcomment %}
+{% include "exams/parts/sidebar.html" %}
+
+<div class="p-6 sm:ml-64 mt-16 min-h-screen bg-surface-base dark:bg-gray-900">
+    <!-- Header -->
+    <div class="mb-8 text-center">
+        <h1 class="text-3xl md:text-4xl font-bold text-indigo dark:text-white tracking-tight">
+            My Sessions
+        </h1>
+        <p class="mt-2 text-body-secondary dark:text-white/60">Review and manage your exam history</p>
+    </div>
+
+    <!-- Actions -->
     {% if sessions %}
-      <div class="flex p-6 justify-center md:justify-end">
-        <button type="button" id="delete-all-sessions" class="text-white bg-red-400 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
-          <i class="fa-solid fa-trash"></i>
-          Delete all sessions
+    <div class="flex justify-end mb-6">
+        <button type="button" id="delete-all-sessions" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-amber hover:bg-amber-dark rounded-xl transition-colors shadow-sm">
+            <i class="fa-solid fa-trash"></i>
+            Delete all sessions
         </button>
-      </div>
+    </div>
     {% endif %}
-    <div class="p-6 gap-2 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gra">
-        <table id="session-table" class="border bg-white dark:bg-black dark:border-black shadow-sm">
-          <thead>
-              <tr>
-                  <th>
-                      <span class="flex items-center">
-                          Session
-                      </span>
-                  </th>
-                  <th>
-                      <span class="flex items-center">
-                          Date
-                      </span>
-                  </th>
-                  <th>
-                      <span class="flex items-center">
-                          Questions
-                      </span>
-                  </th>
-                  <th>
-                      <span class="flex items-center">
-                        Score
-                      </span>
-                  </th>
-                  <th>
-                    <span class="flex items-center">
-                      Actions
-                    </span>
-                </th>
-              </tr>
-          </thead>
-          <tbody>
-            {% for session in sessions %}
-              <tr class="hover:bg-gray-100 dark:hover:bg-gray-950">
-                  <td class="bg-yellow-50 dark:bg-gray-800">{{session.exam.category.name}} #{{session.id}}</td>
-                  <td>{{session.created_at}}</td>
-                  <td class="bg-yellow-50 dark:bg-gray-800">{{session.number_of_questions}}</td>
-                  <td>
-                    {% include "exams/parts/session_score_column.html" %}
-                  </td>
-                  <td class="bg-yellow-50 dark:bg-gray-800 flex justify-center">
-                    {% include "exams/parts/session_actions_column.html" %}
-                  </td>
-              </tr>
-            {% endfor %}
-          </tbody>
+
+    <!-- Table Container -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-card overflow-hidden">
+        <table id="session-table" class="w-full text-sm text-left">
+            <thead class="text-xs text-body-secondary uppercase bg-surface-low dark:bg-gray-700/50 dark:text-white/70">
+                <tr>
+                    <th scope="col" class="px-6 py-4 font-semibold">Session</th>
+                    <th scope="col" class="px-6 py-4 font-semibold">Date</th>
+                    <th scope="col" class="px-6 py-4 font-semibold">Questions</th>
+                    <th scope="col" class="px-6 py-4 font-semibold">Score</th>
+                    <th scope="col" class="px-6 py-4 font-semibold text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-surface-high dark:divide-gray-700">
+                {% for session in sessions %}
+                <tr class="hover:bg-surface-low/50 dark:hover:bg-gray-700/30 transition-colors">
+                    <td class="px-6 py-4 font-medium text-body dark:text-white">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-indigo/10 dark:bg-indigo/20 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-graduation-cap text-indigo dark:text-amber text-sm"></i>
+                            </div>
+                            <span>{{session.exam.category.name}}</span>
+                            <span class="text-body-secondary text-xs">#{{session.id}}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-body-secondary dark:text-white/70">
+                        {{session.created_at|date:"M d, Y H:i"}}
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-teal/10 dark:bg-teal/20 text-teal-dim dark:text-teal text-xs font-medium rounded-full">
+                            {{session.number_of_questions}} questions
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        {% include "exams/parts/session_score_column.html" %}
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        {% include "exams/parts/session_actions_column.html" %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
 </div>

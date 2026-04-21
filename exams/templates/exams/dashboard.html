@@ -3,86 +3,112 @@
 {% block title %}{{info.name}} | {{user.username}}{% endblock title %}
 
 {% block content %}
-
 {% include "exams/parts/navbar.html" %}
-{% include "exams/parts/sidebar.html" %} 
-<div class="p-4 sm:ml-64 mt-14">
-    <h1 class="text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white text-center">
-        Welcome {{user.username}}!
-    </h1>
-    <hr class="w-48 h-1 mx-auto my-4 bg-primary-300 border-0 rounded md:my-10 dark:bg-gray-700">
-    <div class="flex justify-between items-stretch gap-2 p-2 mt-5 flex-wrap flex-col md:flex-row">
-      {% comment %} start card Correct and Incorrect Answer Rate {% endcomment %}
-      <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6 flex-1 flex flex-col">
-          <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white text-center">
-              Correct and Incorrect Answer Rate
-          </h5>
-          <hr class="border mt-3">
-          {% if  user_answer.total_answers %}
-            <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg flex-grow">
-                <div class="grid grid-cols-2 gap-3 mb-2">
-                    <dl class="bg-green-400 dark:bg-gray-600 rounded-lg flex flex-col items-center justify-center h-[78px]">
-                        <dt class="w-8 h-8 rounded-full bg-teal-100 dark:bg-gray-500 text-teal-600 dark:text-teal-300 text-sm font-medium flex items-center justify-center mb-1">
-                            {{user_answer.correct_answers}}
-                        </dt>
-                        <dd class="text-teal-600 dark:text-teal-300 text-sm font-medium">Correct</dd>
-                    </dl>
-                    <dl class="bg-red-400 dark:bg-gray-600 rounded-lg flex flex-col items-center justify-center h-[78px]">
-                        <dt class="w-8 h-8 rounded-full bg-blue-100 dark:bg-gray-500 text-blue-600 dark:text-blue-300 text-sm font-medium flex items-center justify-center mb-1">
-                            {{user_answer.incorrect_answers}}
-                        </dt>
-                        <dd class="text-blue-600 dark:text-blue-300 text-sm font-medium">Incorrect</dd>
-                    </dl>
+{% include "exams/parts/sidebar.html" %}
+
+<div class="p-6 sm:ml-64 mt-16 bg-surface-base dark:bg-gray-900 min-h-screen">
+    <!-- Header -->
+    <div class="mb-8 text-center">
+        <h1 class="text-4xl font-bold text-indigo dark:text-white tracking-tight">
+            Welcome back, <span class="text-amber">{{user.username}}</span>!
+        </h1>
+        <p class="mt-2 text-body-secondary dark:text-white/70">Track your progress and continue learning</p>
+    </div>
+
+    <!-- Stats Cards Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <!-- Answer Stats Card -->
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-card p-6 flex flex-col">
+          <div class="flex items-center gap-3 mb-6">
+              <div class="w-12 h-12 bg-indigo/10 dark:bg-indigo/20 rounded-xl flex items-center justify-center">
+                  <i class="fa-solid fa-chart-pie text-indigo text-xl"></i>
+              </div>
+              <h5 class="text-lg font-bold text-body dark:text-white">Answer Statistics</h5>
+          </div>
+
+          {% if user_answer.total_answers %}
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <!-- Correct -->
+                <div class="bg-teal/10 dark:bg-teal/20 rounded-xl p-4 flex flex-col items-center">
+                    <div class="w-10 h-10 rounded-full bg-teal/20 dark:bg-teal/30 flex items-center justify-center mb-2">
+                        <span class="text-teal-dim dark:text-teal font-bold">{{user_answer.correct_answers}}</span>
+                    </div>
+                    <span class="text-sm font-medium text-teal-dim dark:text-teal">Correct</span>
+                    <span class="text-xs text-body-secondary mt-1">{{user_answer.correct_rate}}%</span>
+                </div>
+                <!-- Incorrect -->
+                <div class="bg-amber/10 dark:bg-amber/20 rounded-xl p-4 flex flex-col items-center">
+                    <div class="w-10 h-10 rounded-full bg-amber/20 dark:bg-amber/30 flex items-center justify-center mb-2">
+                        <span class="text-amber-dark dark:text-amber font-bold">{{user_answer.incorrect_answers}}</span>
+                    </div>
+                    <span class="text-sm font-medium text-amber-dark dark:text-amber">Incorrect</span>
+                    <span class="text-xs text-body-secondary mt-1">{{user_answer.incorrect_rate}}%</span>
                 </div>
             </div>
-            <!-- Line Chart -->
-            <div class="py-6" id="user-answers-chart"></div>
+            <!-- Chart -->
+            <div class="flex-grow" id="user-answers-chart"></div>
           {% else %}
-          <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg flex-grow">
-              <p class="text-center text-gray-700 dark:text-gray-400 text-sm font-medium">
-                You have not answered any questions yet.
+          <div class="bg-surface-low dark:bg-gray-700/50 rounded-xl p-8 flex flex-col items-center justify-center flex-grow">
+              <div class="w-16 h-16 bg-indigo/10 dark:bg-indigo/20 rounded-full flex items-center justify-center mb-4">
+                  <i class="fa-solid fa-graduation-cap text-indigo text-2xl"></i>
+              </div>
+              <p class="text-center text-body-secondary dark:text-white/70 text-sm">
+                Start taking exams to see your statistics here
               </p>
+              <a href="{% url 'dashboard' %}" class="mt-4 px-4 py-2 bg-amber hover:bg-amber-dark text-body text-sm font-semibold rounded-lg transition-colors">
+                  Browse Exams
+              </a>
           </div>
           {% endif %}
       </div>
-      {% comment %} end card Correct and Incorrect Answer Rate {% endcomment %}
-      
-      {% comment %} start card referral {% endcomment %}
-      <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6 flex-1 flex flex-col items-center gap-3">
-          <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white text-center">
-              Details for your referral
-          </h5>
-          <hr class="border mt-3 w-2/3">
-          <h5 class="text-xl leading-none text-gray-900 dark:text-white text-center">
-            Your referral code
-          </h5>
-          {% include "exams/parts/referral_code_btn.html" %}
-          <hr class="border mt-3 w-2/3">
-          {% if user.referred_by %}
-          <p class="text-lg font-thin text-gray-900 dark:text-white">
-            Referred by: <span class="font-bold">{{ user.referred_by.referral_code.code }}</span>
-          </p>
-          {% else %}
-              <h5 class="text-xl leading-none text-gray-900 dark:text-white text-center">
-                  Do you have an active referral code?
-              </h5>
-              {% include "exams/parts/referral_input.html" %}
-          {% endif %}
-            
-          {% if refereed_user_count > 0 %}
-          <p class="dark:text-white">
-            Number of referrals :
-            <span class="bg-blue-100 text-blue-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-              {{refereed_user_count}}
-            </span>
-          </p>
-          {% endif %}
-      </div>
-      {% comment %} end card referral {% endcomment %}
-  </div>
-  
 
-{% include "parts/plans.html" %}
+      <!-- Referral Card -->
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-card p-6 flex flex-col">
+          <div class="flex items-center gap-3 mb-6">
+              <div class="w-12 h-12 bg-amber/10 dark:bg-amber/20 rounded-xl flex items-center justify-center">
+                  <i class="fa-solid fa-gift text-amber text-xl"></i>
+              </div>
+              <h5 class="text-lg font-bold text-body dark:text-white">Referral Program</h5>
+          </div>
+
+          <div class="flex flex-col items-center gap-4 flex-grow">
+              <p class="text-sm text-body-secondary dark:text-white/70 text-center">
+                  Share your code with friends and earn rewards
+              </p>
+
+              {% include "exams/parts/referral_code_btn.html" %}
+
+              {% if user.referred_by %}
+              <div class="mt-4 p-4 bg-surface-low dark:bg-gray-700/50 rounded-xl w-full">
+                  <p class="text-sm text-center text-body-secondary dark:text-white/70">
+                      Referred by <span class="font-semibold text-indigo dark:text-amber">{{ user.referred_by.referral_code.code }}</span>
+                  </p>
+              </div>
+              {% else %}
+              <div class="mt-2 w-full">
+                  <p class="text-sm text-body-secondary dark:text-white/70 text-center mb-3">
+                      Have a referral code?
+                  </p>
+                  {% include "exams/parts/referral_input.html" %}
+              </div>
+              {% endif %}
+
+              {% if refereed_user_count > 0 %}
+              <div class="mt-4 flex items-center gap-2 px-4 py-2 bg-teal/10 dark:bg-teal/20 rounded-full">
+                  <i class="fa-solid fa-users text-teal"></i>
+                  <span class="text-sm font-medium text-teal-dim dark:text-teal">
+                      {{refereed_user_count}} successful referrals
+                  </span>
+              </div>
+              {% endif %}
+          </div>
+      </div>
+  </div>
+
+  <!-- Plans Section -->
+  <div class="bg-surface-low dark:bg-gray-800/50 rounded-2xl p-6">
+      {% include "parts/plans.html" %}
+  </div>
 </div>
 {% endblock content %}
 {% block js %}
@@ -91,7 +117,7 @@
 const getChartOptions = () => {
     return {
       series: [{{user_answer.correct_rate}}, {{user_answer.incorrect_rate}}],
-      colors: ["#31C48D", "#F98080"],
+      colors: ["#70d8c8", "#feb300"],
       chart: {
         height: 420,
         width: "100%",

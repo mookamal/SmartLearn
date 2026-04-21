@@ -1,36 +1,36 @@
 {% load static %}
-<aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
-    <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-       <ul class="space-y-2 font-medium">
+<!-- Internal Sidebar - Cognitive Catalyst Design System -->
+<aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-surface-base dark:bg-gray-900 sm:translate-x-0 border-r border-indigo/10 dark:border-gray-700/50" aria-label="Sidebar">
+    <div class="h-full px-3 pb-4 overflow-y-auto bg-surface-base dark:bg-gray-900">
+       <ul class="space-y-1 font-medium">
           <li>
-            <a href="{% url 'dashboard' %}" class="flex gap-2 items-center w-full p-2 text-sm text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
-               <i class="fa-solid fa-dashboard"></i>
-               <span class="flex-1  text-left rtl
-                whitespace-nowrap">Dashboard</span>
+            <a href="{% url 'dashboard' %}" class="flex gap-3 items-center w-full p-3 text-sm text-body dark:text-white rounded-xl hover:bg-surface-low dark:hover:bg-gray-800 transition-colors group">
+               <i class="fa-solid fa-dashboard text-indigo dark:text-amber group-hover:scale-110 transition-transform"></i>
+               <span class="flex-1 text-left whitespace-nowrap">Dashboard</span>
             </a>
          </li>
-            
+
           <li>
-            <button type="button" class="flex  gap-2 items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="parent-category-list" data-collapse-toggle="parent-category-list">
-               <i class="fa-solid fa-file-lines"></i>
-               <span class="flex-1  text-left rtl:text-right whitespace-nowrap">Browse exams</span>
+            <button type="button" class="flex gap-3 items-center w-full p-3 text-sm text-body dark:text-white rounded-xl hover:bg-surface-low dark:hover:bg-gray-800 transition-colors group" aria-controls="parent-category-list" data-collapse-toggle="parent-category-list">
+               <i class="fa-solid fa-file-lines text-indigo dark:text-amber"></i>
+               <span class="flex-1 text-left whitespace-nowrap">Browse exams</span>
 
                {% if parent_categories %}
-               <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
+               <span class="inline-flex items-center justify-center px-2.5 py-0.5 text-xs font-medium text-teal-dim bg-teal/20 rounded-full">
                   {{parent_categories| length}}
                </span>
                {% endif %}
 
-               <i class="fa-solid fa-arrow-down"></i>
+               <i class="fa-solid fa-chevron-down text-xs text-body-secondary transition-transform group-aria-expanded:rotate-180"></i>
             </button>
-            <ul id="parent-category-list" class="hidden py-2 space-y-2">
+            <ul id="parent-category-list" class="hidden py-2 space-y-1">
                {% for p_cat in parent_categories %}
                   {% if p_cat.is_listed %}
                      <li>
-                        <a href="{% url 'show_category' p_cat.slug %}" class="flex gap-2 items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                        <a href="{% url 'show_category' p_cat.slug %}" class="flex gap-2 items-center w-full p-2.5 text-sm text-body-secondary dark:text-white/70 rounded-lg pl-11 hover:bg-surface-low dark:hover:bg-gray-800 hover:text-indigo dark:hover:text-amber transition-colors">
                            {{p_cat.name}}
                            {% if p_cat.children %}
-                           <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                           <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs font-medium text-teal-dim bg-teal/20 rounded-full ml-auto">
                               {{p_cat.children.all| length}}
                            </span>
                            {% endif %}
@@ -40,58 +40,70 @@
                {% endfor %}
             </ul>
           </li>
-          {% comment %} my_sessions url {% endcomment %}
+
           <li>
-            <a href="{% url 'my_sessions' %}" class="flex gap-2 items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
-               <i class="fa-solid fa-book"></i>
-               My Sessions
+            <a href="{% url 'my_sessions' %}" class="flex gap-3 items-center w-full p-3 text-sm text-body dark:text-white rounded-xl hover:bg-surface-low dark:hover:bg-gray-800 transition-colors group">
+               <i class="fa-solid fa-book text-indigo dark:text-amber group-hover:scale-110 transition-transform"></i>
+               <span class="flex-1 text-left whitespace-nowrap">My Sessions</span>
             </a>
          </li>
          <li>
-            <a href="{% url 'performance' %}" class="flex gap-2 items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
-               <i class="fa-solid fa-chart-pie"></i>
-               Performance
+            <a href="{% url 'performance' %}" class="flex gap-3 items-center w-full p-3 text-sm text-body dark:text-white rounded-xl hover:bg-surface-low dark:hover:bg-gray-800 transition-colors group">
+               <i class="fa-solid fa-chart-pie text-indigo dark:text-amber group-hover:scale-110 transition-transform"></i>
+               <span class="flex-1 text-left whitespace-nowrap">Performance</span>
             </a>
          </li>
-         {% comment %} user settings {% endcomment %}
+
          <li>
-            <button type="button" class="flex  gap-2 items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="usersettings" data-collapse-toggle="usersettings">
-               <i class="fa-solid fa-user"></i>
-               <span class="flex-1  text-left rtl:text-right whitespace-nowrap">Settings</span>
-               <i class="fa-solid fa-arrow-down"></i>
+            <button type="button" class="flex gap-3 items-center w-full p-3 text-sm text-body dark:text-white rounded-xl hover:bg-surface-low dark:hover:bg-gray-800 transition-colors group" aria-controls="usersettings" data-collapse-toggle="usersettings">
+               <i class="fa-solid fa-user text-indigo dark:text-amber"></i>
+               <span class="flex-1 text-left whitespace-nowrap">Settings</span>
+               <i class="fa-solid fa-chevron-down text-xs text-body-secondary transition-transform group-aria-expanded:rotate-180"></i>
             </button>
-            <ul id="usersettings" class="hidden py-2 space-y-2">
+            <ul id="usersettings" class="hidden py-2 space-y-1">
                <li>
-                  <a href="{% url 'profile' user.username %}" class="flex gap-2 items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                  <a href="{% url 'profile' user.username %}" class="flex gap-2 items-center w-full p-2.5 text-sm text-body-secondary dark:text-white/70 rounded-lg pl-11 hover:bg-surface-low dark:hover:bg-gray-800 hover:text-indigo dark:hover:text-amber transition-colors">
                      User Settings
                   </a>
                </li>
                <li>
-                  <a href="{% url 'payment_details' %}" class="flex gap-2 items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                  <a href="{% url 'payment_details' %}" class="flex gap-2 items-center w-full p-2.5 text-sm text-body-secondary dark:text-white/70 rounded-lg pl-11 hover:bg-surface-low dark:hover:bg-gray-800 hover:text-indigo dark:hover:text-amber transition-colors">
                      Payment details
                   </a>
                </li>
             </ul>
          </li>
        </ul>
-       <hr class="border my-2">
-       <!-- show details plan's user -->
-       <div class="bg-gray-50 dark:bg-black p-3 border">
-         <h4 class="font-bold text-purple-900 dark:text-primary-200 text-center">
-            {{user.usersubscription.plan.name}}
-         </h4>
-         <p class="text-gray-600 dark:text-gray-400 text-center">
-            You have used {{ user.usersubscription.sessions_used }} out of {{ user.usersubscription.total_count }} sessions this month.
+
+       <!-- Plan Info Card -->
+       <div class="mt-4 p-4 bg-surface-low dark:bg-gray-800/50 rounded-2xl">
+         <div class="flex items-center justify-center gap-2 mb-3">
+            <i class="fa-solid fa-crown text-amber"></i>
+            <h4 class="font-bold text-indigo dark:text-amber text-sm uppercase tracking-wider">
+               {{user.usersubscription.plan.name}}
+            </h4>
+         </div>
+
+         <div class="mb-3">
+            <div class="flex justify-between text-xs text-body-secondary dark:text-white/60 mb-1">
+               <span>Sessions used</span>
+               <span>{{ user.usersubscription.sessions_used }} / {{ user.usersubscription.total_count }}</span>
+            </div>
+            <div class="w-full bg-surface-high dark:bg-gray-700 rounded-full h-2">
+               <div class="bg-gradient-to-r from-indigo to-amber h-2 rounded-full transition-all" style="width: {% if user.usersubscription.total_count > 0 %}{% widthratio user.usersubscription.sessions_used user.usersubscription.total_count 100 %}{% else %}0{% endif %}%"></div>
+            </div>
+         </div>
+
+         <p class="text-xs text-body-secondary dark:text-white/60 text-center">
+            {{ user.usersubscription.sessions_used }} of {{ user.usersubscription.total_count }} sessions used
          </p>
+
          {% if user.usersubscription.plan.name != "FREE" %}
-         <hr class="border my-2">
-         {% comment %} show start and end date {% endcomment %}
-         <p class="text-gray-600 dark:text-gray-400 text-center">
-            Start date: {{ user.usersubscription.start_date }}
-         </p>
-         <p class="text-gray-600 dark:text-gray-400 text-center">
-            End date: {{ user.usersubscription.end_date }}
-         </p>
+         <div class="mt-3 pt-3 border-t border-indigo/10 dark:border-gray-600/50">
+            <p class="text-xs text-body-secondary dark:text-white/50 text-center mb-1">
+               Valid until {{ user.usersubscription.end_date|date:"M d, Y" }}
+            </p>
+         </div>
          {% endif %}
        </div>
     </div>

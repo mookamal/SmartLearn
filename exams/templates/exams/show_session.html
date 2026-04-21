@@ -9,57 +9,108 @@
 
 {% block content %}
 {% include "exams/parts/session_navbar.html" %}
-<div class="container mx-auto mt-14 h-screen p-5">
-
-    <div class="w-2/3 mx-auto">
-        <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
-            <div class="bg-gray-600 h-2.5 rounded-full dark:bg-gray-300" style="width: {{percentage}}%"></div>
+<div class="container mx-auto mt-16 min-h-screen p-6 bg-surface-base dark:bg-gray-900">
+    <!-- Progress Bar -->
+    <div class="max-w-2xl mx-auto mb-8">
+        <div class="flex justify-between text-sm text-body-secondary dark:text-white/60 mb-2">
+            <span>Question {{session.current_question_index|add:1}} of {{session.exam.question_count}}</span>
+            <span>{{percentage|floatformat:0}}% Complete</span>
+        </div>
+        <div class="w-full bg-surface-high dark:bg-gray-700 rounded-full h-3 overflow-hidden">
+            <div class="bg-gradient-to-r from-indigo to-amber h-3 rounded-full transition-all duration-500" style="width: {{percentage}}%"></div>
         </div>
     </div>
-    <hr class="h-px my-8 w-2/4 mx-auto bg-primary-200 border-0 dark:bg-gray-700">
-    <div class="flex justify-center"><p class="p-2 text-sm my-2 bg-yellow-100 text-black rounded-md shadow">Question ID: {{question.id}}</p></div>
-    <h2 class="text-4xl font-extrabold dark:text-white text-center mt-2">{{question.text}}</h2>
-    {% if question.figure %}
-    <a href="{{ question.figure.url }}" data-lightbox="image-1">
-        <img class="max-h-32 max-w-32 mx-auto my-5" src="{{ question.figure.url }}" alt="{{ question.text }}">
-    </a>
-    {% endif %}
-    <!-- show chooses -->
 
-    
-    <div class="flex justify-center">
-        <ul class="md:w-2/3 w-full mx-auto text-sm my-6 font-medium text-gray-900 border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+    <!-- Question Card -->
+    <div class="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-card p-6 md:p-8 mb-6">
+        <!-- Question Header -->
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-2">
+                <span class="px-3 py-1 bg-indigo/10 dark:bg-indigo/20 text-indigo dark:text-amber text-xs font-semibold rounded-full">
+                    Q{{session.current_question_index|add:1}}
+                </span>
+                {% if question.is_marked %}
+                <span class="px-2 py-0.5 bg-amber/20 text-amber-dark text-xs rounded-full">
+                    <i class="fa-solid fa-bookmark mr-1"></i>Marked
+                </span>
+                {% endif %}
+            </div>
+            <span class="text-xs text-body-secondary dark:text-white/50">ID: {{question.id}}</span>
+        </div>
+
+        <!-- Question Text -->
+        <h2 class="text-xl md:text-2xl font-bold text-body dark:text-white mb-6 leading-relaxed">
+            {{question.text}}
+        </h2>
+
+        <!-- Question Figure -->
+        {% if question.figure %}
+        <div class="mb-6 flex justify-center">
+            <a href="{{ question.figure.url }}" data-lightbox="image-1" class="block">
+                <img class="max-h-48 max-w-full rounded-xl shadow-md" src="{{ question.figure.url }}" alt="{{ question.text }}">
+            </a>
+        </div>
+        {% endif %}
+
+        <!-- Choices -->
+        <div class="space-y-3">
             {% for choice in choices %}
-                <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600"> 
-                    <div class="flex items-center ps-3 gap-2 {% if choice.id == answer.choice.id %}bg-purple-200 dark:bg-primary-950{% endif %}">
-                        {% if choice.is_right %}
-                        <i class="fa-solid fa-circle-check text-green-400" style="{% if not should_display %}display: none;{% endif %}"></i>
-                        {% else %}
-                        <i class="fa-solid fa-circle-xmark text-red-600" style="{% if not should_display %}display: none;{% endif %}"></i>
-                        {% endif %}
-                        <input id="choice-{{choice.id}}" {% if choice.id == answer.choice.id %}checked{% endif %} type="radio" value="{{choice.id}}" name="answer" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                        <label for="choice-{{choice.id}}" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{choice.text}}</label>
-                    </div>
-                </li>
+            <label class="flex items-center gap-3 p-4 rounded-xl cursor-pointer transition-all duration-200
+                {% if choice.id == answer.choice.id and answer.is_right %}
+                    bg-teal/10 dark:bg-teal/20 border-2 border-teal/30
+                {% elif choice.id == answer.choice.id and not answer.is_right %}
+                    bg-amber/10 dark:bg-amber/20 border-2 border-amber/30
+                {% else %}
+                    bg-surface-low dark:bg-gray-700/50 hover:bg-surface-high dark:hover:bg-gray-700 border-2 border-transparent
+                {% endif %}
+                {% if choice.is_right and should_display %}border-teal/50 bg-teal/5{% endif %}">
+
+                <!-- Radio Input -->
+                <input id="choice-{{choice.id}}" {% if choice.id == answer.choice.id %}checked{% endif %} type="radio" value="{{choice.id}}" name="answer"
+                    class="w-5 h-5 text-indigo bg-surface-high border-surface-high focus:ring-indigo focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+
+                <!-- Choice Text -->
+                <span class="flex-1 text-sm md:text-base font-medium text-body dark:text-white">{{choice.text}}</span>
+
+                <!-- Answer Indicators -->
+                {% if choice.is_right and should_display %}
+                <i class="fa-solid fa-circle-check text-teal text-lg"></i>
+                {% elif choice.id == answer.choice.id and not answer.is_right and should_display %}
+                <i class="fa-solid fa-circle-xmark text-amber text-lg"></i>
+                {% endif %}
+            </label>
             {% endfor %}
-        </ul>
+        </div>
     </div>
 
-    
-    <!-- explained question -->
-    <div class="flex justify-center" style="{% if not should_display %}display: none;{% endif %}" id="explanation-area">
-        <div class="p-6 border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 my-5">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-200">Explanation:</h3>
-            <p class="text-sm my-4 text-gray-700 dark:text-gray-400">{{ question.explanation }}</p>
+    <!-- Explanation Card -->
+    <div class="max-w-3xl mx-auto" style="{% if not should_display %}display: none;{% endif %}" id="explanation-area">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-card p-6 md:p-8">
+            <div class="flex items-center gap-2 mb-4">
+                <div class="w-8 h-8 bg-indigo/10 dark:bg-indigo/20 rounded-lg flex items-center justify-center">
+                    <i class="fa-solid fa-lightbulb text-indigo"></i>
+                </div>
+                <h3 class="text-lg font-bold text-indigo dark:text-amber">Explanation</h3>
+            </div>
+
+            <p class="text-body-secondary dark:text-white/70 leading-relaxed mb-4">{{ question.explanation }}</p>
+
             {% if question.explanation_figure %}
-            <a href="{{ question.explanation_figure.url }}" data-lightbox="image-2">
-                <img class="max-h-32 max-w-32 mt-2" src="{{ question.explanation_figure.url }}" alt="{{ question.explanation }}">
-            </a>
+            <div class="mb-4">
+                <a href="{{ question.explanation_figure.url }}" data-lightbox="image-2" class="block">
+                    <img class="max-h-40 max-w-full rounded-xl shadow-md" src="{{ question.explanation_figure.url }}" alt="Explanation figure">
+                </a>
+            </div>
             {% endif %}
-            {% if question.reference  %}
-                <hr class="border border-purple-100 my-2">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-200">Reference:</h3>
-                <p class="text-sm my-4 text-gray-700 dark:text-gray-400">{{ question.reference }}</p>
+
+            {% if question.reference %}
+            <div class="mt-4 pt-4 border-t border-surface-high dark:border-gray-700">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-book text-body-secondary"></i>
+                    <h4 class="font-semibold text-body dark:text-white">Reference</h4>
+                </div>
+                <p class="text-sm text-body-secondary dark:text-white/60">{{ question.reference }}</p>
+            </div>
             {% endif %}
         </div>
     </div>
