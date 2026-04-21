@@ -2,60 +2,19 @@
 <!-- Public Navbar - Cognitive Catalyst Design System -->
 <nav class="navbar-glass fixed w-full z-50 top-0 start-0">
   <style>
-    /* Frosted Glass Navbar */
+    /* Glass effect - Tailwind can't do backdrop-filter well */
     .navbar-glass {
       background: rgba(253, 248, 253, 0.85);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(201, 196, 213, 0.15);
     }
-    
     .dark .navbar-glass {
       background: rgba(28, 27, 31, 0.85);
       border-bottom-color: rgba(201, 196, 213, 0.1);
     }
     
-    /* Logo styling */
-    .navbar-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    
-    .navbar-brand img {
-      height: 36px;
-      width: auto;
-      border-radius: 8px;
-    }
-    
-    .navbar-brand span {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #1c0070;
-      letter-spacing: -0.02em;
-    }
-    
-    .dark .navbar-brand span {
-      color: #ffffff;
-    }
-    
-    /* Navigation links */
-    .navbar-nav {
-      display: flex;
-      align-items: center;
-      gap: 32px;
-    }
-    
-    .nav-link {
-      font-size: 0.9375rem;
-      font-weight: 500;
-      color: #474553;
-      text-decoration: none;
-      padding: 8px 0;
-      position: relative;
-      transition: color 0.2s ease;
-    }
-    
+    /* Amber underline animation - complex for Tailwind */
     .nav-link::after {
       content: '';
       position: absolute;
@@ -66,109 +25,12 @@
       background: #feb300;
       transition: width 0.2s ease;
     }
-    
-    .nav-link:hover {
-      color: #1c0070;
-    }
-    
     .nav-link:hover::after {
       width: 100%;
     }
     
-    .dark .nav-link {
-      color: rgba(255, 255, 255, 0.7);
-    }
-    
-    .dark .nav-link:hover {
-      color: #ffffff;
-    }
-    
-    /* Amber CTA Button */
-    .btn-amber-sm {
-      display: inline-flex;
-      align-items: center;
-      padding: 10px 20px;
-      background: #feb300;
-      color: #1c1b1f;
-      font-size: 0.875rem;
-      font-weight: 600;
-      border-radius: 10px;
-      text-decoration: none;
-      transition: all 0.2s ease;
-      box-shadow: 0px 2px 12px rgba(254, 179, 0, 0.2);
-    }
-    
-    .btn-amber-sm:hover {
-      background: #e5a100;
-      transform: translateY(-1px);
-      box-shadow: 0px 4px 20px rgba(254, 179, 0, 0.3);
-    }
-    
-    /* Secondary outline button */
-    .btn-ghost-sm {
-      display: inline-flex;
-      align-items: center;
-      padding: 10px 20px;
-      background: transparent;
-      color: #1c0070;
-      font-size: 0.875rem;
-      font-weight: 600;
-      border-radius: 10px;
-      text-decoration: none;
-      transition: all 0.2s ease;
-      border: 1px solid rgba(28, 0, 112, 0.2);
-    }
-    
-    .btn-ghost-sm:hover {
-      background: rgba(28, 0, 112, 0.05);
-      border-color: rgba(28, 0, 112, 0.3);
-    }
-    
-    .dark .btn-ghost-sm {
-      color: #feb300;
-      border-color: rgba(254, 179, 0, 0.3);
-    }
-    
-    .dark .btn-ghost-sm:hover {
-      background: rgba(254, 179, 0, 0.1);
-    }
-    
-    /* Mobile menu button */
-    .navbar-toggler {
-      display: none;
-      padding: 8px;
-      background: #f7f2f8;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    
-    .navbar-toggler svg {
-      width: 24px;
-      height: 24px;
-      color: #1c0070;
-    }
-    
-    .dark .navbar-toggler {
-      background: #2d2c31;
-    }
-    
-    .dark .navbar-toggler svg {
-      color: #ffffff;
-    }
-    
-    /* Mobile menu */
-    .navbar-collapse {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-    }
-    
+    /* Mobile menu - needs JS toggle */
     @media (max-width: 768px) {
-      .navbar-toggler {
-        display: block;
-      }
-      
       .navbar-collapse {
         display: none;
         position: absolute;
@@ -177,70 +39,48 @@
         right: 0;
         background: rgba(253, 248, 253, 0.98);
         backdrop-filter: blur(20px);
-        padding: 24px;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 16px;
         border-bottom: 1px solid rgba(201, 196, 213, 0.15);
       }
-      
       .dark .navbar-collapse {
         background: rgba(28, 27, 31, 0.98);
       }
-      
       .navbar-collapse.active {
         display: flex;
       }
-      
-      .navbar-nav {
-        flex-direction: column;
-        gap: 16px;
-      }
-      
-      .nav-link::after {
-        display: none;
-      }
-    }
-    
-    /* Auth buttons container */
-    .navbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
     }
   </style>
   
   <div class="max-w-screen-xl mx-auto px-6 py-4">
     <div class="flex items-center justify-between">
       <!-- Brand -->
-      <a href="/" class="navbar-brand">
-        <img src="{{info.logo.url}}" alt="{{info.name}}" />
-        <span>{{info.name}}</span>
+      <a href="/" class="flex items-center gap-3">
+        <img src="{{info.logo.url}}" alt="{{info.name}}" class="h-9 w-auto rounded-lg" />
+        <span class="text-xl font-bold text-indigo tracking-tight dark:text-white">{{info.name}}</span>
       </a>
       
       <!-- Mobile toggle -->
-      <button class="navbar-toggler" onclick="document.querySelector('.navbar-collapse').classList.toggle('active')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <button class="md:hidden p-2 bg-surface-low dark:bg-gray-800 rounded-lg" onclick="document.querySelector('.navbar-collapse').classList.toggle('active')">
+        <svg class="w-6 h-6 text-indigo dark:text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M4 6h16M4 12h16M4 18h16"/>
         </svg>
       </button>
       
       <!-- Navigation -->
-      <div class="navbar-collapse">
-        <ul class="navbar-nav">
-          <li><a href="/" class="nav-link">Home</a></li>
+      <div class="navbar-collapse hidden md:flex items-center gap-6 p-6 md:p-0 flex-col md:flex-row absolute md:static left-0 right-0 top-full">
+        <ul class="flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-8">
+          <li><a href="/" class="nav-link relative text-sm font-medium text-body-secondary hover:text-indigo dark:text-white/70 dark:hover:text-white py-2 transition-colors">Home</a></li>
           {% for page in pages %}
-          <li><a href="{% url 'page' slug=page.slug %}" class="nav-link">{{page.title}}</a></li>
+          <li><a href="{% url 'page' slug=page.slug %}" class="nav-link relative text-sm font-medium text-body-secondary hover:text-indigo dark:text-white/70 dark:hover:text-white py-2 transition-colors">{{page.title}}</a></li>
           {% endfor %}
         </ul>
         
         <!-- Actions -->
-        <div class="navbar-actions">
+        <div class="flex items-center gap-3">
           {% if user.is_authenticated %}
             {% include "parts/user_menu.html" %}
           {% else %}
-            <a href="{% url 'account_login' %}" class="btn-ghost-sm">Sign in</a>
-            <a href="{% url 'account_signup' %}" class="btn-amber-sm">Get Started</a>
+            <a href="{% url 'account_login' %}" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-indigo dark:text-amber border border-indigo/20 dark:border-amber/30 rounded-xl hover:bg-indigo/5 dark:hover:bg-amber/10 transition-all">Sign in</a>
+            <a href="{% url 'account_signup' %}" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-body bg-amber rounded-xl shadow-[0_2px_12px_rgba(254,179,0,0.2)] hover:bg-amber-dark hover:-translate-y-0.5 hover:shadow-[0_4px_20px_rgba(254,179,0,0.3)] transition-all">Get Started</a>
           {% endif %}
           {% include "parts/theme_btn.html" %}
         </div>
@@ -249,4 +89,4 @@
   </div>
 </nav>
 <!-- Spacer for fixed navbar -->
-<div style="height: 72px;"></div>
+<div class="h-[72px]"></div>

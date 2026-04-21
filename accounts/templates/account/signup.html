@@ -4,28 +4,11 @@
 
 {% block css %}
 <style>
-    /* Editorial Auth Layout - Shared with login */
-    .auth-split {
-        min-height: 100vh;
-        display: flex;
-    }
-    @media (max-width: 1024px) {
-        .auth-split { flex-direction: column; }
-    }
-    
-    /* Left Panel - Branding */
-    .auth-brand {
-        flex: 1;
+    /* Complex gradient background */
+    .auth-gradient {
         background: linear-gradient(145deg, #1c0070 0%, #311b92 50%, #1c0070 100%);
-        position: relative;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 48px 64px;
     }
-    
-    .auth-brand::before {
+    .auth-gradient::before {
         content: '';
         position: absolute;
         top: -50%;
@@ -36,130 +19,8 @@
         pointer-events: none;
     }
     
-    .auth-brand-content {
-        position: relative;
-        z-index: 1;
-        max-width: 480px;
-    }
-    
-    .auth-logo {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 48px;
-    }
-    
-    .auth-logo img {
-        width: 40px;
-        height: 40px;
-        border-radius: 12px;
-    }
-    
-    .auth-logo span {
-        color: #ffffff;
-        font-size: 1.5rem;
-        font-weight: 700;
-        letter-spacing: -0.02em;
-    }
-    
-    .auth-headline {
-        color: #ffffff;
-        font-size: 2.5rem;
-        font-weight: 700;
-        line-height: 1.2;
-        letter-spacing: -0.02em;
-        margin-bottom: 24px;
-    }
-    
-    .auth-subhead {
-        color: rgba(255, 255, 255, 0.75);
-        font-size: 1.125rem;
-        line-height: 1.6;
-        margin-bottom: 48px;
-    }
-    
-    /* Achievement Chips */
-    .auth-chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-    }
-    
-    .chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 16px;
-        background: rgba(141, 245, 228, 0.15);
-        backdrop-filter: blur(12px);
-        border-radius: 999px;
-        color: #8df5e4;
-        font-size: 0.875rem;
-        font-weight: 500;
-    }
-    
-    .chip i {
-        font-size: 0.875rem;
-    }
-    
-    /* Right Panel - Form */
-    .auth-form-container {
-        flex: 0 0 45%;
-        min-width: 420px;
-        background: #fdf8fd;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 48px 64px;
-    }
-    
-    @media (max-width: 1024px) {
-        .auth-form-container {
-            flex: 1;
-            min-width: auto;
-            padding: 32px 24px;
-        }
-    }
-    
-    .auth-form-wrapper {
-        width: 100%;
-        max-width: 400px;
-        margin: 0 auto;
-    }
-    
-    .auth-form-header {
-        margin-bottom: 32px;
-    }
-    
-    .auth-form-header h1 {
-        color: #1c0070;
-        font-size: 1.75rem;
-        font-weight: 700;
-        letter-spacing: -0.02em;
-        margin-bottom: 8px;
-    }
-    
-    .auth-form-header p {
-        color: #474553;
-        font-size: 1rem;
-    }
-    
-    /* Input Styling - Editorial */
-    .auth-form .form-group {
-        margin-bottom: 20px;
-    }
-    
-    .auth-form label {
-        display: block;
-        color: #1c1b1f;
-        font-size: 0.875rem;
-        font-weight: 500;
-        margin-bottom: 8px;
-    }
-    
-    .auth-form input[type="email"],
-    .auth-form input[type="text"],
-    .auth-form input[type="password"] {
+    /* Editorial inputs with bottom border focus */
+    .editorial-input {
         width: 100%;
         padding: 14px 16px;
         background: #f7f2f8;
@@ -170,118 +31,30 @@
         font-size: 1rem;
         transition: all 0.2s ease;
     }
-    
-    .auth-form input:focus {
+    .editorial-input:focus {
         outline: none;
         background: #ffffff;
         border-bottom-color: #1c0070;
         box-shadow: 0px 4px 20px rgba(28, 27, 31, 0.04);
     }
-    
-    .auth-form input::placeholder {
+    .editorial-input::placeholder {
         color: #474553;
         opacity: 0.6;
     }
     
-    /* Checkbox styling */
-    .auth-form input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
-        accent-color: #1c0070;
+    .dark .editorial-input {
+        background: #2d2c31;
+        color: #ffffff;
+    }
+    .dark .editorial-input:focus {
+        background: #3d3c41;
     }
     
-    /* Amber CTA Button */
-    .btn-amber {
-        width: 100%;
-        padding: 14px 24px;
-        background: #feb300;
-        color: #1c1b1f;
-        font-size: 1rem;
-        font-weight: 600;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        box-shadow: 0px 4px 20px rgba(254, 179, 0, 0.25);
-    }
-    
-    .btn-amber:hover {
-        background: #e5a100;
-        transform: translateY(-1px);
-        box-shadow: 0px 8px 30px rgba(254, 179, 0, 0.35);
-    }
-    
-    .btn-amber:active {
-        transform: translateY(0);
-    }
-    
-    /* Secondary Link */
-    .auth-footer {
-        text-align: center;
-        margin-top: 24px;
-        padding-top: 24px;
-    }
-    
-    .auth-footer p {
-        color: #474553;
-        font-size: 0.9375rem;
-    }
-    
-    .auth-footer a {
-        color: #1c0070;
-        font-weight: 600;
-        text-decoration: none;
-        transition: color 0.2s;
-    }
-    
-    .auth-footer a:hover {
-        color: #feb300;
-    }
-    
-    /* Form Errors */
-    .auth-form .errorlist {
-        list-style: none;
-        padding: 12px 16px;
-        background: rgba(254, 179, 0, 0.1);
-        border-radius: 8px;
-        margin-bottom: 16px;
-    }
-    
-    .auth-form .errorlist li {
-        color: #7e5700;
-        font-size: 0.875rem;
-    }
-    
-    /* Helptext */
-    .auth-form .helptext {
-        display: block;
-        color: #474553;
-        font-size: 0.8125rem;
-        margin-top: 6px;
-    }
-    
-    /* Password requirements styling */
-    .password-requirements {
-        background: #f7f2f8;
-        padding: 16px;
-        border-radius: 12px;
-        margin-top: 12px;
-    }
-    
-    .password-requirements ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-    
+    /* Password requirements with teal bullets */
     .password-requirements li {
-        color: #474553;
-        font-size: 0.8125rem;
-        padding: 4px 0;
-        padding-left: 20px;
         position: relative;
+        padding-left: 20px;
     }
-    
     .password-requirements li::before {
         content: '•';
         position: absolute;
@@ -289,79 +62,44 @@
         color: #8df5e4;
         font-weight: bold;
     }
-    
-    /* Dark mode adjustments */
-    @media (prefers-color-scheme: dark) {
-        .auth-form-container {
-            background: #1c1b1f;
-        }
-        .auth-form-header h1 {
-            color: #ffffff;
-        }
-        .auth-form-header p {
-            color: rgba(255, 255, 255, 0.7);
-        }
-        .auth-form label {
-            color: rgba(255, 255, 255, 0.9);
-        }
-        .auth-form input {
-            background: #2d2c31;
-            color: #ffffff;
-        }
-        .auth-form input:focus {
-            background: #3d3c41;
-        }
-        .password-requirements {
-            background: #2d2c31;
-        }
-        .password-requirements li {
-            color: rgba(255, 255, 255, 0.7);
-        }
-        .auth-footer p {
-            color: rgba(255, 255, 255, 0.7);
-        }
-        .auth-footer a {
-            color: #feb300;
-        }
-    }
 </style>
 {% endblock css %}
 
 {% block content %}
-<div class="auth-split">
+<div class="min-h-screen flex flex-col lg:flex-row">
     <!-- Left Panel - Branding -->
-    <div class="auth-brand">
-        <div class="auth-brand-content">
-            <div class="auth-logo">
-                <img src="{{info.logo.url}}" alt="{{info.name}} logo">
-                <span>{{info.name}}</span>
-            </div>
-            <h2 class="auth-headline">Start your learning journey today</h2>
-            <p class="auth-subhead">Join thousands of learners and take structured assessments to track your progress and achieve your goals.</p>
-            <div class="auth-chips">
-                <span class="chip"><i class="fas fa-graduation-cap"></i> Free to Join</span>
-                <span class="chip"><i class="fas fa-infinity"></i> Unlimited Access</span>
-                <span class="chip"><i class="fas fa-shield-alt"></i> Secure Platform</span>
+    <div class="auth-gradient relative flex-1 flex flex-col justify-center px-8 lg:px-16 py-12 overflow-hidden">
+        <div class="relative z-10 max-w-md">
+            <a href="/" class="flex items-center gap-3 mb-12">
+                <img src="{{info.logo.url}}" alt="{{info.name}} logo" class="w-10 h-10 rounded-xl">
+                <span class="text-2xl font-bold text-white tracking-tight">{{info.name}}</span>
+            </a>
+            <h2 class="text-4xl lg:text-5xl font-bold text-white leading-tight tracking-tight mb-6">Start your learning journey today</h2>
+            <p class="text-lg text-white/75 leading-relaxed mb-12">Join thousands of learners and take structured assessments to track your progress and achieve your goals.</p>
+            <div class="flex flex-wrap gap-3">
+                <span class="inline-flex items-center gap-2 px-4 py-2.5 bg-teal/15 backdrop-blur-xl rounded-full text-teal text-sm font-medium"><i class="fas fa-graduation-cap text-sm"></i> Free to Join</span>
+                <span class="inline-flex items-center gap-2 px-4 py-2.5 bg-teal/15 backdrop-blur-xl rounded-full text-teal text-sm font-medium"><i class="fas fa-infinity text-sm"></i> Unlimited Access</span>
+                <span class="inline-flex items-center gap-2 px-4 py-2.5 bg-teal/15 backdrop-blur-xl rounded-full text-teal text-sm font-medium"><i class="fas fa-shield-alt text-sm"></i> Secure Platform</span>
             </div>
         </div>
     </div>
     
     <!-- Right Panel - Form -->
-    <div class="auth-form-container">
-        <div class="auth-form-wrapper">
-            <div class="auth-form-header">
-                <h1>Create your account</h1>
-                <p>Get started in seconds</p>
+    <div class="flex-[0_0_45%] min-w-[420px] lg:min-w-auto bg-surface-base dark:bg-gray-900 flex flex-col justify-center px-8 lg:px-16 py-12">
+        <div class="w-full max-w-md mx-auto">
+            <div class="mb-8">
+                <h1 class="text-2xl lg:text-3xl font-bold text-indigo dark:text-white tracking-tight mb-2">Create your account</h1>
+                <p class="text-body-secondary dark:text-white/70">Get started in seconds</p>
             </div>
             
-            <form class="auth-form" method="post" action="{% url 'account_signup' %}">
+            <form method="post" action="{% url 'account_signup' %}" class="space-y-5">
                 {% csrf_token %}
                 {{ form|crispy }}
-                <button type="submit" class="btn-amber">Create Account</button>
+                <button type="submit" class="w-full py-3.5 px-6 bg-amber hover:bg-amber-dark text-body font-semibold rounded-xl shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all">Create Account</button>
             </form>
             
-            <div class="auth-footer">
-                <p>Already have an account? <a href="{% url 'account_login' %}">Sign in</a></p>
+            <div class="text-center mt-6 pt-6">
+                <p class="text-body-secondary dark:text-white/70">Already have an account? <a href="{% url 'account_login' %}" class="text-indigo dark:text-amber font-semibold hover:text-amber transition-colors">Sign in</a></p>
             </div>
         </div>
     </div>
