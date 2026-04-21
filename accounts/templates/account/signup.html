@@ -1,29 +1,369 @@
 {% extends "_base.html" %}
 {% load tailwind_filters %}
-{% block title %}ٌRegister page{% endblock title %}
+{% block title %}Register - {{info.name}}{% endblock title %}
+
+{% block css %}
+<style>
+    /* Editorial Auth Layout - Shared with login */
+    .auth-split {
+        min-height: 100vh;
+        display: flex;
+    }
+    @media (max-width: 1024px) {
+        .auth-split { flex-direction: column; }
+    }
+    
+    /* Left Panel - Branding */
+    .auth-brand {
+        flex: 1;
+        background: linear-gradient(145deg, #1c0070 0%, #311b92 50%, #1c0070 100%);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 48px 64px;
+    }
+    
+    .auth-brand::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -30%;
+        width: 80%;
+        height: 100%;
+        background: radial-gradient(ellipse, rgba(141, 245, 228, 0.15) 0%, transparent 70%);
+        pointer-events: none;
+    }
+    
+    .auth-brand-content {
+        position: relative;
+        z-index: 1;
+        max-width: 480px;
+    }
+    
+    .auth-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 48px;
+    }
+    
+    .auth-logo img {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+    }
+    
+    .auth-logo span {
+        color: #ffffff;
+        font-size: 1.5rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+    }
+    
+    .auth-headline {
+        color: #ffffff;
+        font-size: 2.5rem;
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+        margin-bottom: 24px;
+    }
+    
+    .auth-subhead {
+        color: rgba(255, 255, 255, 0.75);
+        font-size: 1.125rem;
+        line-height: 1.6;
+        margin-bottom: 48px;
+    }
+    
+    /* Achievement Chips */
+    .auth-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    
+    .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        background: rgba(141, 245, 228, 0.15);
+        backdrop-filter: blur(12px);
+        border-radius: 999px;
+        color: #8df5e4;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+    
+    .chip i {
+        font-size: 0.875rem;
+    }
+    
+    /* Right Panel - Form */
+    .auth-form-container {
+        flex: 0 0 45%;
+        min-width: 420px;
+        background: #fdf8fd;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 48px 64px;
+    }
+    
+    @media (max-width: 1024px) {
+        .auth-form-container {
+            flex: 1;
+            min-width: auto;
+            padding: 32px 24px;
+        }
+    }
+    
+    .auth-form-wrapper {
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    
+    .auth-form-header {
+        margin-bottom: 32px;
+    }
+    
+    .auth-form-header h1 {
+        color: #1c0070;
+        font-size: 1.75rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 8px;
+    }
+    
+    .auth-form-header p {
+        color: #474553;
+        font-size: 1rem;
+    }
+    
+    /* Input Styling - Editorial */
+    .auth-form .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .auth-form label {
+        display: block;
+        color: #1c1b1f;
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+    
+    .auth-form input[type="email"],
+    .auth-form input[type="text"],
+    .auth-form input[type="password"] {
+        width: 100%;
+        padding: 14px 16px;
+        background: #f7f2f8;
+        border: none;
+        border-radius: 12px;
+        border-bottom: 2px solid transparent;
+        color: #1c1b1f;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+    }
+    
+    .auth-form input:focus {
+        outline: none;
+        background: #ffffff;
+        border-bottom-color: #1c0070;
+        box-shadow: 0px 4px 20px rgba(28, 27, 31, 0.04);
+    }
+    
+    .auth-form input::placeholder {
+        color: #474553;
+        opacity: 0.6;
+    }
+    
+    /* Checkbox styling */
+    .auth-form input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #1c0070;
+    }
+    
+    /* Amber CTA Button */
+    .btn-amber {
+        width: 100%;
+        padding: 14px 24px;
+        background: #feb300;
+        color: #1c1b1f;
+        font-size: 1rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0px 4px 20px rgba(254, 179, 0, 0.25);
+    }
+    
+    .btn-amber:hover {
+        background: #e5a100;
+        transform: translateY(-1px);
+        box-shadow: 0px 8px 30px rgba(254, 179, 0, 0.35);
+    }
+    
+    .btn-amber:active {
+        transform: translateY(0);
+    }
+    
+    /* Secondary Link */
+    .auth-footer {
+        text-align: center;
+        margin-top: 24px;
+        padding-top: 24px;
+    }
+    
+    .auth-footer p {
+        color: #474553;
+        font-size: 0.9375rem;
+    }
+    
+    .auth-footer a {
+        color: #1c0070;
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+    
+    .auth-footer a:hover {
+        color: #feb300;
+    }
+    
+    /* Form Errors */
+    .auth-form .errorlist {
+        list-style: none;
+        padding: 12px 16px;
+        background: rgba(254, 179, 0, 0.1);
+        border-radius: 8px;
+        margin-bottom: 16px;
+    }
+    
+    .auth-form .errorlist li {
+        color: #7e5700;
+        font-size: 0.875rem;
+    }
+    
+    /* Helptext */
+    .auth-form .helptext {
+        display: block;
+        color: #474553;
+        font-size: 0.8125rem;
+        margin-top: 6px;
+    }
+    
+    /* Password requirements styling */
+    .password-requirements {
+        background: #f7f2f8;
+        padding: 16px;
+        border-radius: 12px;
+        margin-top: 12px;
+    }
+    
+    .password-requirements ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .password-requirements li {
+        color: #474553;
+        font-size: 0.8125rem;
+        padding: 4px 0;
+        padding-left: 20px;
+        position: relative;
+    }
+    
+    .password-requirements li::before {
+        content: '•';
+        position: absolute;
+        left: 0;
+        color: #8df5e4;
+        font-weight: bold;
+    }
+    
+    /* Dark mode adjustments */
+    @media (prefers-color-scheme: dark) {
+        .auth-form-container {
+            background: #1c1b1f;
+        }
+        .auth-form-header h1 {
+            color: #ffffff;
+        }
+        .auth-form-header p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .auth-form label {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .auth-form input {
+            background: #2d2c31;
+            color: #ffffff;
+        }
+        .auth-form input:focus {
+            background: #3d3c41;
+        }
+        .password-requirements {
+            background: #2d2c31;
+        }
+        .password-requirements li {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .auth-footer p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .auth-footer a {
+            color: #feb300;
+        }
+    }
+</style>
+{% endblock css %}
 
 {% block content %}
-<section class="bg-gray-50 dark:bg-gray-900">
-    <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-            <img class="w-8 h-8 mr-2" src="{{info.logo.url}}" alt="logo">
-            {{info.name}}    
-        </a>
-        <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-            <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-                <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                    Register
-                </h1>
-                <form class="space-y-4 md:space-y-6" method="post" action="{% url 'account_signup' %}">
-                    {{ form|crispy }}
-                    {% csrf_token %}
-                    <button type="submit" class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Register</button>
-                    <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-                        Already have an account? <a href="{% url 'account_login' %}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign in</a>
-                    </p>
-                </form>
+<div class="auth-split">
+    <!-- Left Panel - Branding -->
+    <div class="auth-brand">
+        <div class="auth-brand-content">
+            <div class="auth-logo">
+                <img src="{{info.logo.url}}" alt="{{info.name}} logo">
+                <span>{{info.name}}</span>
+            </div>
+            <h2 class="auth-headline">Start your learning journey today</h2>
+            <p class="auth-subhead">Join thousands of learners and take structured assessments to track your progress and achieve your goals.</p>
+            <div class="auth-chips">
+                <span class="chip"><i class="fas fa-graduation-cap"></i> Free to Join</span>
+                <span class="chip"><i class="fas fa-infinity"></i> Unlimited Access</span>
+                <span class="chip"><i class="fas fa-shield-alt"></i> Secure Platform</span>
             </div>
         </div>
     </div>
-  </section>
+    
+    <!-- Right Panel - Form -->
+    <div class="auth-form-container">
+        <div class="auth-form-wrapper">
+            <div class="auth-form-header">
+                <h1>Create your account</h1>
+                <p>Get started in seconds</p>
+            </div>
+            
+            <form class="auth-form" method="post" action="{% url 'account_signup' %}">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button type="submit" class="btn-amber">Create Account</button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>Already have an account? <a href="{% url 'account_login' %}">Sign in</a></p>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}
