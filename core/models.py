@@ -23,7 +23,7 @@ class Info(models.Model):
     twitter = models.URLField(max_length=200, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        if Info.objects.exists():
+        if not self.pk and Info.objects.exists():
             raise Exception('Only one instance of Info model is allowed.')
         super().save(*args, **kwargs)
 
