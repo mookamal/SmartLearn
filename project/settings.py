@@ -254,6 +254,58 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Media Storage Configuration (Local or Cloudinary)
+MEDIA_STORAGE = config('MEDIA_STORAGE', default='local')
+
+# Cloudinary credentials
+CLOUDINARY_CLOUD_NAME = config('CLOUDINARY_CLOUD_NAME', default='')
+CLOUDINARY_API_KEY = config('CLOUDINARY_API_KEY', default='')
+CLOUDINARY_API_SECRET = config('CLOUDINARY_API_SECRET', default='')
+
+# Default storage backend (Django < 4.2 compatibility)
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+
+# STORAGES dict (Django 4.2+) - controls the actual storage used
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
+    },
+}
+
+if MEDIA_STORAGE == 'cloudinary':
+    # Add Cloudinary apps to INSTALLED_APPS
+    CLOUDINARY_APPS = ['cloudinary', 'cloudinary_storage']
+    for app in CLOUDINARY_APPS:
+        if app not in INSTALLED_APPS:
+            INSTALLED_APPS.append(app)
+
+    # CLOUDINARY_STORAGE dict required by django-cloudinary-storage
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': CLOUDINARY_CLOUD_NAME,
+        'API_KEY': CLOUDINARY_API_KEY,
+        'API_SECRET': CLOUDINARY_API_SECRET,
+        'SECURE': True,
+    }
+
+    # Override with Cloudinary storage (both old and new settings)
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    STORAGES['default']['BACKEND'] = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+    # Cloudinary SDK Configuration
+    import cloudinary
+    cloudinary.config(
+        cloud_name=CLOUDINARY_CLOUD_NAME,
+        api_key=CLOUDINARY_API_KEY,
+        api_secret=CLOUDINARY_API_SECRET,
+        secure=True
+    )
+else:
+    # Local mode: remove Cloudinary apps from INSTALLED_APPS
+    INSTALLED_APPS = [app for app in INSTALLED_APPS if app not in ['cloudinary', 'cloudinary_storage']]
+
 COMPRESS_ROOT = BASE_DIR / 'project/static'
 
 COMPRESS_ENABLED = True

@@ -1,5 +1,7 @@
 amqp==5.2.0
+cloudinary==1.40.0
 dj-database-url==2.2.0
+django-cloudinary-storage==0.3.0
 psycopg2-binary==2.9.9
 asgiref==3.8.1
 async-timeout==5.0.1
